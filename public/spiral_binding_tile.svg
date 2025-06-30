@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="60.5"
+   height="35"
+   viewBox="0 0 60.5 35"
+   fill="none"
+   version="1.1"
+   id="svg70"
+   sodipodi:docname="spiral_binding_tile.svg"
+   inkscape:version="1.4.2 (ebf0e940, 2025-05-08)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview70"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="9.1498065"
+     inkscape:cx="49.509244"
+     inkscape:cy="11.421007"
+     inkscape:window-width="1512"
+     inkscape:window-height="916"
+     inkscape:window-x="0"
+     inkscape:window-y="38"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg70" />
+
+   <path
+     d="m 52.9166,34.5465 c 3.9121,0 7.0834,-3.1756 7.0834,-7.093 0,-3.9174 -3.1713,-7.093 -7.0834,-7.093 -3.912,0 -7.0833,3.1756 -7.0833,7.093 0,3.9174 3.1713,7.093 7.0833,7.093 z"
+     fill="#ffffff"
+     stroke="#555555"
+     id="path24" />
+  <path
+     d="m 7.58333,14.686 c 3.91207,0 7.08337,-3.1756 7.08337,-7.09298 C 14.6667,3.67565 11.4954,0.5 7.58333,0.5 3.67132,0.5 0.5,3.67565 0.5,7.59302 0.5,11.5104 3.67132,14.686 7.58333,14.686 Z"
+     fill="#ffffff"
+     stroke="#555555"
+     id="path12" />
+       <path
+     d="M 7.58331,7.59302 C 21.75,17.5233 38.75,35.9651 52.9166,27.4535"
+     stroke="#454545"
+     stroke-width="2.3"
+     id="path1" />
+  <defs
+     id="defs70">
+    <clipPath
+       id="clip0_12_164">
+      <rect
+         width="68"
+         height="366"
+         fill="white"
+         transform="translate(1 319)"
+         id="rect70" />
+    </clipPath>
+  </defs>
+</svg>

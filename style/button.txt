@@ -1,0 +1,81 @@
+2. Create Button Styles
+You’ll design two button types: a Primary Sign-In Button (bold, attention-grabbing) and a Secondary Sign-In Button (subtle, for alternative actions like “Sign Up” or “Guest Login”).
+Primary Sign-In Button
+Purpose: Main call-to-action (e.g., “Sign In”).
+
+Shape:
+Use the Rectangle Tool (R) to create a rectangle (e.g., 160px wide × 48px tall for desktop).
+
+Apply Corner Radius: 8px for a modern yet slightly softened vintage look.
+
+Color:
+Background: --burnt-sienna (#C97C5D) for a warm, bold accent.
+
+Text: --seashell (#EEE2DF) for high contrast (contrast ratio ~5.5:1, meets WCAG 2.1).
+
+Text:
+Use the Text Tool (T) and type “Sign In.”
+
+Apply the “Navigation / Button” Text Style (or create it):
+Font: Montserrat
+
+Weight: Medium (500) or SemiBold (600)
+
+Size: 16px (desktop) or 14px (mobile)
+
+Line Height: 22.4px (desktop) or 19.6px (mobile)
+
+Color: --seashell (#EEE2DF)
+
+Center the text (Align Center in the Text panel).
+
+Effects:
+Add a subtle vintage shadow:  
+Go to Effects > Add Drop Shadow
+
+Settings: X: 2px, Y: 2px, Blur: 4px, Opacity: 15%, Color: #000000
+
+Hover State:
+Duplicate the button (Ctrl+D or Cmd+D).
+
+Change the background to --redwood (#B36A5E) for a darker, richer hover effect.
+
+Keep text and shadow unchanged.
+
+Secondary Sign-In Button
+Purpose: Alternative action (e.g., “Sign Up” or “Continue as Guest”).
+
+Shape:
+Rectangle: 160px wide × 48px tall, Corner Radius: 8px.
+
+Color:
+Background: --champagne-pink (#EED7C5) for a soft, vintage feel.
+
+Text: --redwood (#B36A5E) for contrast (ratio ~4.8:1, meets WCAG 2.1).
+
+Text:
+Use “Navigation / Button” Text Style:
+Font: Montserrat
+
+Weight: Medium (500)
+
+Size: 16px (desktop) or 14px (mobile)
+
+Line Height: 22.4px (desktop) or 19.6px (mobile)
+
+Color: --redwood (#B36A5E)
+
+Center the text.
+
+Effects:
+Optional: Add a thin border (1px, --rosy-brown #C89F9C) for a vintage touch.
+
+Shadow: Same as primary button (X: 2px, Y: 2px, Blur: 4px, Opacity: 15%).
+
+Hover State:
+Duplicate the button.
+
+Change background to --seashell (#EEE2DF) for a lighter hover effect.
+
+Keep text and border unchanged.
+
