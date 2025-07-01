@@ -1,4 +1,5 @@
 import Button from "@/components/Button";
+import Chefy from "./chefy";
 import styles from "./login.module.css";
 
 export default function Dashboard() {
@@ -6,15 +7,22 @@ export default function Dashboard() {
 		<div className={styles.container}>
 			<div className={styles.left}>
 				<div className={styles.content}>
-					<div>Header</div>
-					<div>Body</div>
-					<div>Footer</div>
+					<div className={styles.header}>
+						<h1>Rie.recipes</h1>
+					</div>
+					<div className={styles.body}>
+						<Chefy width="98%" height="98%" />
+					</div>
+					<div className={styles.footer}>
+						<h2>Meet Your Inner Chef</h2>
+						<img src="underline_crayon.svg" alt="crayon underline" />
+					</div>
 				</div>
 			</div>
 			<div className={styles.center} />
 			<div className={styles.right}>
 				<div className={styles.content}>
-					<div>
+					<div className={styles.header}>
 						<img src="shelf_long.png" alt="vegi shelf header" />
 					</div>
 					<div>
@@ -27,7 +35,7 @@ export default function Dashboard() {
 							<Button startImage="yahoo.png">Continue With Yahoo</Button>
 						</div>
 					</div>
-					<div>
+					<div className={styles.footer}>
 						<img src="pancakes.png" alt="pile of pancakes footer" />
 					</div>
 				</div>
