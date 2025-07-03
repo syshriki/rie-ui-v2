@@ -11,7 +11,7 @@ export default function Dashboard() {
 						<h1>Rie.recipes</h1>
 					</div>
 					<div className={styles.body}>
-						<Chefy width="98%" height="98%" />
+						<Chefy />
 					</div>
 					<div className={styles.footer}>
 						<h2>Meet Your Inner Chef</h2>
@@ -26,7 +26,8 @@ export default function Dashboard() {
 						<img src="shelf_long.png" alt="vegi shelf header" />
 					</div>
 					<div>
-						<h1>Welcome</h1>
+						<h1 className={styles.primaryHeading}>Welcome</h1>
+						<h1 className={styles.secondaryHeading}>Rie.recipes</h1>
 						<p>Choose an option below to get started</p>
 						<div className={styles.buttonContainer}>
 							<Button startImage="google.png">Continue With Google</Button>

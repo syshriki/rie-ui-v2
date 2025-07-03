@@ -1,9 +1,4 @@
-import { useEffect, useRef } from "react";
-
-interface ChefyProps {
-	width: string | number;
-	height: string | number;
-}
+import { useRef } from "react";
 
 const chefy = {
 	leftShoulder: "646.18px 511.46px",
@@ -391,7 +386,7 @@ function initializeAnimation(svgElement: SVGGElement): Animation[] {
 		animateLeftArmHand(svgElement),
 	].filter((animation) => animation !== undefined);
 }
-export default function Chefy({ width, height }: ChefyProps) {
+export default function Chefy() {
 	const imgRef = useRef<HTMLObjectElement | null>(null);
 
 	return (
@@ -400,8 +395,9 @@ export default function Chefy({ width, height }: ChefyProps) {
 			data="/chefy.svg"
 			type="image/svg+xml"
 			ref={imgRef}
+			width={"100%"}
+			height={"100%"}
 			onLoad={() => {
-				console.log("SVG loaded");
 				const svgDoc = imgRef?.current?.contentDocument as SVGGElement | null;
 				if (svgDoc) {
 					initializeAnimation(svgDoc);
@@ -409,8 +405,6 @@ export default function Chefy({ width, height }: ChefyProps) {
 					console.error("SVG document not found or not loaded.");
 				}
 			}}
-			height={height}
-			width={width}
 		/>
 	);
 }
