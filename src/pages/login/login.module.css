@@ -111,6 +111,18 @@ p {
 	gap: .5rem;
 }
 
+button {
+	background-color: rgba(255, 255, 255, 1);
+	border: 2px solid #000000;
+	border-radius: 0.25rem;
+}
+
+button:not(:disabled):focus,
+button:not(:disabled):hover {
+	transform: scale(1.1);
+	box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.2);
+}
+
 .center {
 	position: absolute;
 	right: calc(max(500px, 40%) - 2rem);
@@ -124,18 +136,16 @@ p {
 }
 
 @media (max-width: 900px) {
-	.left {
-		display: none;
-	}
-	.center {
-		display: none;
-	}
-	.right {
-		width: 100%;
-	}
+	.left,
+	.center,
 	.primaryHeading {
 		display: none;
 	}
+
+	.right {
+		width: 100%;
+	}
+
 	.secondaryHeading {
 		display: block;
 	}
@@ -149,8 +159,13 @@ p {
 	.left .content {
 		grid-template-rows: 75%;
 	}
-	.content .header {
+	.content .header,
+	.primaryHeading {
 		display: none;
+	}
+
+	.secondaryHeading {
+		display: block;
 	}
 
 	object {

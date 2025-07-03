@@ -30,10 +30,18 @@ export default function Dashboard() {
 						<h1 className={styles.secondaryHeading}>Rie.recipes</h1>
 						<p>Choose an option below to get started</p>
 						<div className={styles.buttonContainer}>
-							<Button startImage="google.png">Continue With Google</Button>
-							<Button startImage="fb.png">Continue With Facebook</Button>
-							<Button startImage="reddit.png">Continue With Reddit</Button>
-							<Button startImage="yahoo.png">Continue With Yahoo</Button>
+							<Button startImage="google.png" tabindex={0}>
+								Continue With Google
+							</Button>
+							<Button startImage="fb.png" disabled tabindex={-1}>
+								Continue With Facebook
+							</Button>
+							<Button startImage="reddit.png" tabindex={0}>
+								Continue With Reddit
+							</Button>
+							<Button startImage="yahoo.png" disabled tabindex={-1}>
+								Continue With Yahoo
+							</Button>
 						</div>
 					</div>
 					<div className={styles.footer}>

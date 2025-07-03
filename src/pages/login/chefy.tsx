@@ -391,7 +391,7 @@ export default function Chefy() {
 
 	return (
 		<object
-			title="Chefy"
+			title="Chefy the mascot"
 			data="/chefy.svg"
 			type="image/svg+xml"
 			ref={imgRef}

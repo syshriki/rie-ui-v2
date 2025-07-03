@@ -6,12 +6,16 @@ interface ButtonProps {
 	className?: string;
 	children: React.ReactNode;
 	startImage?: string;
+	disabled?: boolean;
+	tabindex?: number;
 }
 
 const Button: React.FC<ButtonProps> = ({
 	onClick,
 	className = "",
 	children,
+	disabled = false,
+	tabindex,
 	startImage,
 }) => {
 	return (
@@ -19,6 +23,8 @@ const Button: React.FC<ButtonProps> = ({
 			type="button"
 			onClick={onClick}
 			className={`${className} ${styles.button}`}
+			disabled={disabled}
+			tabIndex={tabindex}
 		>
 			{startImage && (
 				<img src={startImage} alt="Button icon" className={styles.startImage} />
