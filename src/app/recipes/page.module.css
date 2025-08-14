@@ -1,0 +1,178 @@
+.container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+	row-gap: 2.1em;
+	height: 100%;
+}
+
+.search {
+	margin: 2em;
+}
+
+.searchContainer {
+	flex-grow: 1;
+	display: flex;
+	align-items: stretch; /* Changed from center to stretch */
+	justify-content: center;
+	:focus-within {
+		border: 2px solid var(--link-selected-color);
+	}
+}
+
+.card {
+	margin-top: 2.5em;
+	margin-bottom: 2.5em;
+	margin-left: 2em;
+	margin-right: 2em;
+	width: 80%;
+}
+
+.description {
+	display: block;
+}
+
+.searchBox {
+	width: 100%;
+	height: 3em;
+	border: 2px solid #000;
+	border-radius: 5px 0 0 5px;
+	outline: none;
+}
+
+.searchButton:focus {
+	border-left: 0;
+}
+
+.searchButton:active {
+	border-left: 0;
+	img {
+		filter: var(--link-selected-color-svg);
+	}
+}
+
+.searchButton {
+	background-image: url("/bluecrayon3.jpg");
+	display: flex;
+	:focus {
+		border-left: 0;
+	}
+	border-radius: 0 5px 5px 0;
+	justify-content: center;
+	cursor: pointer;
+	outline: none;
+	align-items: center;
+	> img {
+		width: 2em;
+		height: 2em;
+	}
+	width: 5em;
+	border-left: none;
+	border-right: 2px solid #000;
+	border-top: 2px solid #000;
+	border-bottom: 2px solid #000;
+}
+
+.mobilePaginator {
+	display: none;
+}
+
+.resultContainer {
+	margin-top: 1em;
+	display: grid;
+	grid-template-rows: repeat(auto-fit, minmax(2.25em, auto));
+	grid-auto-rows: minmax(4em, auto);
+	.result {
+		border-bottom: 2px solid #98b8e4;
+		padding-bottom: calc(.5rem - 3px);
+		height: 4em;
+		display: flex;
+		align-items: start;
+		justify-content: end;
+		flex-direction: column;
+		gap: .25rem;
+
+		&:last-child {
+			border-bottom: 0;
+		}
+
+		> a {
+			display: flex;
+			align-items: center;
+			img {
+				width: .9em;
+				height: .9em;
+				margin-right: 0.25em;
+				filter: drop-shadow(0 0 8px #000);
+			}
+		}
+		p {
+			margin-left: 1.15em;
+			font-size: 1em;
+			font-weight: 200;
+			font-family: "Montserrat", sans-serif;
+			font-style: italic;
+			height: 1em;
+		}
+	}
+}
+
+.paper {
+	background-color: white;
+}
+
+@media (max-width: 1000px) {
+	.container {
+		width: 100%;
+	}
+	.searchBox {
+		width: 90%;
+	}
+	.searchButton {
+		width: 4em;
+	}
+	.mobilePaginator {
+		display: block;
+	}
+	.card {
+		width: 90%;
+		margin-top: 1em;
+	}
+	.desktopPaginator {
+		display: none;
+	}
+}
+
+@media (max-width: 600px) {
+	.search {
+		margin: 1em;
+	}
+	.container {
+		width: 100%;
+	}
+	.result {
+		justify-content: center !important;
+		p {
+			display: none !important;
+		}
+	}
+	.desktopPaginator .searchButton {
+		display: none !important;
+	}
+
+	.searchBox {
+		width: 100%;
+		border-radius: 5px 0px 0px 5px;
+	}
+	.card {
+		width: 90%;
+		margin-left: .3em;
+		margin-right: .3em;
+		margin-top: 1em;
+	}
+
+	.mobilePaginator {
+		display: block;
+	}
+}

@@ -1,0 +1,22 @@
+.header {
+	background-color: var(--default-background-color);
+	height: 6rem;
+	> h1 {
+		display: flex;
+		justify-content: center;
+		align-items: flex-end;
+		height: 100%;
+	}
+}
+
+@media print {
+	.header {
+		display: none;
+	}
+}
+
+@media (max-width: 900px) {
+	.header {
+		display: none;
+	}
+}

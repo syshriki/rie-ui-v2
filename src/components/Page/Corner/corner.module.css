@@ -1,0 +1,22 @@
+.corner {
+	grid-area: corner;
+	background-color: var(--default-background-color);
+	border-right-style: double;
+	border-right-width: 5px;
+	border-right-color: var(--separator-color);
+	display: flex;
+	padding-left: 4em;
+	align-items: flex-end;
+	padding-bottom: var(--line-height);
+	> img {
+		height: 3.6em;
+	}
+}
+
+@media (max-width: 900px) {
+	.corner {
+		> img {
+			display: none;
+		}
+	}
+}

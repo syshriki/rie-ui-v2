@@ -1,0 +1,13 @@
+.paper {
+	line-height: var(--line-height);
+	background-image: repeating-linear-gradient(
+		to bottom,
+		var(--paper-line-color) 0,
+		var(--paper-line-color) var(--paper-line-thickness),
+		transparent var(--paper-line-thickness),
+		transparent calc(var(--paper-line-height) + var(--paper-line-thickness))
+	);
+	background-size: 100%
+		calc(var(--paper-line-height) + var(--paper-line-thickness));
+	height: 100%;
+}

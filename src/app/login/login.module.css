@@ -1,0 +1,194 @@
+.container {
+	position: relative;
+	width: 100%;
+	height: 100vh;
+	overflow: hidden;
+}
+
+.left::after {
+	content: "";
+	background-image: url("/paper_tile.svg");
+	background-repeat: repeat;
+	position: absolute;
+	opacity: 0.3;
+	right: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+}
+
+.left {
+	position: absolute;
+	left: 0;
+	top: 0;
+	background-color: var(--default-background-color);
+	width: min(60%, calc(100% - 500px));
+	height: 100%;
+	z-index: 2;
+	box-shadow: 1rem 1rem 2rem rgba(0, 0, 0, 0.3); /* Adds shadow on the right edge */
+	.content {
+		display: grid;
+		margin-top: 3rem;
+		margin-left: 4rem;
+		margin-right: 4rem;
+		height: 100%;
+		grid-template-rows: 10% 65% 25%;
+		justify-items: center;
+		.body {
+			width: 100%;
+			height: 100%;
+		}
+		.footer {
+			margin-top: .50rem;
+		}
+	}
+}
+
+.secondaryHeading {
+	display: none;
+	text-align: center;
+}
+
+.primaryHeading {
+	text-align: center;
+}
+
+.button {
+	display: flex;
+	align-items: center;
+	justify-content: start;
+	font-family: "Montserrat", sans-serif;
+	font-weight: 600;
+	width: 17em;
+	height: 4em;
+	> img:first-child {
+		height: 16px;
+		width: 16px;
+		margin-right: 8px;
+		margin-left: 8px;
+		object-fit: contain;
+	}
+	background-color: rgba(255, 255, 255, 1);
+	border: 2px solid #000000;
+	border-radius: 0.25rem;
+}
+
+.anonymousButton {
+	height: 2.5em !important;
+	margin-top: 2em;
+	font-weight: 700;
+	background-color: #000000;
+	color: #fff;
+}
+
+.button:not(:disabled):focus,
+.button:not(:disabled):hover {
+	transform: scale(1.1);
+	cursor: pointer;
+	box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.right {
+	position: absolute;
+	overflow-y: scroll;
+	background-image: repeating-linear-gradient(
+			to bottom,
+			#afbec5 0,
+			#afbec5 var(--paper-line-thickness),
+			transparent var(--paper-line-thickness),
+			transparent calc(var(--paper-line-height) + var(--paper-line-thickness))
+		), url("/bluecrayon3.jpg");
+	background-repeat: repeat, repeat;
+	right: 0;
+	top: 0;
+	width: max(500px, 40%);
+	height: 100%;
+	z-index: 1;
+	.content {
+		display: grid;
+		margin-top: 3rem;
+		margin-left: 4rem;
+		height: 100%;
+		grid-template-rows: 20% 50% 30%;
+		justify-items: center;
+		.footer {
+			margin-top: 1em;
+			width: 60%;
+			height: 60%;
+		}
+	}
+}
+
+.right .header img,
+.right img {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+}
+
+.buttonContainer {
+	padding-top: 2rem;
+	padding-bottom: 1rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: .5rem;
+}
+
+.center {
+	position: absolute;
+	right: calc(max(500px, 40%) - 2rem);
+	top: 1rem;
+	background-image: url("/spiral_binding_tile.svg");
+	background-size: 100%;
+	background-repeat: repeat;
+	z-index: 3;
+	width: 4rem;
+	height: 100%;
+}
+
+@media (max-width: 900px) {
+	.left,
+	.center,
+	.primaryHeading {
+		display: none;
+	}
+
+	.right {
+		width: 100%;
+		.content {
+			margin-left: 0;
+		}
+	}
+
+	.secondaryHeading {
+		display: block;
+	}
+}
+
+@media (max-height: 600px) {
+	.right .content,
+	.left .content {
+		grid-template-rows: 75%;
+	}
+	.content .header,
+	.primaryHeading {
+		display: none;
+	}
+
+	.secondaryHeading {
+		display: block;
+	}
+
+	#chefy object {
+		width: 100%;
+		height: 100%;
+	}
+}
+
+@media (max-height: 800px) {
+	.content .footer {
+		display: none;
+	}
+}

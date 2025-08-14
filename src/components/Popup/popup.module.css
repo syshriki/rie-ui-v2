@@ -1,0 +1,16 @@
+:popover-open {
+	position: absolute;
+	inset: unset;
+	bottom: 7em;
+	left: 5px;
+}
+
+.dialog {
+	border: 2px solid #000;
+	border-radius: 5px;
+	box-shadow: 3px 3px 4px #00000066;
+}
+
+::backdrop {
+	backdrop-filter: blur(3px);
+}

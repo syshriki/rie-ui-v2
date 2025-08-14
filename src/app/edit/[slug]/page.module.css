@@ -1,0 +1,45 @@
+.form {
+	margin-top: 2.5rem;
+	margin-bottom: 2.5rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+	row-gap: 2.1em;
+	height: 100%;
+
+	textarea {
+		resize: none;
+	}
+}
+.invalid {
+	border: 2px solid red;
+}
+
+.recipe {
+	height: 30.1em;
+}
+
+.description {
+	height: 4.5em;
+}
+
+.recipeName {
+	height: 2.6em;
+}
+
+.input {
+	width: 80%;
+	border: 2px solid #000;
+	border-radius: 5px 5px 5px 5px;
+	outline: none;
+	:focus {
+		border: 2px solid var(--link-selected-color);
+	}
+}
+
+@media (max-width: 900px) {
+	.input {
+		width: 90%;
+	}
+}
