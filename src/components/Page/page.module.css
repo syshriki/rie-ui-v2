@@ -59,8 +59,19 @@
 @media print {
 	.container {
 		grid-template-columns: 1fr;
+		height: auto !important;
+		overflow: visible !important;
+
 		.left {
 			display: none;
+		}
+
+		.scrollableContainer {
+			overflow: visible !important;
+			height: auto !important;
+			position: static !important;
+			page-break-inside: auto;
+			max-height: none !important;
 		}
 	}
 }

@@ -1,10 +1,11 @@
 "use client";
-import type React from "react";
 import clsx from "clsx";
-import styles from "./footer.module.css";
 import Link from "next/link";
-import { useRef, useState, useEffect } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
+import type React from "react";
+import { useRef, useState } from "react";
+import Menu from "../../Menu/Menu";
+import styles from "./footer.module.css";
 
 interface FooterProps {
 	selected?: "profile" | "recipes" | "news" | "add" | "logout";
@@ -14,7 +15,8 @@ interface FooterProps {
 
 const Footer: React.FC<FooterProps> = ({ selected, className, isLoggedIn }) => {
 	const popoverRef = useRef<HTMLDivElement>(null);
-	const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
+	const menuId = "footer-menu";
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 
@@ -24,23 +26,6 @@ const Footer: React.FC<FooterProps> = ({ selected, className, isLoggedIn }) => {
 	const redirectPath = queryString
 		? `${currentPath}?${queryString}`
 		: currentPath;
-
-	useEffect(() => {
-		const popover = popoverRef.current;
-		if (!popover) return;
-		const handleToggle = (event: Event) => {
-			const toggleEvent = event as ToggleEvent;
-			if (toggleEvent.newState === "open") {
-				setIsPopoverOpen(true);
-			} else {
-				setIsPopoverOpen(false);
-			}
-		};
-		popover.addEventListener("toggle", handleToggle);
-		return () => {
-			popover.removeEventListener("toggle", handleToggle);
-		};
-	}, []);
 
 	return (
 		<footer className={`${className} ${styles.footer}`}>
@@ -75,48 +60,56 @@ const Footer: React.FC<FooterProps> = ({ selected, className, isLoggedIn }) => {
 
 				<div
 					className={clsx(styles.clickable, {
-						[styles.selected]: isPopoverOpen,
+						[styles.selected]: isMenuOpen,
 					})}
 				>
 					<button
 						type="button"
 						style={{ all: "unset" }}
-						popoverTarget={styles.hamburger}
+						popoverTarget={menuId}
 						popoverTargetAction="show"
 					>
 						<img src="/hamburger.svg" aria-label="Show More" />
 					</button>
 				</div>
-			</nav>
-			<menu id={styles.hamburger} popover="auto" role="menu" ref={popoverRef}>
-				<div className={styles.hamburgerContent}>
+
+				<Menu
+					ref={popoverRef}
+					menuId={menuId}
+					onOpen={() => setIsMenuOpen(true)}
+					onClose={() => setIsMenuOpen(false)}
+				>
 					<div className={clsx(styles.clickable, styles.disabled)}>
 						<img src="/profile.svg" aria-label="Profile" />
 						<span>Profile</span>
 					</div>
 					{isLoggedIn ? (
-						<div
+						<button
 							className={clsx(styles.clickable)}
 							onClick={() => {
 								window.location.href = "/logout";
 							}}
+							type="button"
+							style={{ all: "unset", width: "100%" }}
 						>
 							<img src="/logout.svg" aria-label="Logout" />
 							<span>Logout</span>
-						</div>
+						</button>
 					) : (
-						<div
+						<button
 							className={clsx(styles.clickable)}
 							onClick={() => {
 								window.location.href = `/login?redirectUri=${redirectPath}`;
 							}}
+							type="button"
+							style={{ all: "unset", width: "100%" }}
 						>
 							<img src="/login.svg" aria-label="Login" />
 							<span>Login</span>
-						</div>
+						</button>
 					)}
-				</div>
-			</menu>
+				</Menu>
+			</nav>
 		</footer>
 	);
 };

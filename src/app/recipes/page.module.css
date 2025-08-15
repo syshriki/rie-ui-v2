@@ -80,16 +80,15 @@
 
 .resultContainer {
 	margin-top: 1em;
-	display: grid;
-	grid-template-rows: repeat(auto-fit, minmax(2.25em, auto));
-	grid-auto-rows: minmax(4em, auto);
+	display: flex;
+	flex-direction: column;
 	.result {
 		border-bottom: 2px solid #98b8e4;
 		padding-bottom: calc(.5rem - 3px);
-		height: 4em;
 		display: flex;
 		align-items: start;
-		justify-content: end;
+		min-height: 4rem;
+		justify-content: center;
 		flex-direction: column;
 		gap: .25rem;
 
@@ -113,7 +112,6 @@
 			font-weight: 200;
 			font-family: "Montserrat", sans-serif;
 			font-style: italic;
-			height: 1em;
 		}
 	}
 }

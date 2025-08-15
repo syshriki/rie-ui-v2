@@ -1,0 +1,19 @@
+.menuContent {
+	display: flex;
+	flex-direction: column;
+	width: 150px;
+	background-color: white;
+	border-radius: 8px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	padding: 8px 0;
+}
+
+.menu {
+	padding: 0;
+	margin: 0;
+	border: none;
+	background: none;
+	position: absolute;
+	bottom: 60px;
+	right: 0;
+}

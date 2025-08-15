@@ -60,6 +60,7 @@
 
 	.description {
 		font-style: italic;
+		line-height: 1.2em;
 		margin-bottom: 2em;
 		margin-top: 2em;
 		color: #444;
@@ -97,14 +98,30 @@
 }
 
 @media print {
-	.description {
-		display: none;
+	.container {
+		height: auto !important;
+		article {
+			i:last-child {
+				display: none;
+			}
+		}
 	}
-	.headerContainer {
-		padding-bottom: 2em;
-	}
+
 	.card {
+		width: 100% !important;
+		min-height: auto !important;
+		margin: 0 !important;
 		border: none !important;
-		box-shadow: none;
+		box-shadow: none !important;
+	}
+
+	.description {
+		margin-top: .5em !important;
+		margin-bottom: .5em !important;
+	}
+
+	.headerContainer {
+		grid-template-columns: 1fr !important;
+		padding-bottom: 0;
 	}
 }

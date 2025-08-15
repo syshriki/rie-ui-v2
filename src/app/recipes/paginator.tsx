@@ -1,8 +1,8 @@
 "use client";
 import clsx from "clsx";
-import styles from "./paginator.module.css";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import styles from "./paginator.module.css";
 
 type PaginatorProps = {
 	totalPages: number;
@@ -19,11 +19,10 @@ export default function Paginator({
 	pageNumbersToShow,
 	className,
 }: PaginatorProps) {
+	const searchParams = useSearchParams();
 	if (totalItems === 0) {
 		return null;
 	}
-
-	const searchParams = useSearchParams();
 
 	const createQueryObject = (page: number) => {
 		const params = new URLSearchParams(searchParams.toString());

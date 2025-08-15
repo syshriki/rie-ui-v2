@@ -146,7 +146,7 @@ h3 {
 
 p {
 	font-size: 1.1rem;
-	text-align: center;
+	line-height: 1.2rem;
 	font-weight: 500;
 	font-family: "Montserrat", cursive;
 	margin-top: 0;
@@ -177,9 +177,54 @@ p {
 }
 
 @media print {
+	/* Hide navigation elements */
 	header,
 	footer,
 	nav {
 		display: none !important;
+	}
+
+	/* Critical fixes for printing scrollable content */
+	html,
+	body {
+		height: auto !important;
+		width: auto !important;
+		overflow: visible !important;
+	}
+
+	/* Fix for all scrollable containers */
+	div,
+	main,
+	article,
+	section {
+		overflow: visible !important;
+		height: auto !important;
+		max-height: none !important;
+		position: static !important;
+		page-break-inside: auto;
+	}
+
+	/* Ensure proper page breaks */
+	pre,
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		page-break-after: avoid;
+		page-break-inside: avoid;
+	}
+
+	img,
+	figure,
+	table {
+		page-break-inside: avoid;
+	}
+
+	/* Remove fixed positioning */
+	[style*="position: fixed"],
+	[style*="position:fixed"] {
+		position: static !important;
 	}
 }

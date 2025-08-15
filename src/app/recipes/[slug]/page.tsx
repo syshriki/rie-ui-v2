@@ -1,20 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import clsx from "clsx";
 import { useParams } from "next/navigation";
-import Page from "../../../components/Page/Page";
-import Card from "../../../components/Card/Card";
-import { useIsLoggedIn } from "../../../hooks/auth";
+import { useEffect, useState } from "react";
 import {
 	deleteRecipe,
 	getRecipe,
 	getRecipeAnonymous,
 } from "../../../api/client";
-import styles from "./page.module.css";
-import Button from "../../../components/Button/Button";
-import clsx from "clsx";
-import Popover from "../../../components/Popup/Popup";
 import type { Recipe, RecipeBySlug } from "../../../api/models";
+import Button from "../../../components/Button/Button";
+import Card from "../../../components/Card/Card";
+import Popover from "../../../components/Dialog/Dialog";
+import Page from "../../../components/Page/Page";
+import { useIsLoggedIn } from "../../../hooks/auth";
+import styles from "./page.module.css";
 
 export default function RecipePage() {
 	const { slug } = useParams();
@@ -26,9 +26,6 @@ export default function RecipePage() {
 	const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
 	const [isDeleting, setIsDeleting] = useState(false);
 
-	if (!slug?.toString()) {
-		return null;
-	}
 	useEffect(() => {
 		const fetchRecipe = async () => {
 			try {
@@ -48,6 +45,10 @@ export default function RecipePage() {
 
 		fetchRecipe();
 	}, [slug, isLoggedIn]);
+
+	if (!slug?.toString()) {
+		return null;
+	}
 
 	const deleteRecipeHandler = async (slug: string) => {
 		setIsDeleting(true);
