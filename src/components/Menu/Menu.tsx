@@ -44,26 +44,26 @@ const Menu: React.FC<MenuProps> = ({
 				if (anchorToElement && popover) {
 					const anchorEl = document.getElementById(anchorToElement);
 					if (anchorEl) {
-						const rect = anchorEl.getBoundingClientRect();
-						console.log("Anchor Rect:", rect);
+						const anchoElRect = anchorEl.getBoundingClientRect();
+						const popoverElRect = popover.getBoundingClientRect();
 						// Position at the bottom right corner of the anchor element
 						popover.style.position = "fixed";
 						if (
 							noRadiusCorner === "bottomRight" ||
 							noRadiusCorner === "bottomLeft"
 						) {
-							popover.style.top = `${rect.y - popover.offsetHeight - 16}px`; // 5 to add a small gap
+							popover.style.top = `${anchoElRect.y - popoverElRect.height - 16}px`; // 5 to add a small gap
 						} else {
-							popover.style.top = `${rect.y + rect.height + 16}px`;
+							popover.style.top = `${anchoElRect.y + anchoElRect.height + 16}px`;
 						}
 
 						if (
 							noRadiusCorner === "bottomRight" ||
 							noRadiusCorner === "topRight"
 						) {
-							popover.style.right = `${window.innerWidth - rect.right + 0.5 * rect.width}px`;
+							popover.style.right = `${window.innerWidth - anchoElRect.right + 0.5 * anchoElRect.width}px`;
 						} else {
-							popover.style.right = `${window.innerWidth + rect.right - 0.5 * rect.width}px`;
+							popover.style.right = `${window.innerWidth + anchoElRect.right - 0.5 * anchoElRect.width}px`;
 						}
 						popover.style.left = "auto"; // Reset left to avoid conflicts
 						popover.style.margin = "0";

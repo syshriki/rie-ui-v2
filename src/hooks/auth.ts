@@ -13,13 +13,16 @@ export function useIsLoggedIn({
 	setExpiresAt: (date: Date) => void;
 	setUserId: (id: string | null) => void;
 } {
-	const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+	const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
+		window.localStorage.getItem("expiresAt") !== null,
+	);
 	const [isLoading, setIsLoading] = useState(true);
-	const [userId, setUserIdState] = useState<string | null>(null);
+	const [userId, setUserIdState] = useState<string | null>(
+		window.localStorage.getItem("userId"),
+	);
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 
-	// Modified to update both localStorage and state
 	const setUserId = useCallback((id: string | null) => {
 		if (id) {
 			window.localStorage.setItem("userId", id);
@@ -34,7 +37,6 @@ export function useIsLoggedIn({
 		setIsLoggedIn(true);
 	}, []);
 
-	// Extract just the path portion without domain
 	const currentPath = pathname || "";
 	const queryString = searchParams?.toString();
 	const redirectPath = queryString
@@ -58,7 +60,6 @@ export function useIsLoggedIn({
 
 	useEffect(() => {
 		const handleStorageChange = (event: StorageEvent) => {
-			// Only update for relevant keys
 			if (event.key === "expiresAt") {
 				setIsLoggedIn(event.newValue !== null);
 			}
@@ -67,12 +68,6 @@ export function useIsLoggedIn({
 			}
 		};
 
-		// Initialize from localStorage on mount
-		setIsLoggedIn(window.localStorage.getItem("expiresAt") !== null);
-		const storedUserId = window.localStorage.getItem("userId");
-		if (storedUserId) {
-			setUserIdState(storedUserId);
-		}
 		setIsLoading(false);
 
 		window.addEventListener("storage", handleStorageChange);
@@ -93,6 +88,5 @@ export function useIsLoggedIn({
 		}
 	}, [isLoggedIn, isLoading, requiresLogin, redirectPath]);
 
-	console.log({ isLoggedIn, userId });
 	return { isLoggedIn, logout, isLoading, setExpiresAt, setUserId, userId };
 }

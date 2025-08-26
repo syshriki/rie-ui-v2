@@ -68,7 +68,6 @@ export default function RecipePage() {
 		}
 	};
 
-	console.log({ userId });
 	return (
 		<Page selected="recipes" headerText="" isLoggedIn={isLoggedIn}>
 			<div className={styles.container}>
