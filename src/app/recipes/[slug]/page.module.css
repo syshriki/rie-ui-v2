@@ -34,10 +34,17 @@
 	.headerContainer {
 		display: grid;
 		grid-template-columns: 3fr 1fr;
-		.controls {
+		.desktopControls {
 			display: flex;
 			gap: 1rem;
 			justify-content: flex-end;
+		}
+		.mobileControls {
+			display: none;
+			img {
+				height: 2rem;
+				cursor: pointer;
+			}
 		}
 		.editButton {
 			justify-self: end;
@@ -79,11 +86,16 @@
 	.card {
 		width: 90%;
 	}
-	.controls {
+	.desktopControls {
 		display: none !important;
 	}
+	.mobileControls {
+		display: flex !important;
+		justify-content: flex-end;
+		flex-grow: 1;
+	}
 	.headerContainer {
-		grid-template-columns: 1fr !important;
+		display: flex;
 	}
 
 	.recipeContainer {
@@ -94,6 +106,14 @@
 @media (max-width: 600px) {
 	.card {
 		margin: 1em;
+	}
+	.mobileControls {
+		display: flex !important;
+		justify-content: flex-end;
+		flex-grow: 1;
+	}
+	.headerContainer {
+		display: flex !important;
 	}
 }
 
@@ -121,7 +141,6 @@
 	}
 
 	.headerContainer {
-		grid-template-columns: 1fr !important;
 		padding-bottom: 0;
 	}
 }

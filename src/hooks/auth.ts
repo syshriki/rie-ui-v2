@@ -15,13 +15,23 @@ export function useIsLoggedIn({
 } {
 	const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 	const [isLoading, setIsLoading] = useState(true);
-	const [userId, setUserId] = useState<string | null>(null);
+	const [userId, setUserIdState] = useState<string | null>(null);
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 
+	// Modified to update both localStorage and state
+	const setUserId = useCallback((id: string | null) => {
+		if (id) {
+			window.localStorage.setItem("userId", id);
+		} else {
+			window.localStorage.removeItem("userId");
+		}
+		setUserIdState(id);
+	}, []);
+
 	const setExpiresAt = useCallback((date: Date) => {
 		window.localStorage.setItem("expiresAt", date.toString());
-		setIsLoggedIn(window.localStorage.getItem("expiresAt") !== null);
+		setIsLoggedIn(true);
 	}, []);
 
 	// Extract just the path portion without domain
@@ -31,26 +41,41 @@ export function useIsLoggedIn({
 		? `${currentPath}?${queryString}`
 		: currentPath;
 
-	const logout = useCallback((redirectUrl: string) => {
-		setIsLoading(true);
-		return revoke().then(() => {
-			window.localStorage.removeItem("expiresAt");
-			window.localStorage.removeItem("userId");
-			setIsLoggedIn(false);
-			setUserId(null);
-			window.location.href = redirectUrl;
-			setIsLoading(false);
-		});
-	}, []);
+	const logout = useCallback(
+		(redirectUrl: string) => {
+			setIsLoading(true);
+			return revoke().then(() => {
+				window.localStorage.removeItem("expiresAt");
+				window.localStorage.removeItem("userId");
+				setIsLoggedIn(false);
+				setUserId(null);
+				window.location.href = redirectUrl;
+				setIsLoading(false);
+			});
+		},
+		[setUserId],
+	);
 
 	useEffect(() => {
-		const handleStorageChange = () => {
-			setIsLoggedIn(window.localStorage.getItem("expiresAt") !== null);
-			setUserId(window.localStorage.getItem("userId"));
+		const handleStorageChange = (event: StorageEvent) => {
+			// Only update for relevant keys
+			if (event.key === "expiresAt") {
+				setIsLoggedIn(event.newValue !== null);
+			}
+			if (event.key === "userId") {
+				setUserIdState(event.newValue);
+			}
 		};
-		handleStorageChange();
-		window.addEventListener("storage", handleStorageChange);
+
+		// Initialize from localStorage on mount
+		setIsLoggedIn(window.localStorage.getItem("expiresAt") !== null);
+		const storedUserId = window.localStorage.getItem("userId");
+		if (storedUserId) {
+			setUserIdState(storedUserId);
+		}
 		setIsLoading(false);
+
+		window.addEventListener("storage", handleStorageChange);
 		return () => {
 			window.removeEventListener("storage", handleStorageChange);
 		};
@@ -68,5 +93,6 @@ export function useIsLoggedIn({
 		}
 	}, [isLoggedIn, isLoading, requiresLogin, redirectPath]);
 
+	console.log({ isLoggedIn, userId });
 	return { isLoggedIn, logout, isLoading, setExpiresAt, setUserId, userId };
 }

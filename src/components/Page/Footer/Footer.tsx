@@ -5,6 +5,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import type React from "react";
 import { useRef, useState } from "react";
 import Menu from "../../Menu/Menu";
+import MenuItem from "../../Menu/MenuItem/MenuItem";
 import styles from "./footer.module.css";
 
 interface FooterProps {
@@ -14,7 +15,6 @@ interface FooterProps {
 }
 
 const Footer: React.FC<FooterProps> = ({ selected, className, isLoggedIn }) => {
-	const popoverRef = useRef<HTMLDivElement>(null);
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const menuId = "footer-menu";
 	const pathname = usePathname();
@@ -68,45 +68,42 @@ const Footer: React.FC<FooterProps> = ({ selected, className, isLoggedIn }) => {
 						style={{ all: "unset" }}
 						popoverTarget={menuId}
 						popoverTargetAction="show"
+						id="footer-menu-trigger"
 					>
 						<img src="/hamburger.svg" aria-label="Show More" />
 					</button>
 				</div>
 
 				<Menu
-					ref={popoverRef}
 					menuId={menuId}
+					className={styles.hamburger}
+					noRadiusCorner="bottomRight"
 					onOpen={() => setIsMenuOpen(true)}
 					onClose={() => setIsMenuOpen(false)}
+					anchorToElement="footer-menu-trigger"
 				>
-					<div className={clsx(styles.clickable, styles.disabled)}>
+					<MenuItem disabled>
 						<img src="/profile.svg" aria-label="Profile" />
 						<span>Profile</span>
-					</div>
+					</MenuItem>
 					{isLoggedIn ? (
-						<button
-							className={clsx(styles.clickable)}
+						<MenuItem
 							onClick={() => {
 								window.location.href = "/logout";
 							}}
-							type="button"
-							style={{ all: "unset", width: "100%" }}
 						>
 							<img src="/logout.svg" aria-label="Logout" />
 							<span>Logout</span>
-						</button>
+						</MenuItem>
 					) : (
-						<button
-							className={clsx(styles.clickable)}
+						<MenuItem
 							onClick={() => {
 								window.location.href = `/login?redirectUri=${redirectPath}`;
 							}}
-							type="button"
-							style={{ all: "unset", width: "100%" }}
 						>
 							<img src="/login.svg" aria-label="Login" />
 							<span>Login</span>
-						</button>
+						</MenuItem>
 					)}
 				</Menu>
 			</nav>

@@ -1,0 +1,26 @@
+.clickable {
+	display: flex;
+	align-items: center;
+	padding-left: 1.5em;
+	border: 0;
+	padding-right: 1.5em;
+	padding-top: 1.5em;
+	padding-bottom: 1.5em;
+	cursor: pointer;
+	height: 100%;
+	background-color: inherit;
+	span {
+		font-size: 2em;
+	}
+	img {
+		height: 1.75em;
+		width: 1.75em;
+		margin-right: 0.5em;
+	}
+}
+
+.disabled {
+	opacity: 0.5;
+	pointer-events: none;
+	filter: grayscale(60%);
+}

@@ -1,19 +1,36 @@
-.menuContent {
+:popover-open {
+	width: max-content; /* Use the width of content instead of fixed width */
+	min-width: 200px; /* Minimum width for the menu */
+	max-width: 85%; /* Maximum width relative to viewport */
+	background-color: #fff;
+	border-radius: 5px;
+	box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.2);
+	position: fixed; /* Use fixed positioning to avoid layout issues */
+	padding: 0em;
 	display: flex;
 	flex-direction: column;
-	width: 150px;
-	background-color: white;
-	border-radius: 8px;
-	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-	padding: 8px 0;
+	> :not(:last-child) {
+		border-bottom: 1px solid #ccc;
+	}
 }
 
-.menu {
-	padding: 0;
-	margin: 0;
-	border: none;
-	background: none;
-	position: absolute;
-	bottom: 60px;
-	right: 0;
+/* Custom corner radius based on data attribute */
+:popover-open[data-no-radius-corner="topLeft"] {
+	border-radius: 0 5px 5px 5px;
+}
+
+:popover-open[data-no-radius-corner="topRight"] {
+	border-radius: 5px 0 5px 5px;
+}
+
+:popover-open[data-no-radius-corner="bottomLeft"] {
+	border-radius: 5px 5px 5px 0;
+}
+
+:popover-open[data-no-radius-corner="bottomRight"] {
+	border-radius: 5px 5px 0 5px;
+}
+
+::backdrop {
+	backdrop-filter: blur(3px);
 }

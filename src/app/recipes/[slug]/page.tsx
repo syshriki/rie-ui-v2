@@ -1,30 +1,35 @@
 "use client";
 
 import clsx from "clsx";
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import {
 	deleteRecipe,
 	getRecipe,
 	getRecipeAnonymous,
 } from "../../../api/client";
-import type { Recipe, RecipeBySlug } from "../../../api/models";
+import type { RecipeBySlug } from "../../../api/models";
 import Button from "../../../components/Button/Button";
 import Card from "../../../components/Card/Card";
 import Popover from "../../../components/Dialog/Dialog";
+import Menu from "../../../components/Menu/Menu";
+import MenuItem from "../../../components/Menu/MenuItem/MenuItem";
 import Page from "../../../components/Page/Page";
 import { useIsLoggedIn } from "../../../hooks/auth";
 import styles from "./page.module.css";
 
 export default function RecipePage() {
 	const { slug } = useParams();
+	const router = useRouter();
 
 	const { isLoggedIn, userId } = useIsLoggedIn({});
+	const menuId = "recipe-menu";
 
 	const [recipeData, setRecipeData] = useState<RecipeBySlug | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
 	const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
 	const [isDeleting, setIsDeleting] = useState(false);
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
 	useEffect(() => {
 		const fetchRecipe = async () => {
@@ -54,7 +59,7 @@ export default function RecipePage() {
 		setIsDeleting(true);
 		try {
 			await deleteRecipe(slug);
-			window.location.href = "/recipes";
+			router.push("/recipes");
 		} catch (err) {
 			console.error("Error deleting recipe:", err);
 		} finally {
@@ -63,6 +68,7 @@ export default function RecipePage() {
 		}
 	};
 
+	console.log({ userId });
 	return (
 		<Page selected="recipes" headerText="" isLoggedIn={isLoggedIn}>
 			<div className={styles.container}>
@@ -71,16 +77,20 @@ export default function RecipePage() {
 						<article className={clsx(styles.printable, styles.recipeContainer)}>
 							<div className={styles.headerContainer}>
 								<h2 className={styles.title}>{recipeData.title}</h2>
-								<nav className={styles.controls}>
-									<Button className={styles.editButton} onClick={window.print}>
+								<nav className={styles.desktopControls}>
+									<Button
+										className={styles.editButton}
+										onClick={() =>
+											typeof window !== "undefined" && window.print()
+										}
+									>
 										<img src="/print.svg" aria-label="Print Recipe" />
 									</Button>
 									{userId === recipeData.authorId ? (
 										<>
 											<Button
 												className={styles.editButton}
-												// biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
-												onClick={() => (window.location.href = `/edit/${slug}`)}
+												onClick={() => router.push(`/edit/${slug}`)}
 											>
 												<img src="/edit.svg" aria-label="Edit Recipe" />
 											</Button>
@@ -92,6 +102,17 @@ export default function RecipePage() {
 											</Button>
 										</>
 									) : null}
+								</nav>
+								<nav className={styles.mobileControls}>
+									<button
+										type="button"
+										style={{ all: "unset" }}
+										popoverTarget={menuId}
+										popoverTargetAction="show"
+										id="menu-trigger"
+									>
+										<img src="/hamburger.svg" aria-label="Show More" />
+									</button>
 								</nav>
 							</div>
 							<p className={styles.description}>{recipeData.description}</p>
@@ -123,6 +144,36 @@ export default function RecipePage() {
 					</Button>
 				</nav>
 			</Popover>
+			<Menu
+				menuId={menuId}
+				noRadiusCorner="topRight"
+				onOpen={() => setIsMenuOpen(true)}
+				onClose={() => setIsMenuOpen(false)}
+				anchorToElement="menu-trigger"
+			>
+				<MenuItem
+					onClick={() => typeof window !== "undefined" && window.print()}
+				>
+					<img src="/print.svg" aria-label="Print" />
+					<span>Print</span>
+				</MenuItem>
+				{!isLoading && recipeData && userId === recipeData.authorId ? (
+					<>
+						<MenuItem
+							onClick={() => {
+								router.push(`/edit/${slug}`);
+							}}
+						>
+							<img src="/edit.svg" aria-label="Edit" />
+							<span>Edit</span>
+						</MenuItem>
+						<MenuItem onClick={() => setIsDeletePopupOpen(true)}>
+							<img src="/delete.svg" aria-label="Delete" />
+							<span>Delete</span>
+						</MenuItem>
+					</>
+				) : null}
+			</Menu>
 		</Page>
 	);
 }
