@@ -1,11 +1,12 @@
 "use client";
 
-import Chefy from "./chefy";
-import styles from "./login.module.css";
+import clsx from "clsx";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect } from "react";
 import Paper from "../../components/Paper/Paper";
 import { useIsLoggedIn } from "../../hooks/auth";
-import { useSearchParams } from "next/navigation";
-import clsx from "clsx";
+import Chefy from "./chefy";
+import styles from "./login.module.css";
 
 function generateState(redirectUri = "recipes") {
 	const state = {
@@ -18,15 +19,18 @@ function generateState(redirectUri = "recipes") {
 	return btoa(stateJson);
 }
 
-export default function Login() {
+// Client component that uses useSearchParams
+function LoginClient() {
 	const { isLoggedIn, isLoading } = useIsLoggedIn({});
 	const searchParams = useSearchParams();
 	const redirectUri = searchParams.get("redirectUri") ?? undefined;
+	const router = useRouter();
 
-	if (isLoggedIn) {
-		window.location.href = redirectUri || "/recipes";
-		return null;
-	}
+	useEffect(() => {
+		if (isLoggedIn) {
+			router.push(redirectUri || "/recipes");
+		}
+	}, [isLoggedIn, redirectUri, router]);
 
 	if (isLoading) {
 		return null;
@@ -81,9 +85,11 @@ export default function Login() {
 								type="button"
 								tabIndex={0}
 								className={styles.button}
-								onClick={() => {
-									window.location.href = `${process.env.NEXT_PUBLIC_REDDIT_AUTH_URL}&state=${generateState(redirectUri)}`;
-								}}
+								onClick={() =>
+									router.push(
+										`${process.env.NEXT_PUBLIC_REDDIT_AUTH_URL}&state=${generateState(redirectUri)}`,
+									)
+								}
 							>
 								<img src="/reddit.png" alt="Reddit logo" />
 								Continue With Reddit
@@ -103,9 +109,7 @@ export default function Login() {
 									type="button"
 									tabIndex={0}
 									className={clsx(styles.button, styles.anonymousButton)}
-									onClick={() => {
-										window.location.href = redirectUri ?? "/recipes";
-									}}
+									onClick={() => router.push(redirectUri ?? "/recipes")}
 								>
 									<img src="/anonymous.svg" alt="Anonymous login" />
 									Continue Anonymously
@@ -119,5 +123,14 @@ export default function Login() {
 				</div>
 			</div>
 		</div>
+	);
+}
+
+// Main page component with Suspense boundary
+export default function Login() {
+	return (
+		<Suspense fallback={<div>Loading...</div>}>
+			<LoginClient />
+		</Suspense>
 	);
 }

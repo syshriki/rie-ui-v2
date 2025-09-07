@@ -1,0 +1,6 @@
+services:
+  rie-ui:
+    image: 192.168.4.58:5000/rie-ui:latest
+    build: .
+    ports:
+      - "3000:3000"

@@ -1,7 +1,6 @@
 "use client";
 import clsx from "clsx";
 import { type ReactNode, useEffect, useId, useRef } from "react";
-import styles from "./menu.module.css";
 
 type NoRadiusCorner = "topLeft" | "topRight" | "bottomLeft" | "bottomRight";
 
@@ -86,7 +85,7 @@ const Menu: React.FC<MenuProps> = ({
 			id={finalMenuId}
 			popover="auto"
 			role="menu"
-			className={clsx(styles.menu, className)}
+			className={clsx(className)}
 			data-no-radius-corner={noRadiusCorner}
 		>
 			{children}

@@ -228,3 +228,44 @@ p {
 		position: static !important;
 	}
 }
+
+::backdrop {
+	backdrop-filter: blur(3px);
+}
+
+:popover-open {
+	width: max-content; /* Use the width of content instead of fixed width */
+	min-width: 200px; /* Minimum width for the menu */
+	max-width: 85%; /* Maximum width relative to viewport */
+	background-color: #fff;
+	border-radius: 5px;
+	box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.2);
+	position: fixed; /* Use fixed positioning to avoid layout issues */
+	padding: 0em;
+	display: flex;
+	flex-direction: column;
+	> :not(:last-child) {
+		border-bottom: 1px solid #ccc;
+	}
+}
+
+/* Custom corner radius based on data attribute */
+:popover-open[data-no-radius-corner="topLeft"] {
+	border-radius: 0 5px 5px 5px;
+}
+
+:popover-open[data-no-radius-corner="topRight"] {
+	border-radius: 5px 0 5px 5px;
+}
+
+:popover-open[data-no-radius-corner="bottomLeft"] {
+	border-radius: 5px 5px 5px 0;
+}
+
+:popover-open[data-no-radius-corner="bottomRight"] {
+	border-radius: 5px 5px 0 5px;
+}
+
+::backdrop {
+	backdrop-filter: blur(3px);
+}

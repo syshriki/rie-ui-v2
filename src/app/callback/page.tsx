@@ -1,24 +1,36 @@
 "use client";
-import { useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect } from "react";
 import { useIsLoggedIn } from "../../hooks/auth";
 
-export default function Callback() {
+// Client component that uses useSearchParams hook
+function CallbackClient() {
 	const { isLoggedIn, setExpiresAt, setUserId } = useIsLoggedIn({});
+	const router = useRouter();
+	const searchParams = useSearchParams();
 
 	useEffect(() => {
-		const params = new URLSearchParams(window.location.search);
-		const expiresAt = params.get("token_expires_at");
-		const userId = params.get("user_id");
-		const redirectUri = params.get("redirectUri") ?? "/recipes";
+		const expiresAt = searchParams.get("token_expires_at");
+		const userId = searchParams.get("user_id");
+		const redirectUri = searchParams.get("redirectUri") ?? "/recipes";
 		if (expiresAt) {
 			const date = new Date(Number(expiresAt));
 			setExpiresAt(date);
 			setUserId(userId);
 		}
 		if (isLoggedIn) {
-			window.location.href = redirectUri;
+			router.push(redirectUri);
 		}
-	}, [setExpiresAt, isLoggedIn, setUserId]);
+	}, [setExpiresAt, isLoggedIn, setUserId, router, searchParams]);
 
 	return null;
+}
+
+// Main page component with Suspense boundary
+export default function Callback() {
+	return (
+		<Suspense fallback={<div>Loading...</div>}>
+			<CallbackClient />
+		</Suspense>
+	);
 }

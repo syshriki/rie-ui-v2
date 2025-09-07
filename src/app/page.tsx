@@ -1,9 +1,13 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function Home() {
+	const router = useRouter();
+
 	useEffect(() => {
-		window.location.href = "/recipes";
-	}, []);
-	return null;
+		router.push("/recipes");
+	}, [router]);
+
+	return;
 }

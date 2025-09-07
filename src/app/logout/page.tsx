@@ -1,9 +1,9 @@
 "use client";
-import { revoke } from "../../api/client";
+import { Suspense, useEffect } from "react";
 import { useIsLoggedIn } from "../../hooks/auth";
-import { useEffect } from "react";
 
-export default function LogoutLayout() {
+// Client component that uses useSearchParams indirectly through useIsLoggedIn
+function LogoutClient() {
 	const { logout, isLoading, isLoggedIn } = useIsLoggedIn({});
 
 	useEffect(() => {
@@ -13,4 +13,13 @@ export default function LogoutLayout() {
 	}, [logout, isLoading, isLoggedIn]);
 
 	return null;
+}
+
+// Main page component with Suspense boundary
+export default function LogoutLayout() {
+	return (
+		<Suspense fallback={<div>Loading...</div>}>
+			<LogoutClient />
+		</Suspense>
+	);
 }

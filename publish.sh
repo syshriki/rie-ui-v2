@@ -1,0 +1,1 @@
+BUILDKIT_PROGRESS=plain docker compose -f compose.build.yml build --push

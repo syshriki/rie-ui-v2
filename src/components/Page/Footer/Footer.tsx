@@ -1,7 +1,7 @@
 "use client";
 import clsx from "clsx";
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type React from "react";
 import { useRef, useState } from "react";
 import Menu from "../../Menu/Menu";
@@ -16,6 +16,7 @@ interface FooterProps {
 
 const Footer: React.FC<FooterProps> = ({ selected, className, isLoggedIn }) => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
+	const router = useRouter();
 	const menuId = "footer-menu";
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
@@ -89,7 +90,7 @@ const Footer: React.FC<FooterProps> = ({ selected, className, isLoggedIn }) => {
 					{isLoggedIn ? (
 						<MenuItem
 							onClick={() => {
-								window.location.href = "/logout";
+								router.push("/logout");
 							}}
 						>
 							<img src="/logout.svg" aria-label="Logout" />
@@ -98,7 +99,7 @@ const Footer: React.FC<FooterProps> = ({ selected, className, isLoggedIn }) => {
 					) : (
 						<MenuItem
 							onClick={() => {
-								window.location.href = `/login?redirectUri=${redirectPath}`;
+								router.push(`/login?redirectUri=${redirectPath}`);
 							}}
 						>
 							<img src="/login.svg" aria-label="Login" />

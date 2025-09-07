@@ -1,15 +1,16 @@
 "use client";
-import Page from "../../components/Page/Page";
-import styles from "./page.module.css";
-import { useForm, type SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import type { CreateRecipeRequest } from "../../models/Recipe";
+import { Suspense, useState } from "react";
+import { type SubmitHandler, useForm } from "react-hook-form";
 import { postRecipe } from "../../api/client";
-import { useState } from "react";
-import { useIsLoggedIn } from "../../hooks/auth";
 import Button from "../../components/Button/Button";
+import Page from "../../components/Page/Page";
+import { useIsLoggedIn } from "../../hooks/auth";
+import type { CreateRecipeRequest } from "../../models/Recipe";
+import styles from "./page.module.css";
 
-export default function AddPage() {
+// Client component that uses useSearchParams via useIsLoggedIn hook
+function AddPageClient() {
 	const {
 		register,
 		handleSubmit,
@@ -76,5 +77,14 @@ export default function AddPage() {
 				</form>
 			</div>
 		</Page>
+	);
+}
+
+// Main page component with Suspense boundary
+export default function AddPage() {
+	return (
+		<Suspense fallback={<div>Loading...</div>}>
+			<AddPageClient />
+		</Suspense>
 	);
 }

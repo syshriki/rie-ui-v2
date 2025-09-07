@@ -1,5 +1,5 @@
 "use client";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { revoke, tryRefreshToken } from "../api/client";
 
@@ -14,26 +14,35 @@ export function useIsLoggedIn({
 	setUserId: (id: string | null) => void;
 } {
 	const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
-		window.localStorage.getItem("expiresAt") !== null,
+		typeof window !== "undefined"
+			? window.localStorage.getItem("expiresAt") !== null
+			: false,
 	);
 	const [isLoading, setIsLoading] = useState(true);
 	const [userId, setUserIdState] = useState<string | null>(
-		window.localStorage.getItem("userId"),
+		typeof window !== "undefined"
+			? window.localStorage.getItem("userId")
+			: null,
 	);
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
+	const router = useRouter();
 
 	const setUserId = useCallback((id: string | null) => {
-		if (id) {
-			window.localStorage.setItem("userId", id);
-		} else {
-			window.localStorage.removeItem("userId");
+		if (typeof window !== "undefined") {
+			if (id) {
+				window.localStorage.setItem("userId", id);
+			} else {
+				window.localStorage.removeItem("userId");
+			}
 		}
 		setUserIdState(id);
 	}, []);
 
 	const setExpiresAt = useCallback((date: Date) => {
-		window.localStorage.setItem("expiresAt", date.toString());
+		if (typeof window !== "undefined") {
+			window.localStorage.setItem("expiresAt", date.toString());
+		}
 		setIsLoggedIn(true);
 	}, []);
 
@@ -47,15 +56,17 @@ export function useIsLoggedIn({
 		(redirectUrl: string) => {
 			setIsLoading(true);
 			return revoke().then(() => {
-				window.localStorage.removeItem("expiresAt");
-				window.localStorage.removeItem("userId");
+				if (typeof window !== "undefined") {
+					window.localStorage.removeItem("expiresAt");
+					window.localStorage.removeItem("userId");
+				}
 				setIsLoggedIn(false);
 				setUserId(null);
-				window.location.href = redirectUrl;
+				router.push(redirectUrl);
 				setIsLoading(false);
 			});
 		},
-		[setUserId],
+		[setUserId, router],
 	);
 
 	useEffect(() => {
@@ -70,10 +81,12 @@ export function useIsLoggedIn({
 
 		setIsLoading(false);
 
-		window.addEventListener("storage", handleStorageChange);
-		return () => {
-			window.removeEventListener("storage", handleStorageChange);
-		};
+		if (typeof window !== "undefined") {
+			window.addEventListener("storage", handleStorageChange);
+			return () => {
+				window.removeEventListener("storage", handleStorageChange);
+			};
+		}
 	}, []);
 
 	useEffect(() => {

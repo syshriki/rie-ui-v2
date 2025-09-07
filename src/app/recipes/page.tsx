@@ -1,17 +1,18 @@
 "use client";
-import { useState, useEffect } from "react";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
+import { getRecipes, getRecipesAnonymous } from "../../api/client";
+import type { Recipe, RecipeResponse } from "../../api/models";
+import Card from "../../components/Card/Card";
 import Page from "../../components/Page/Page";
 import { useIsLoggedIn } from "../../hooks/auth";
-import { getRecipes, getRecipesAnonymous } from "../../api/client";
-import type { RecipeResponse, Recipe } from "../../api/models";
-import styles from "./page.module.css";
-import Card from "../../components/Card/Card";
-import Paginator from "./paginator";
 import MobilePaginator from "./MobilePaginator";
-import Link from "next/link";
+import styles from "./page.module.css";
+import Paginator from "./paginator";
 
-export default function RootLayout() {
+// Client component that uses useSearchParams
+function RecipesClient() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const { isLoggedIn } = useIsLoggedIn({});
@@ -117,5 +118,14 @@ export default function RootLayout() {
 				</Card>
 			</div>
 		</Page>
+	);
+}
+
+// Main page component with Suspense boundary
+export default function RecipesPage() {
+	return (
+		<Suspense fallback={<div>Loading...</div>}>
+			<RecipesClient />
+		</Suspense>
 	);
 }
