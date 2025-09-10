@@ -5,7 +5,7 @@ import type {
 	RefreshTokenResponse,
 } from "./models";
 
-export async function tryRefreshToken(redirectUri = "/browse") {
+export async function tryRefreshToken(redirectUri = "/recipes") {
 	let expiresAt = window.localStorage.getItem("expiresAt");
 	const userId = window.localStorage.getItem("userId");
 	const isInvalidExpiresAt =

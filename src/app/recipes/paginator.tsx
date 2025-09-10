@@ -20,6 +20,7 @@ export default function Paginator({
 	className,
 }: PaginatorProps) {
 	const searchParams = useSearchParams();
+
 	if (totalItems === 0) {
 		return null;
 	}

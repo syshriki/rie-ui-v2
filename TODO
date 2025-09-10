@@ -1,0 +1,9 @@
+1. Shrink buttons at bottom of screen on recipe page to be same size as search bar
+2. Mobile, add more line spacing between recipe title (when multiline) in search list
+3. Mobile, switch from bottom nav to top corner drop down
+4. Mobile, ensure menu item take up full with + increase height
+5. Mobile, Center login text
+6. Mobile, ensure bottom is fully scrollable on recipe details.
+7. Mobile, Shrink Recipe details header
+8. Should scroll to top when coming to a new page 
+9. Ensure print does not include small screen menu
