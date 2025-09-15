@@ -6,6 +6,7 @@
 	border-right-color: var(--separator-color);
 	display: flex;
 	padding-left: 4em;
+	height: 6rem;
 	align-items: flex-end;
 	padding-bottom: var(--line-height);
 	> img {
@@ -15,8 +16,15 @@
 
 @media (max-width: 900px) {
 	.corner {
+		padding-left: 1em;
 		> img {
-			display: none;
+			width: 4em;
 		}
+	}
+}
+
+@media (max-height: 600px) {
+	.corner {
+		display: none;
 	}
 }

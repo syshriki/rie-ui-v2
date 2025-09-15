@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { getRecipes, getRecipesAnonymous } from "../../api/client";
 import type { Recipe, RecipeResponse } from "../../api/models";
 import Card from "../../components/Card/Card";

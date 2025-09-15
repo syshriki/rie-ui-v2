@@ -1,15 +1,22 @@
 "use client";
-import type React from "react";
+
 import clsx from "clsx";
+import React, { type ForwardedRef, type ReactNode } from "react";
 import styles from "./paper.module.css";
 
 interface PaperProps {
-	children: React.ReactNode;
+	children: ReactNode;
 	className?: string;
 }
 
-const Paper: React.FC<PaperProps> = ({ children, className }) => {
-	return <div className={clsx(styles.paper, className)}>{children}</div>;
-};
+const Paper = React.forwardRef<HTMLDivElement, PaperProps>(
+	({ children, className }, ref: ForwardedRef<HTMLDivElement>) => {
+		return (
+			<div ref={ref} className={clsx(styles.paper, className)}>
+				{children}
+			</div>
+		);
+	},
+);
 
 export default Paper;

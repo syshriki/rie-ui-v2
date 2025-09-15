@@ -1,6 +1,7 @@
 .sidebar {
 	border-right-style: double;
 	border-right-width: 5px;
+	width: 12rem;
 	border-right-color: var(--separator-color);
 	font: 1.8em "Schoolbell", cursive;
 	display: flex;
@@ -24,7 +25,7 @@
 		border-top-style: double;
 		border-top-width: 5px;
 		border-top-color: var(--separator-color);
-		height: 3.5em;
+		min-height: 3.5em;
 		padding-left: 1em;
 		padding-right: 1em;
 		background-color: var(--default-background-color);
@@ -80,6 +81,8 @@
 	}
 
 	.sidebar {
+		width: 6rem;
+		overflow-y: scroll;
 		> nav {
 			> ul {
 				padding-left: .6em;

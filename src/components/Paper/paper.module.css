@@ -7,7 +7,9 @@
 		transparent var(--paper-line-thickness),
 		transparent calc(var(--paper-line-height) + var(--paper-line-thickness))
 	);
+	background-attachment: local;
 	background-size: 100%
 		calc(var(--paper-line-height) + var(--paper-line-thickness));
 	min-height: 100vh;
+	overscroll-behavior: none;
 }

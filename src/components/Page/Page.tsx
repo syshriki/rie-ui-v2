@@ -1,10 +1,12 @@
-import Header from "./Header/Header";
-import styles from "./page.module.css";
-import Sidebar from "./Sidebar/Sidebar";
-import type { SidebarProps } from "./Sidebar/Sidebar";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useRef } from "react";
 import Paper from "../Paper/Paper";
 import Corner from "./Corner/Corner";
-import MobileFooter from "./Footer/Footer";
+import Header from "./Header/Header";
+import MobilTopBar from "./MobileTopBar/MobileTopBar";
+import Sidebar from "./Sidebar/Sidebar";
+import type { SidebarProps } from "./Sidebar/Sidebar";
+import styles from "./page.module.css";
 
 export default function PageLayout({
 	children,
@@ -17,29 +19,37 @@ export default function PageLayout({
 	selected?: SidebarProps["selected"];
 	isLoggedIn?: boolean;
 }>) {
+	const searchParams = useSearchParams();
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	useEffect(() => {
+		//We do this to ensure that the container scrolls to the top when new content is loaded.
+		if (contentRef.current) {
+			contentRef.current.scrollTo({ top: 0 });
+		}
+	}, [searchParams]); // Triggers on path or query changes (e.g., ?page=2)
+
+	const contentRef = useRef<HTMLDivElement>(null);
+
 	return (
 		<Paper className={styles.container}>
+			<MobilTopBar
+				className={styles.mobileTopBar}
+				selected={selected}
+				isLoggedIn={isLoggedIn}
+			/>
 			<div className={styles.left}>
-				<Corner />
+				<Corner className={styles.corner} />
 				<Sidebar
 					className={styles.sidebar}
 					selected={selected}
 					isLoggedIn={isLoggedIn}
 				/>
 			</div>
-			<div className={styles.scrollableContainer}>
-				<div>
-					<Paper>
-						<Header>{headerText}</Header>
-						<main>{children}</main>
-					</Paper>
-				</div>
-			</div>
-			<MobileFooter
-				className={styles.footer}
-				selected={selected}
-				isLoggedIn={isLoggedIn}
-			/>
+			<Paper className={styles.scrollableContainer} ref={contentRef}>
+				<Header>{headerText}</Header>
+				<main>{children}</main>
+			</Paper>
 		</Paper>
 	);
 }

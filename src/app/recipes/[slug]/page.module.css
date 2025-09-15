@@ -25,6 +25,19 @@
 	margin-top: 1em;
 }
 
+.mobileControls {
+	display: none;
+	.editButton {
+		width: 4em;
+		height: 3rem;
+		img {
+			width: 2em;
+			height: 2em;
+			margin-right: .25em;
+		}
+	}
+}
+
 .recipeContainer {
 	display: flex;
 	flex-direction: column;
@@ -38,24 +51,17 @@
 			display: flex;
 			gap: 1rem;
 			justify-content: flex-end;
-		}
-		.mobileControls {
-			display: none;
-			img {
-				height: 2rem;
-				cursor: pointer;
-			}
-		}
-		.editButton {
-			justify-self: end;
-			align-items: center;
-			display: flex;
-			width: 4em;
-			height: 3rem;
-			img {
-				width: 2em;
-				height: 2em;
-				margin-right: .25em;
+			.editButton {
+				justify-self: end;
+				align-items: center;
+				display: flex;
+				width: 4em;
+				height: 3rem;
+				img {
+					width: 2em;
+					height: 2em;
+					margin-right: .25em;
+				}
 			}
 		}
 		> h2 {
@@ -91,7 +97,7 @@
 	}
 	.mobileControls {
 		display: flex !important;
-		justify-content: flex-end;
+		justify-content: center;
 		flex-grow: 1;
 	}
 	.headerContainer {
@@ -109,8 +115,7 @@
 	}
 	.mobileControls {
 		display: flex !important;
-		justify-content: flex-end;
-		flex-grow: 1;
+		justify-content: center;
 	}
 	.headerContainer {
 		display: flex !important;

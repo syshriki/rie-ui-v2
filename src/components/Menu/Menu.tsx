@@ -1,7 +1,7 @@
 "use client";
 import clsx from "clsx";
 import { type ReactNode, useEffect, useId, useRef } from "react";
-
+import styles from "./menu.module.css";
 type NoRadiusCorner = "topLeft" | "topRight" | "bottomLeft" | "bottomRight";
 
 interface MenuProps {
@@ -11,7 +11,7 @@ interface MenuProps {
 	onOpen?: () => void;
 	onClose?: () => void;
 	noRadiusCorner?: NoRadiusCorner;
-	anchorToElement?: string; // ID of the element to anchor the menu to
+	anchorToElement?: string;
 }
 
 const Menu: React.FC<MenuProps> = ({
@@ -20,7 +20,7 @@ const Menu: React.FC<MenuProps> = ({
 	menuId,
 	onOpen,
 	onClose,
-	noRadiusCorner = "bottomRight", // Set default to bottomRight to match the CSS
+	noRadiusCorner = "bottomRight",
 	anchorToElement,
 }) => {
 	const generatedId = useId();
@@ -61,10 +61,16 @@ const Menu: React.FC<MenuProps> = ({
 							noRadiusCorner === "topRight"
 						) {
 							popover.style.right = `${window.innerWidth - anchoElRect.right + 0.5 * anchoElRect.width}px`;
+							popover.style.left = "auto";
 						} else {
-							popover.style.right = `${window.innerWidth + anchoElRect.right - 0.5 * anchoElRect.width}px`;
+							console.log({
+								windowWidth: window.innerWidth,
+								anchoElRectRight: anchoElRect.right,
+								anchoElRectWidth: anchoElRect.width,
+								innerWidth: window.innerWidth,
+							});
+							popover.style.left = `${anchoElRect.right}px`;
 						}
-						popover.style.left = "auto"; // Reset left to avoid conflicts
 						popover.style.margin = "0";
 					}
 				}
@@ -85,7 +91,7 @@ const Menu: React.FC<MenuProps> = ({
 			id={finalMenuId}
 			popover="auto"
 			role="menu"
-			className={clsx(className)}
+			className={clsx(className, styles.menu)}
 			data-no-radius-corner={noRadiusCorner}
 		>
 			{children}
