@@ -47,7 +47,7 @@ const Footer: React.FC<FooterProps> = ({ selected, className, isLoggedIn }) => {
 
 			<Menu
 				menuId={menuId}
-				className={styles.hamburger}
+				className={styles.menu}
 				noRadiusCorner="topLeft"
 				onOpen={() => setIsMenuOpen(true)}
 				onClose={() => setIsMenuOpen(false)}

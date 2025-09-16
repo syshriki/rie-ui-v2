@@ -97,6 +97,7 @@
 	}
 	.mobileControls {
 		display: flex !important;
+		gap: 2rem;
 		justify-content: center;
 		flex-grow: 1;
 	}

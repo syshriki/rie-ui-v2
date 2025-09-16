@@ -1,7 +1,8 @@
 "use client";
+import debounce from "lodash/debounce";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { getRecipes, getRecipesAnonymous } from "../../api/client";
 import type { Recipe, RecipeResponse } from "../../api/models";
 import Card from "../../components/Card/Card";
@@ -26,6 +27,30 @@ function RecipesClient() {
 		null,
 	);
 	const [isLoading, setIsLoading] = useState(false);
+
+	const performSearch = useCallback(() => {
+		const params = new URLSearchParams();
+		if (searchQuery) params.set("q", searchQuery);
+		params.set("page", "1"); // Reset to page 1 when searching
+		router.replace(`/recipes?${params.toString()}`);
+	}, [searchQuery, router]);
+
+	const debouncedSearchFn = useCallback(
+		debounce((query: string, currentQueryParam: string, search: () => void) => {
+			if (query !== currentQueryParam && query.length >= 3) {
+				search();
+			}
+		}, 300),
+		[],
+	);
+
+	useEffect(() => {
+		debouncedSearchFn(searchQuery, queryParam, performSearch);
+
+		return () => {
+			debouncedSearchFn.cancel();
+		};
+	}, [searchQuery, queryParam, performSearch, debouncedSearchFn]);
 
 	useEffect(() => {
 		setIsLoading(true);
@@ -52,13 +77,6 @@ function RecipesClient() {
 		setSearchQuery(queryParam);
 	}, [queryParam]);
 
-	const handleSearch = () => {
-		const params = new URLSearchParams();
-		if (searchQuery) params.set("q", searchQuery);
-		params.set("page", "1"); // Reset to page 1 when searching
-		router.replace(`/recipes?${params.toString()}`);
-	};
-
 	return (
 		<Page selected="recipes" headerText="Recipes" isLoggedIn={isLoggedIn}>
 			<div className={styles.container}>
@@ -72,13 +90,13 @@ function RecipesClient() {
 								placeholder="Search recipes..."
 								value={searchQuery}
 								onChange={(e) => setSearchQuery(e.target.value)}
-								onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-								aria-label="Search recipes"
+								onKeyDown={(e) => e.key === "Enter" && performSearch()}
+								aria-label="Search recipes (typing 3 or more characters will search automatically)"
 							/>
 							<button
 								className={styles.searchButton}
-								onClick={handleSearch}
-								onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+								onClick={performSearch}
+								onKeyDown={(e) => e.key === "Enter" && performSearch()}
 								aria-label="Submit"
 								type="button"
 							>
