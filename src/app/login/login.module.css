@@ -158,6 +158,10 @@
 		display: none;
 	}
 
+	.button {
+		width: 100%;
+	}
+
 	.right {
 		width: 100%;
 		.content {
@@ -176,9 +180,6 @@
 		grid-template-rows: 75%;
 	}
 
-	.button {
-		width: 80%;
-	}
 	.content .header,
 	.primaryHeading {
 		display: none;
