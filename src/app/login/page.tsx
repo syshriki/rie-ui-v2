@@ -61,7 +61,9 @@ function LoginClient() {
 					<div>
 						<h1 className={styles.primaryHeading}>Welcome</h1>
 						<h1 className={styles.secondaryHeading}>Rie.recipes</h1>
-						<p>Choose an option below to get started</p>
+						<p className={styles.subHeader}>
+							Choose an option below to get started
+						</p>
 						<div className={styles.buttonContainer}>
 							<button
 								type="button"

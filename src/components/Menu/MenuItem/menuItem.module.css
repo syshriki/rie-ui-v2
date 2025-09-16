@@ -1,16 +1,13 @@
 .clickable {
 	display: flex;
 	align-items: center;
-	padding-left: 1.5em;
 	border: 0;
-	padding-right: 1.5em;
-	padding-top: 1.5em;
-	padding-bottom: 1.5em;
+	padding: 3em;
 	cursor: pointer;
 	height: 100%;
 	background-color: inherit;
 	span {
-		font-size: 2em;
+		font-size: 3em;
 	}
 	img {
 		height: 1.75em;

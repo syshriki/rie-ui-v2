@@ -19,4 +19,6 @@ const Paper = React.forwardRef<HTMLDivElement, PaperProps>(
 	},
 );
 
+Paper.displayName = "Paper";
+
 export default Paper;

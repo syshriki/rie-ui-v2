@@ -112,6 +112,9 @@
 		height: 100%;
 		grid-template-rows: 20% 50% 30%;
 		justify-items: center;
+		.subHeader {
+			text-align: center;
+		}
 		.footer {
 			margin-top: 1em;
 			width: 60%;
@@ -171,6 +174,10 @@
 	.right .content,
 	.left .content {
 		grid-template-rows: 75%;
+	}
+
+	.button {
+		width: 80%;
 	}
 	.content .header,
 	.primaryHeading {
