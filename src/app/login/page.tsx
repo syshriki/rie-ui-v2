@@ -76,9 +76,13 @@ function LoginClient() {
 							</button>
 							<button
 								type="button"
-								disabled
-								tabIndex={-1}
+								tabIndex={0}
 								className={styles.button}
+								onClick={() =>
+									router.push(
+										`${process.env.NEXT_PUBLIC_FB_AUTH_URL}&state=${generateState(redirectUri)}`,
+									)
+								}
 							>
 								<img src="/fb.png" alt="Facebook logo" />
 								Continue With Facebook
