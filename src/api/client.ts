@@ -5,6 +5,13 @@ import type {
 	RefreshTokenResponse,
 } from "./models";
 
+export class AuthenticationError extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = "AuthenticationError";
+	}
+}
+
 export async function tryRefreshToken(redirectUri = "/recipes") {
 	let expiresAt = window.localStorage.getItem("expiresAt");
 	const userId = window.localStorage.getItem("userId");
@@ -35,8 +42,10 @@ export async function tryRefreshToken(redirectUri = "/recipes") {
 		return; // token is valid
 	} catch (error) {
 		console.log(error);
-		window.location.href = `/login?redirectUri=${redirectUri}`;
-		throw new Error("not authenticated, redirecting to login");
+		if (error instanceof AuthenticationError) {
+			window.location.href = `/login?redirectUri=${redirectUri}`;
+		}
+		throw error;
 	}
 }
 
@@ -50,9 +59,10 @@ async function introspect(): Promise<IntrospectResponse> {
 	});
 
 	if ([400, 401].includes(response.status)) {
-		throw new Error(await response.text());
+		throw new AuthenticationError(await response.text());
 	}
 
+	await failOnNonOk(response);
 	return await response.json();
 }
 
@@ -69,7 +79,7 @@ async function refresh(): Promise<RefreshTokenResponse> {
 	);
 
 	if ([401, 400].includes(response.status)) {
-		throw new Error(await response.text());
+		throw new AuthenticationError(await response.text());
 	}
 
 	return await response.json();
@@ -88,13 +98,9 @@ export async function revoke(): Promise<void> {
 }
 
 async function failOnNonOk(response: Response) {
-	if (!response.ok) {
-		throw new Error(
-			JSON.stringify({
-				status: response.status,
-				body: await response.json(),
-			}),
-		);
+	if (response.status === 404 || response.status >= 500) {
+		window.location.href = "/error";
+		return;
 	}
 }
 

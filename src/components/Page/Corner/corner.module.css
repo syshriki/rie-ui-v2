@@ -1,5 +1,4 @@
 .corner {
-	grid-area: corner;
 	background-color: var(--default-background-color);
 	border-right-style: double;
 	border-right-width: 5px;
@@ -9,8 +8,11 @@
 	height: 6rem;
 	align-items: flex-end;
 	padding-bottom: var(--line-height);
-	> img {
+	.img {
 		height: 3.6em;
+	}
+	> a {
+		line-height: 0 !important;
 	}
 }
 

@@ -23,13 +23,34 @@ export default function RecipePage() {
 	const router = useRouter();
 
 	const { isLoggedIn, userId } = useIsLoggedIn({});
-	const menuId = "recipe-menu";
 
 	const [recipeData, setRecipeData] = useState<RecipeBySlug | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
 	const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
 	const [isDeleting, setIsDeleting] = useState(false);
-	const [isMenuOpen, setIsMenuOpen] = useState(false);
+	const [wakeLock, setWakeLock] = useState<WakeLockSentinel | null>(null);
+
+	useEffect(() => {
+		const requestWakeLock = async () => {
+			if ("wakeLock" in navigator) {
+				try {
+					const lock = await navigator.wakeLock.request("screen");
+					setWakeLock(lock);
+				} catch (err) {
+					console.warn("Wake lock request failed:", err);
+				}
+			}
+		};
+
+		requestWakeLock();
+
+		return () => {
+			if (wakeLock) {
+				wakeLock.release();
+				setWakeLock(null);
+			}
+		};
+	}, [wakeLock]);
 
 	useEffect(() => {
 		const fetchRecipe = async () => {

@@ -1,7 +1,17 @@
 "use client";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { revoke, tryRefreshToken } from "../api/client";
+import { AuthenticationError, revoke, tryRefreshToken } from "../api/client";
+
+function isUserLoggedIn(): boolean {
+	if (typeof window === "undefined") return false;
+	const expiresAtStr = window.localStorage.getItem("expiresAt");
+	if (expiresAtStr) {
+		const expiresAt = new Date(expiresAtStr);
+		return expiresAt > new Date();
+	}
+	return false;
+}
 
 export function useIsLoggedIn({
 	requiresLogin = false,
@@ -13,11 +23,7 @@ export function useIsLoggedIn({
 	setExpiresAt: (date: Date) => void;
 	setUserId: (id: string | null) => void;
 } {
-	const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
-		typeof window !== "undefined"
-			? window.localStorage.getItem("expiresAt") !== null
-			: false,
-	);
+	const [isLoggedIn, setIsLoggedIn] = useState<boolean>(isUserLoggedIn());
 	const [isLoading, setIsLoading] = useState(true);
 	const [userId, setUserIdState] = useState<string | null>(
 		typeof window !== "undefined"
@@ -72,7 +78,7 @@ export function useIsLoggedIn({
 	useEffect(() => {
 		const handleStorageChange = (event: StorageEvent) => {
 			if (event.key === "expiresAt") {
-				setIsLoggedIn(event.newValue !== null);
+				setIsLoggedIn(isUserLoggedIn());
 			}
 			if (event.key === "userId") {
 				setUserIdState(event.newValue);
@@ -90,14 +96,30 @@ export function useIsLoggedIn({
 	}, []);
 
 	useEffect(() => {
-		if (!isLoggedIn && !isLoading && requiresLogin) {
+		const isTokenExpired = () => {
+			const expiresAtStr = window.localStorage.getItem("expiresAt");
+			if (expiresAtStr) {
+				const expiresAt = new Date(expiresAtStr);
+				return expiresAt <= new Date();
+			}
+			return true;
+		};
+
+		if (!isLoading && ((!isLoggedIn && requiresLogin) || isTokenExpired())) {
 			setIsLoading(true);
 			tryRefreshToken(redirectPath)
 				.then((response) => {
 					setIsLoggedIn(true);
 					setIsLoading(false);
 				})
-				.catch(() => {}); // noop, already redirected
+				.catch((error) => {
+					if (error instanceof AuthenticationError) {
+						// already redirected to login
+					} else {
+						// other errors, redirect to error page
+						window.location.href = "/error";
+					}
+				});
 		}
 	}, [isLoggedIn, isLoading, requiresLogin, redirectPath]);
 
