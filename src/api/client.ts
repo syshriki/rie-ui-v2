@@ -100,7 +100,7 @@ export async function revoke(): Promise<void> {
 async function failOnNonOk(response: Response) {
 	if (response.status === 404 || response.status >= 500) {
 		window.location.href = "/error";
-		return;
+		throw new Error(`request failed with status ${response.status}`);
 	}
 }
 

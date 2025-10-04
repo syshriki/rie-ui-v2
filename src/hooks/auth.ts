@@ -102,7 +102,7 @@ export function useIsLoggedIn({
 				const expiresAt = new Date(expiresAtStr);
 				return expiresAt <= new Date();
 			}
-			return true;
+			return false;
 		};
 
 		if (!isLoading && ((!isLoggedIn && requiresLogin) || isTokenExpired())) {
