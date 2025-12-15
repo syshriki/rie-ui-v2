@@ -12,12 +12,24 @@ import type { RecipeBySlug } from "../../../api/models";
 import Button from "../../../components/Button/Button";
 import Card from "../../../components/Card/Card";
 import Popover from "../../../components/Dialog/Dialog";
-import Menu from "../../../components/Menu/Menu";
-import MenuItem from "../../../components/Menu/MenuItem/MenuItem";
 import Page from "../../../components/Page/Page";
 import { useIsLoggedIn } from "../../../hooks/auth";
 import styles from "./page.module.css";
 
+function print() {
+	if (typeof window === "undefined") {
+		console.error("Print function called outside of browser context");
+		return;
+	}
+
+	try {
+		if (!document.execCommand("print", false, undefined)) {
+			window.print();
+		}
+	} catch {
+		window.print();
+	}
+}
 export default function RecipePage() {
 	const { slug } = useParams();
 	const router = useRouter();
@@ -94,16 +106,11 @@ export default function RecipePage() {
 			<div className={styles.container}>
 				<Card className={styles.card}>
 					{!isLoading && recipeData && (
-						<article className={clsx(styles.printable, styles.recipeContainer)}>
+						<article className={clsx(styles.recipeContainer)}>
 							<div className={styles.headerContainer}>
 								<h2 className={styles.title}>{recipeData.title}</h2>
 								<nav className={styles.desktopControls}>
-									<Button
-										className={styles.editButton}
-										onClick={() =>
-											typeof window !== "undefined" && window.print()
-										}
-									>
+									<Button className={styles.editButton} onClick={() => print()}>
 										<img src="/print.svg" aria-label="Print Recipe" />
 									</Button>
 									{userId === recipeData.authorId ? (

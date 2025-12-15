@@ -125,6 +125,7 @@
 
 @media print {
 	.container {
+		background: white !important;
 		height: auto !important;
 		article {
 			i:last-child {
@@ -137,6 +138,7 @@
 	}
 
 	.card {
+		background: white !important;
 		width: 100% !important;
 		min-height: auto !important;
 		margin: 0 !important;
