@@ -13,6 +13,11 @@ export class AuthenticationError extends Error {
 }
 
 export async function tryRefreshToken(redirectUri = "/recipes") {
+	// Don't redirect if already on login page to prevent loops
+	if (typeof window !== 'undefined' && window.location.pathname === '/login') {
+		throw new AuthenticationError('Already on login page');
+	}
+	
 	let expiresAt = window.localStorage.getItem("expiresAt");
 	const userId = window.localStorage.getItem("userId");
 	const isInvalidExpiresAt =

@@ -105,7 +105,10 @@ export function useIsLoggedIn({
 			return false;
 		};
 
-		if (!isLoading && ((!isLoggedIn && requiresLogin) || isTokenExpired())) {
+		// Don't attempt token refresh if already on login/callback pages
+		const isAuthPage = pathname === '/login' || pathname === '/callback' || pathname === '/logout';
+		
+		if (!isLoading && ((!isLoggedIn && requiresLogin) || isTokenExpired()) && !isAuthPage) {
 			setIsLoading(true);
 			tryRefreshToken(redirectPath)
 				.then((response) => {
@@ -121,7 +124,7 @@ export function useIsLoggedIn({
 					}
 				});
 		}
-	}, [isLoggedIn, isLoading, requiresLogin, redirectPath]);
+	}, [isLoggedIn, isLoading, requiresLogin, redirectPath, pathname]);
 
 	return { isLoggedIn, logout, isLoading, setExpiresAt, setUserId, userId };
 }
