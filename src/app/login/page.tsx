@@ -3,6 +3,7 @@
 import clsx from "clsx";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect } from "react";
+import { revoke } from "../../api/client";
 import Paper from "../../components/Paper/Paper";
 import { useIsLoggedIn } from "../../hooks/auth";
 import Chefy from "./chefy";
@@ -115,7 +116,12 @@ function LoginClient() {
 									type="button"
 									tabIndex={0}
 									className={clsx(styles.button, styles.anonymousButton)}
-									onClick={() => router.push(redirectUri ?? "/recipes")}
+									onClick={async () => {
+										// incase bad credentials are stored (it will automatically clear them instead of trying to refresh)
+										await revoke().finally(() => {
+											router.push(redirectUri ?? "/recipes");
+										});
+									}}
 								>
 									<img src="/anonymous.svg" alt="Anonymous login" />
 									Continue Anonymously

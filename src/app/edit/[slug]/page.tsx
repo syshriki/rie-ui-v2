@@ -63,7 +63,7 @@ export default function EditPage() {
 		setIsSubmitting(true);
 		try {
 			const recipe = await updateRecipe(slug.toString(), data);
-			router.push(`/recipes/${recipe.slug}`);
+			router.push(`/${recipe.slug}`);
 		} catch (error) {
 			console.error("Failed to update recipe:", error);
 			// Optionally, handle the error (e.g., show a notification)

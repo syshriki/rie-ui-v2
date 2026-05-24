@@ -1,5 +1,6 @@
-import { useSearchParams } from "next/navigation";
-import { useEffect, useRef } from "react";
+"use client";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useLayoutEffect, useRef } from "react";
 import Paper from "../Paper/Paper";
 import Corner from "./Corner/Corner";
 import Header from "./Header/Header";
@@ -20,16 +21,14 @@ export default function PageLayout({
 	isLoggedIn?: boolean;
 }>) {
 	const searchParams = useSearchParams();
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-	useEffect(() => {
-		//We do this to ensure that the container scrolls to the top when new content is loaded.
-		if (contentRef.current) {
-			contentRef.current.scrollTo({ top: 0 });
-		}
-	}, [searchParams]); // Triggers on path or query changes (e.g., ?page=2)
-
+	const pathname = usePathname();
 	const contentRef = useRef<HTMLDivElement>(null);
+
+	// Scroll to the top whenever the route changes.
+	// biome-ignore lint/correctness/useExhaustiveDependencies: contentRef is a stable ref
+	useLayoutEffect(() => {
+		contentRef.current?.scrollTo({ top: 0, behavior: "instant" });
+	}, [pathname, searchParams]);
 
 	return (
 		<Paper className={styles.container}>

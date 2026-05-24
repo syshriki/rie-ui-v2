@@ -106,9 +106,16 @@ export function useIsLoggedIn({
 		};
 
 		// Don't attempt token refresh if already on login/callback pages
-		const isAuthPage = pathname === '/login' || pathname === '/callback' || pathname === '/logout';
-		
-		if (!isLoading && ((!isLoggedIn && requiresLogin) || isTokenExpired()) && !isAuthPage) {
+		const isAuthPage =
+			pathname === "/login" ||
+			pathname === "/callback" ||
+			pathname === "/logout";
+
+		if (
+			!isLoading &&
+			((!isLoggedIn && requiresLogin) || (isTokenExpired() && requiresLogin)) &&
+			!isAuthPage
+		) {
 			setIsLoading(true);
 			tryRefreshToken(redirectPath)
 				.then((response) => {

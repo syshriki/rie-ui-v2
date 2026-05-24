@@ -29,7 +29,7 @@ function AddPageClient() {
 		setIsSubmitting(true);
 		try {
 			const recipe = await postRecipe(data);
-			router.push(`/recipes/${recipe.slug}`);
+			router.push(`/${recipe.slug}`);
 		} catch (error) {
 			//console.error("Failed to post recipe:", error);
 			// Optionally, handle the error (e.g., show a notification)

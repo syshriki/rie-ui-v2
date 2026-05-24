@@ -54,6 +54,7 @@ function RecipesClient() {
 
 	useEffect(() => {
 		setIsLoading(true);
+		setRecipeResponse(null); // Clear stale results so the old page doesn't flash
 		if (isLoggedIn) {
 			getRecipes({ page: currentPage, query: queryParam, pageSize: 20 }).then(
 				(response: RecipeResponse) => {
@@ -104,9 +105,13 @@ function RecipesClient() {
 							</button>
 						</div>
 						<section className={styles.resultContainer}>
-							{recipeResponse?.recipes.map((recipe: Recipe) => (
+							{isLoading && (
+								<p className={styles.loadingText}>Loading...</p>
+							)}
+
+							{!isLoading && recipeResponse?.recipes.map((recipe: Recipe) => (
 								<div className={styles.result} key={recipe.id}>
-									<Link href={`/recipes/${recipe.slug}`}>
+									<Link href={`/${recipe.slug}`}>
 										<img src="/asterisk.svg" aria-label="list item marker" />
 										<h3>{recipe.title}</h3>
 									</Link>
@@ -114,7 +119,7 @@ function RecipesClient() {
 								</div>
 							))}
 
-							{recipeResponse?.recipes.length === 0 && !isLoading && (
+							{!isLoading && recipeResponse?.recipes.length === 0 && (
 								<h3 aria-live="polite">No recipes found</h3>
 							)}
 						</section>

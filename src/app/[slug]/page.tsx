@@ -7,13 +7,13 @@ import {
 	deleteRecipe,
 	getRecipe,
 	getRecipeAnonymous,
-} from "../../../api/client";
-import type { RecipeBySlug } from "../../../api/models";
-import Button from "../../../components/Button/Button";
-import Card from "../../../components/Card/Card";
-import Popover from "../../../components/Dialog/Dialog";
-import Page from "../../../components/Page/Page";
-import { useIsLoggedIn } from "../../../hooks/auth";
+} from "../../api/client";
+import type { RecipeBySlug } from "../../api/models";
+import Button from "../../components/Button/Button";
+import Card from "../../components/Card/Card";
+import Popover from "../../components/Dialog/Dialog";
+import Page from "../../components/Page/Page";
+import { useIsLoggedIn } from "../../hooks/auth";
 import styles from "./page.module.css";
 
 function print() {

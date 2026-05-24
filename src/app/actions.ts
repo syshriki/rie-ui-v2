@@ -25,5 +25,5 @@ export async function createRecipe(formData: FormData): Promise<void> {
 
   const responseData = await response.json();
 
-  revalidatePath(`/recipes/${responseData.slug}`);
+  revalidatePath(`/${responseData.slug}`);
 }
