@@ -7,8 +7,8 @@ import {
 	deleteRecipe,
 	getRecipe,
 	getRecipeAnonymous,
-} from "../../api/client";
-import type { RecipeBySlug } from "../../api/models";
+} from "../../api/sdk";
+import type { RecipeWithAuthor, RecipeWithAuthorAnon } from "../../api/sdk";
 import Button from "../../components/Button/Button";
 import Card from "../../components/Card/Card";
 import Popover from "../../components/Dialog/Dialog";
@@ -36,7 +36,7 @@ export default function RecipePage() {
 
 	const { isLoggedIn, userId } = useIsLoggedIn({});
 
-	const [recipeData, setRecipeData] = useState<RecipeBySlug | null>(null);
+	const [recipeData, setRecipeData] = useState<RecipeWithAuthor | RecipeWithAuthorAnon | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
 	const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
 	const [isDeleting, setIsDeleting] = useState(false);
@@ -69,11 +69,15 @@ export default function RecipePage() {
 			try {
 				setIsLoading(true);
 
-				const data = isLoggedIn
-					? await getRecipe(slug?.toString() || "")
-					: await getRecipeAnonymous(slug?.toString() || "");
+				const result = isLoggedIn
+					? await getRecipe({ path: { slug: slug?.toString() || "" } })
+					: await getRecipeAnonymous({ path: { slug: slug?.toString() || "" } });
 
-				setRecipeData(data);
+				if (result.error) {
+					console.error("Error fetching recipe:", result.error);
+				} else {
+					setRecipeData(result.data);
+				}
 			} catch (err) {
 				console.error("Error fetching recipe:", err);
 			} finally {
@@ -91,8 +95,12 @@ export default function RecipePage() {
 	const deleteRecipeHandler = async (slug: string) => {
 		setIsDeleting(true);
 		try {
-			await deleteRecipe(slug);
-			router.push("/recipes");
+			const result = await deleteRecipe({ path: { slug } });
+			if (result.error) {
+				console.error("Error deleting recipe:", result.error);
+			} else {
+				router.push("/recipes");
+			}
 		} catch (err) {
 			console.error("Error deleting recipe:", err);
 		} finally {

@@ -48,6 +48,7 @@ export default function PageLayout({
 			<Paper className={styles.scrollableContainer} ref={contentRef}>
 				<Header>{headerText}</Header>
 				<main>{children}</main>
+				<footer className={styles.footer} />
 			</Paper>
 		</Paper>
 	);

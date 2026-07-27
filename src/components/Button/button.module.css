@@ -1,6 +1,4 @@
 .button {
-	background-image: url("/bluecrayon3.jpg");
-	background-repeat: repeat;
 	display: flex;
 	border-radius: 5px 5px 5px 5px;
 	justify-content: center;
@@ -22,6 +20,15 @@
 .button:disabled {
 	border: 2px solid #939393;
 	color: #939393;
+}
+
+.primary {
+	background-image: url("/bluecrayon3.jpg");
+	background-repeat: repeat;
+}
+
+.secondary {
+	background: transparent;
 }
 
 /* Add these classes for more customization */

@@ -3,7 +3,7 @@
 import clsx from "clsx";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect } from "react";
-import { revoke } from "../../api/client";
+import { revoke } from "../../api/auth";
 import Paper from "../../components/Paper/Paper";
 import { useIsLoggedIn } from "../../hooks/auth";
 import Chefy from "./chefy";
@@ -126,7 +126,16 @@ function LoginClient() {
 									<img src="/anonymous.svg" alt="Anonymous login" />
 									Continue Anonymously
 								</button>
+							
 							</div>
+								<div className={styles.links}>
+									<a href="/privacy">
+									Privacy Policy
+									</a>
+									<a href="/terms">
+											Terms of Service
+									</a>
+								</div>
 						</div>
 					</div>
 					<div className={styles.footer}>

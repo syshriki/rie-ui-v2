@@ -15,8 +15,16 @@
 		width: 100%;
 		overflow-y: auto;
 		background-color: var(--default-background-color);
-		backface-visibility: hidden; /*  forces Firefox to promote rendering to GPU compositor layer. recipe page background lags without this */
+		backface-visibility: hidden; /*  forces Firefox to promote rendering to GPU compositor layer. recipe page background scroll lags without this */
 	}
+
+	.footer {
+		display: flex;
+		justify-content: center;
+		padding: 1.5rem 1rem;
+	}
+
+	
 }
 
 @media (max-width: 600px) {
@@ -45,5 +53,9 @@
 			page-break-inside: auto;
 			max-height: none !important;
 		}
+	}
+
+	.footer {
+		display: none;
 	}
 }

@@ -1,10 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import type { CreateRecipeRequest } from "../models/Recipe";
+import type { CreateRecipeBody } from "../api/sdk";
 
 export async function createRecipe(formData: FormData): Promise<void> {
-  const recipeData: CreateRecipeRequest = {
+  const recipeData: CreateRecipeBody = {
     title: formData.get("recipeName") as string,
     description: formData.get("description") as string,
     recipe: formData.get("recipe") as string

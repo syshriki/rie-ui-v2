@@ -1,7 +1,7 @@
 "use client";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { AuthenticationError, revoke, tryRefreshToken } from "../api/client";
+import { AuthenticationError, revoke, tryRefreshToken } from "../api/auth";
 
 function isUserLoggedIn(): boolean {
 	if (typeof window === "undefined") return false;

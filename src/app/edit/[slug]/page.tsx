@@ -3,8 +3,8 @@ import Page from "../../../components/Page/Page";
 import styles from "./page.module.css";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { useParams, useRouter } from "next/navigation";
-import type { CreateRecipeRequest } from "../../../models/Recipe";
-import { getRecipe, updateRecipe } from "../../../api/client";
+import { getRecipe, updateRecipe } from "../../../api/sdk";
+import type { CreateRecipeBody } from "../../../api/sdk";
 import { useEffect, useState } from "react";
 import { useIsLoggedIn } from "../../../hooks/auth";
 import Button from "../../../components/Button/Button";
@@ -15,7 +15,7 @@ export default function EditPage() {
 		handleSubmit,
 		formState: { isValid, errors },
 		reset,
-	} = useForm<CreateRecipeRequest>({
+	} = useForm<CreateRecipeBody>({
 		mode: "onChange",
 	});
 	const { isLoggedIn, isLoading } = useIsLoggedIn({
@@ -40,12 +40,17 @@ export default function EditPage() {
 
 		const fetchRecipe = async () => {
 			try {
-				const recipe = await getRecipe(slug.toString());
-				reset({
-					title: recipe.title,
-					description: recipe.description,
-					recipe: recipe.recipe,
-				});
+				const result = await getRecipe({ path: { slug: slug.toString() } });
+				if (result.error) {
+					console.error("Failed to fetch recipe:", result.error);
+					router.push("/recipes");
+				} else {
+					reset({
+						title: result.data.title,
+						description: result.data.description ?? undefined,
+						recipe: result.data.recipe,
+					});
+				}
 			} catch (error) {
 				console.error("Failed to fetch recipe:", error);
 				router.push("/recipes");
@@ -57,16 +62,19 @@ export default function EditPage() {
 		fetchRecipe();
 	}, [slug, isLoggedIn, reset, router]);
 
-	const onSubmit: SubmitHandler<CreateRecipeRequest> = async (data) => {
+	const onSubmit: SubmitHandler<CreateRecipeBody> = async (data) => {
 		if (!slug) return;
 
 		setIsSubmitting(true);
 		try {
-			const recipe = await updateRecipe(slug.toString(), data);
-			router.push(`/${recipe.slug}`);
+			const result = await updateRecipe({ path: { slug: slug.toString() }, body: data });
+			if (result.error) {
+				console.error("Failed to update recipe:", result.error);
+			} else {
+				router.push(`/${result.data.slug}`);
+			}
 		} catch (error) {
 			console.error("Failed to update recipe:", error);
-			// Optionally, handle the error (e.g., show a notification)
 		} finally {
 			setIsSubmitting(false);
 		}

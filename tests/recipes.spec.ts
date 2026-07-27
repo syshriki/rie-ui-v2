@@ -105,7 +105,7 @@ test.describe("Recipes list page", () => {
 		// Playwright processes routes LIFO, so this runs first. For page=2 we hold
 		// the response for 300 ms (enough to assert the loading state), then fulfill
 		// it directly. All other requests fall through to the beforeEach mock.
-		await page.route("**/api/anonymous/recipes**", async (route) => {
+		await page.route("**/anonymous/recipes**", async (route) => {
 			const url = new URL(route.request().url());
 			if (url.searchParams.get("page") === "2") {
 				await new Promise<void>((r) => setTimeout(r, 300));

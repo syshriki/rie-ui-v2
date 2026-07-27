@@ -17,7 +17,7 @@ test.describe("Print layout", () => {
 		await mockApiRoutes(page);
 
 		// Override the detail route to return the pizza dough recipe for this slug
-		await page.route("**/api/anonymous/recipes/pizza-dough", (route) =>
+		await page.route("**/anonymous/recipes/pizza-dough", (route) =>
 			route.fulfill({
 				status: 200,
 				contentType: "application/json",
@@ -27,7 +27,7 @@ test.describe("Print layout", () => {
 	});
 
 	test("pizza dough recipe prints on 1 or 2 pages", async ({ page }) => {
-		await page.goto("/recipes/pizza-dough");
+		await page.goto("/pizza-dough");
 
 		// Wait for the recipe content to be fully rendered before printing
 		await expect(

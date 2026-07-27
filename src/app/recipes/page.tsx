@@ -3,8 +3,8 @@ import debounce from "lodash/debounce";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useRef, useState } from "react";
-import { getRecipes, getRecipesAnonymous } from "../../api/client";
-import type { Recipe, RecipeResponse } from "../../api/models";
+import { searchRecipes, searchRecipesAnonymous } from "../../api/sdk";
+import type { RecipesPageResponse, RecipesPageResponseAnon } from "../../api/sdk";
 import Card from "../../components/Card/Card";
 import Page from "../../components/Page/Page";
 import { useIsLoggedIn } from "../../hooks/auth";
@@ -23,7 +23,7 @@ function RecipesClient() {
 	const currentPage = pageParam ? Number.parseInt(pageParam) : 1;
 
 	const [searchQuery, setSearchQuery] = useState(queryParam);
-	const [recipeResponse, setRecipeResponse] = useState<RecipeResponse | null>(
+	const [recipeResponse, setRecipeResponse] = useState<RecipesPageResponse | RecipesPageResponseAnon | null>(
 		null,
 	);
 	const [isLoading, setIsLoading] = useState(false);
@@ -55,23 +55,18 @@ function RecipesClient() {
 	useEffect(() => {
 		setIsLoading(true);
 		setRecipeResponse(null); // Clear stale results so the old page doesn't flash
-		if (isLoggedIn) {
-			getRecipes({ page: currentPage, query: queryParam, pageSize: 20 }).then(
-				(response: RecipeResponse) => {
-					setRecipeResponse(response);
-					setIsLoading(false);
-				},
-			);
-		} else {
-			getRecipesAnonymous({
-				page: currentPage,
-				query: queryParam,
-				pageSize: 20,
-			}).then((response: RecipeResponse) => {
-				setRecipeResponse(response);
-				setIsLoading(false);
-			});
-		}
+		const fetchRecipes = isLoggedIn
+			? searchRecipes({ query: { page: currentPage, q: queryParam, pageSize: 20 } })
+			: searchRecipesAnonymous({ query: { page: currentPage, q: queryParam, pageSize: 20 } });
+
+		fetchRecipes.then((result) => {
+			if (result.error) {
+				console.error("Error fetching recipes:", result.error);
+			} else if (result.data && "pagination" in result.data) {
+				setRecipeResponse(result.data);
+			}
+			setIsLoading(false);
+		});
 	}, [isLoggedIn, currentPage, queryParam]);
 
 	useEffect(() => {
@@ -109,7 +104,7 @@ function RecipesClient() {
 								<p className={styles.loadingText}>Loading...</p>
 							)}
 
-							{!isLoading && recipeResponse?.recipes.map((recipe: Recipe) => (
+							{!isLoading && recipeResponse?.recipes.map((recipe) => (
 								<div className={styles.result} key={recipe.id}>
 									<Link href={`/${recipe.slug}`}>
 										<img src="/asterisk.svg" aria-label="list item marker" />

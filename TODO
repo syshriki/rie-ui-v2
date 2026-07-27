@@ -3,9 +3,4 @@ https://rie.recipes/auth/applications/1/fb/token?error_code=1349048&error_messag
 
 - Should not be able to visit login page unless logged out (maybe )
 
-
-- shorten urls https://rie.recipes/recipes/r195 -> https://rie.recipes/r195
-
 Bugs:
-
-- Safari Print issues

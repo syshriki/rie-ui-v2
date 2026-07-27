@@ -200,6 +200,19 @@
 	}
 }
 
+.links {
+		display: flex;
+		gap: 1rem;
+		a {
+			font-size: 0.75rem;
+			text-decoration: none;
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+	}
+
 @media (max-height: 800px) {
 	.content .footer {
 		display: none;

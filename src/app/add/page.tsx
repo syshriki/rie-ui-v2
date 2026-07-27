@@ -2,11 +2,11 @@
 import { useRouter } from "next/navigation";
 import { Suspense, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
-import { postRecipe } from "../../api/client";
+import { createRecipe } from "../../api/sdk";
+import type { CreateRecipeBody } from "../../api/sdk";
 import Button from "../../components/Button/Button";
 import Page from "../../components/Page/Page";
 import { useIsLoggedIn } from "../../hooks/auth";
-import type { CreateRecipeRequest } from "../../models/Recipe";
 import styles from "./page.module.css";
 
 // Client component that uses useSearchParams via useIsLoggedIn hook
@@ -15,7 +15,7 @@ function AddPageClient() {
 		register,
 		handleSubmit,
 		formState: { isValid, errors },
-	} = useForm<CreateRecipeRequest>({
+	} = useForm<CreateRecipeBody>({
 		mode: "onChange",
 	});
 	const { isLoggedIn, isLoading } = useIsLoggedIn({
@@ -25,14 +25,17 @@ function AddPageClient() {
 	const router = useRouter();
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
-	const onSubmit: SubmitHandler<CreateRecipeRequest> = async (data) => {
+	const onSubmit: SubmitHandler<CreateRecipeBody> = async (data) => {
 		setIsSubmitting(true);
 		try {
-			const recipe = await postRecipe(data);
-			router.push(`/${recipe.slug}`);
+			const result = await createRecipe({ body: data });
+			if (result.error) {
+				console.error("Failed to create recipe:", result.error);
+			} else {
+				router.push(`/${result.data.slug}`);
+			}
 		} catch (error) {
-			//console.error("Failed to post recipe:", error);
-			// Optionally, handle the error (e.g., show a notification)
+			console.error("Failed to post recipe:", error);
 		} finally {
 			setIsSubmitting(false);
 		}

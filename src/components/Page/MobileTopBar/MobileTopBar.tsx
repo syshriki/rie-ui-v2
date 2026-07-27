@@ -84,10 +84,23 @@ const Footer: React.FC<FooterProps> = ({ selected, className, isLoggedIn }) => {
 					<img src="/news.svg" aria-label="News" />
 					<span>News</span>
 				</MenuItem>
-				<MenuItem disabled>
-					<img src="/profile.svg" aria-label="Profile" />
-					<span>Profile</span>
-				</MenuItem>
+				{isLoggedIn ? (
+					<MenuItem
+						onClick={() => {
+							router.push("/profile");
+						}}
+					>
+						<div className={selected === "profile" ? styles.selectedItem : ""}>
+							<img src="/profile.svg" aria-label="Profile" />
+							<span>Profile</span>
+						</div>
+					</MenuItem>
+				) : (
+					<MenuItem disabled>
+						<img src="/profile.svg" aria-label="Profile" />
+						<span>Profile</span>
+					</MenuItem>
+				)}
 				{isLoggedIn ? (
 					<MenuItem
 						onClick={() => {

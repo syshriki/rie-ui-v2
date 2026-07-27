@@ -76,13 +76,37 @@ const Sidebar: React.FC<SidebarProps> = ({
 						)}
 					</li>
 					<li>
-						<div
-							className={clsx(styles.clickable, styles.disabled)}
-							title="View My Profile"
-						>
-							<img src="/profile.svg" aria-label="Profile" />
-							<span>Profile</span>
-						</div>
+						{isLoggedIn ? (
+							<Link href="/profile" style={{ all: "unset" }}>
+								<div
+									title="View My Profile"
+									className={clsx(styles.clickable, {
+										[styles.selected]:
+											selected === "profile",
+									})}
+								>
+									<img
+										src="/profile.svg"
+										aria-label="Profile"
+									/>
+									<span>Profile</span>
+								</div>
+							</Link>
+						) : (
+							<div
+								className={clsx(
+									styles.clickable,
+									styles.disabled,
+								)}
+								title="View My Profile"
+							>
+								<img
+									src="/profile.svg"
+									aria-label="Profile"
+								/>
+								<span>Profile</span>
+							</div>
+						)}
 					</li>
 				</ul>
 			</nav>
