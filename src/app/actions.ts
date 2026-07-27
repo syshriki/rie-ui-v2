@@ -1,29 +1,21 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { createRecipe as createRecipeApi } from "../api/sdk";
 import type { CreateRecipeBody } from "../api/sdk";
 
 export async function createRecipe(formData: FormData): Promise<void> {
-  const recipeData: CreateRecipeBody = {
+  const body: CreateRecipeBody = {
     title: formData.get("recipeName") as string,
     description: formData.get("description") as string,
-    recipe: formData.get("recipe") as string
+    recipe: formData.get("recipe") as string,
   };
 
-  const response = await fetch(`${process.env.API_URL || ""}/api/recipe`, {
-    method: "POST",
-    body: JSON.stringify(recipeData),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-  });
+  const { data, error } = await createRecipeApi({ body });
 
-  if (!response.ok) {
+  if (error) {
     throw new Error("Failed to create recipe");
   }
 
-  const responseData = await response.json();
-
-  revalidatePath(`/${responseData.slug}`);
+  revalidatePath(`/${data.slug}`);
 }

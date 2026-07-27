@@ -58,6 +58,17 @@ test.describe("Recipes list page", () => {
 		).toBeVisible({ timeout: 10000 });
 	});
 
+	test("fetches recipes from the anonymous API endpoint", async ({ page }) => {
+		const requestPromise = page.waitForRequest(
+			(request) =>
+				request.method() === "GET" &&
+				request.url().includes("/anonymous/recipes"),
+		);
+		await page.goto("/recipes");
+		const request = await requestPromise;
+		expect(request.url()).toContain("/anonymous/recipes");
+	});
+
 	test("root path redirects to /recipes", async ({ page }) => {
 		await page.goto("/");
 		await expect(page).toHaveURL(/\/recipes/);
