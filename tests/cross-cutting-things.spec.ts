@@ -1,9 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { mockApiRoutes } from "./helpers";
 
-const API_BASE_URL = "http://localhost:8001";
-const APP_BASE_URL = "http://localhost:3000";
-
 test("SDK API calls target the API base URL, not the app origin", async ({
 	page,
 }) => {
@@ -18,6 +15,6 @@ test("SDK API calls target the API base URL, not the app origin", async ({
 	await page.goto("/recipes");
 	const request = await requestPromise;
 
-	expect(request.url()).toContain(`${API_BASE_URL}/anonymous/recipes`);
-	expect(request.url()).not.toContain(`${APP_BASE_URL}/anonymous/recipes`);
+	expect(request.url()).toContain(`http://localhost:8001/api/anonymous/recipes`);
+	expect(request.url()).not.toContain(`http://localhost:8001/anonymous/recipes`);
 });

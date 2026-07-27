@@ -143,12 +143,12 @@ export async function mockApiRoutes(page: Page) {
 	);
 
 	// Anonymous recipe list + detail — differentiated by path depth
-	// Note: SDK calls go directly to the API base URL (e.g. http://localhost:8001/anonymous/recipes)
+	// Note: SDK calls go directly to the API base URL (e.g. http://localhost:8001/api/anonymous/recipes)
 	// rather than through the Next.js server at /api/anonymous/recipes
-	await page.route("**/anonymous/recipes**", (route) => {
+	await page.route("**/api/anonymous/recipes**", (route) => {
 		const url = new URL(route.request().url());
 		const pathSegments = url.pathname.split("/").filter(Boolean);
-		const isDetailRequest = pathSegments.length > 2; // …/recipes/:slug
+		const isDetailRequest = pathSegments.length > 3; // …/api/anonymous/recipes/:slug
 
 		if (isDetailRequest) {
 			return route.fulfill({
