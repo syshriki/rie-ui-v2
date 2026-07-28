@@ -48,7 +48,7 @@ function LoginClient() {
 						<Chefy />
 					</div>
 					<div className={styles.footer}>
-						<h2>Meet Your Inner Chef</h2>
+						<h2>Hi! I'm Rie.</h2>
 						<img src="underline_crayon.svg" alt="crayon underline" />
 					</div>
 				</div>

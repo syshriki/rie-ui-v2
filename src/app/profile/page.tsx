@@ -88,7 +88,7 @@ function ProfileContent() {
 								<p className={styles.memberSince}>
 									Member since{" "}
 									{new Date(
-										profile.createdAt * 1000,
+										profile.createdAt
 									).toLocaleDateString()}
 								</p>
 							</div>
