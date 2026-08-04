@@ -208,12 +208,25 @@ export async function mockAuthenticatedUser(page: Page, userId: string) {
 	);
 
 	// GET /users/me — return mock profile
-	await page.route("**/users/me", (route) => {
+	await page.route("**/users/me", async (route) => {
 		if (route.request().method() === "GET") {
 			return route.fulfill({
 				status: 200,
 				contentType: "application/json",
 				body: JSON.stringify(MOCK_PROFILE),
+			});
+		}
+		if (route.request().method() === "PATCH") {
+			// Small delay so the UI loading state is observable in tests
+			await new Promise((resolve) => setTimeout(resolve, 300));
+			return route.fulfill({
+				status: 200,
+				contentType: "application/json",
+				body: JSON.stringify({
+					id: MOCK_PROFILE.id,
+					username: "Updated User",
+					createdAt: MOCK_PROFILE.createdAt,
+				}),
 			});
 		}
 		return route.fallback();

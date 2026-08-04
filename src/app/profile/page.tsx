@@ -2,12 +2,15 @@
 
 import { useRouter } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
-import { deleteUser, getMe } from "../../api/sdk";
+import { deleteUser, getMe, updateUser } from "../../api/sdk";
 import type { UserProfile } from "../../api/sdk";
 import Button from "../../components/Button/Button";
 import Card from "../../components/Card/Card";
 import Dialog from "../../components/Dialog/Dialog";
 import Page from "../../components/Page/Page";
+import { CheckIcon, CloseIcon } from "../../components/Icons/Icons";
+import ErrorText from "../../components/ErrorText/ErrorText";
+import Spinner from "../../components/Spinner/Spinner";
 import { useIsLoggedIn } from "../../hooks/auth";
 import styles from "./page.module.css";
 
@@ -25,6 +28,10 @@ function ProfileContent() {
 	const [error, setError] = useState<string | null>(null);
 	const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 	const [isDeleting, setIsDeleting] = useState(false);
+
+	const [isEditingUsername, setIsEditingUsername] = useState(false);
+	const [newUsername, setNewUsername] = useState("");
+	const [isSavingUsername, setIsSavingUsername] = useState(false);
 
 	useEffect(() => {
 		if (!authLoading && !isLoggedIn) {
@@ -62,6 +69,42 @@ function ProfileContent() {
 		}
 	};
 
+	const handleEditUsername = () => {
+		setError(null);
+		setNewUsername(profile?.username ?? "");
+		setIsEditingUsername(true);
+	};
+
+	const handleCancelEdit = () => {
+		setIsEditingUsername(false);
+		setNewUsername("");
+	};
+
+	const handleSaveUsername = async () => {
+		if (!newUsername.trim()) {
+			setError("Username cannot be empty.");
+			return;
+		}
+		if (newUsername.trim() === profile?.username) {
+			setIsEditingUsername(false);
+			return;
+		}
+
+		setIsSavingUsername(true);
+		setError(null);
+
+		const result = await updateUser({
+			body: { username: newUsername.trim() },
+		});
+
+		if (result.error) {
+			setError("Failed to update username. Please try again later.");
+			setIsSavingUsername(false);
+		} else {
+			window.location.reload();
+		}
+	};
+
 	const showLoading = authLoading || isLoading;
 
 	return (
@@ -74,7 +117,7 @@ function ProfileContent() {
 				<Card className={styles.card}>
 					{showLoading && <p>Loading...</p>}
 
-					{error && <p className={styles.error}>{error}</p>}
+					{error && <ErrorText>{error}</ErrorText>}
 
 					{!showLoading && profile && (
 						<>
@@ -82,9 +125,57 @@ function ProfileContent() {
 								<div className={styles.avatar}>
 									{getInitials(profile.username)}
 								</div>
-								<h2 className={styles.username}>
-									{profile.username}
-								</h2>
+								{isEditingUsername ? (
+								<div className={styles.editRow}>
+									<input
+										className={styles.editInput}
+										type="text"
+										value={newUsername}
+										onChange={(e) =>
+											setNewUsername(e.target.value)
+										}
+										maxLength={30}
+									/>
+									<div className={styles.icons}>
+										<button
+											type="button"
+											className={styles.editAction}
+											disabled={isSavingUsername}
+											onClick={handleCancelEdit}
+											aria-label="Cancel editing"
+										>
+											<CloseIcon size={18} />
+										</button>
+										<button
+											type="button"
+											className={styles.editAction}
+											disabled={isSavingUsername}
+											onClick={handleSaveUsername}
+											aria-label="Save username"
+										>
+											{isSavingUsername ? (
+												<Spinner size={16} />
+											) : (
+												<CheckIcon size={18} />
+											)}
+										</button>
+									</div>
+								</div>
+							) : (
+								<div className={styles.usernameRow}>
+									<h2 className={styles.username}>
+										{profile.username}
+									</h2>
+									<button
+										type="button"
+										className={styles.editButton}
+										onClick={handleEditUsername}
+										aria-label="Edit username"
+									>
+										✎
+									</button>
+								</div>
+							)}
 								<p className={styles.memberSince}>
 									Member since{" "}
 									{new Date(

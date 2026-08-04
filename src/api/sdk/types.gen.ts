@@ -744,6 +744,36 @@ export type GetMeResponses = {
 
 export type GetMeResponse = GetMeResponses[keyof GetMeResponses];
 
+export type UpdateUserData = {
+    body: unknown;
+    path?: never;
+    query?: never;
+    url: '/users/me';
+};
+
+export type UpdateUserErrors = {
+    /**
+     * Bad request
+     */
+    400: Error;
+    /**
+     * Missing or invalid authentication
+     */
+    401: Error;
+    409: unknown;
+};
+
+export type UpdateUserError = UpdateUserErrors[keyof UpdateUserErrors];
+
+export type UpdateUserResponses = {
+    /**
+     * User updated
+     */
+    200: UserEntity;
+};
+
+export type UpdateUserResponse = UpdateUserResponses[keyof UpdateUserResponses];
+
 export type GetUserRecipesData = {
     body?: never;
     path: {
