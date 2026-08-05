@@ -11,6 +11,19 @@ async function setupRoutes(
 	let usersMeCalls = 0;
 	let deleteCalls = 0;
 
+	// Block MSW service worker so a concurrently running mock server
+	// (npm run mock) doesn't interfere with Playwright route handlers.
+	await page.route("**/mockServiceWorker.js", (route) =>
+		route.fulfill({ status: 404 }),
+	);
+	await page.addInitScript(() => {
+		if ("serviceWorker" in navigator) {
+			navigator.serviceWorker.getRegistrations().then((regs) => {
+				for (const reg of regs) reg.unregister();
+			});
+		}
+	});
+
 	await page.route("**/*", (route, request) => {
 		const url = request.url();
 		if (url.includes("localhost:3000/_next")) return route.fallback();

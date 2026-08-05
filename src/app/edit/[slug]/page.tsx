@@ -105,9 +105,8 @@ export default function EditPage() {
 							Recipe Name <span className={styles.required} aria-hidden="true">*</span>
 							<span className={styles.srOnly}> (required)</span>
 						</label>
-						<input
+						<textarea
 							id="title"
-							type="text"
 							className={`${styles.input} ${styles.recipeName} ${errors.title ? styles.invalid : ""}`}
 							placeholder="Enter recipe name"
 							required

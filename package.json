@@ -12,7 +12,7 @@
     "test:ui": "playwright test --ui",
     "mock": "NEXT_PUBLIC_MOCK_MODE=true next dev --turbopack",
     "mock:slow": "NEXT_PUBLIC_MOCK_MODE=true NEXT_PUBLIC_MOCK_DELAY=500 next dev --turbopack",
-    "screenshots": "node scripts/screenshots.ts"
+    "screenshots": "tsx scripts/screenshots.ts"
   },
   "dependencies": {
     "@t3-oss/env-nextjs": "^0.13.11",

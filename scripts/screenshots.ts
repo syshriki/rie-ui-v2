@@ -14,7 +14,7 @@ import { execSync, spawn, type ChildProcess } from "child_process";
 import fs from "fs";
 import http from "http";
 import path from "path";
-import { mockApiRoutes, mockAuthenticatedUser } from "../tests/helpers.ts";
+import { mockApiRoutes, mockAuthenticatedUser } from "../tests/helpers";
 
 // ---------------------------------------------------------------------------
 // Config

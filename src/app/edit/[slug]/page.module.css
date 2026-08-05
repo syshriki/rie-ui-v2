@@ -1,5 +1,5 @@
 .form {
-	margin-top: var(--space-2xl);
+	margin-top: var(--space-md);
 	margin-bottom: var(--space-2xl);
 	display: flex;
 	flex-direction: column;
@@ -22,7 +22,7 @@
 
 .label {
 	font-family: "Montserrat", sans-serif;
-	font-size: 0.9em;
+	font-size: var(--space-md);
 	font-weight: 600;
 	color: #333;
 }
@@ -63,7 +63,7 @@
 }
 
 .description {
-	height: 4.5em;
+	height: 2.6em;
 }
 
 .recipeName {

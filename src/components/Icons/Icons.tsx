@@ -8,14 +8,14 @@ type IconProps = (
 export const CloseIcon: React.FC<IconProps> = ({ size, className }) => (
 	<svg
 		{...(size != null ? { width: size, height: size } : {})}
-		viewBox="0 0 18 18"
+		viewBox="0 0 40 40"
 		fill="none"
 		stroke="currentColor"
 		strokeWidth="2"
 		strokeLinecap="round"
 		className={className}
 	>
-		<path d="M3 3l12 12M15 3L3 15" />
+		<path d="M10 10l20 20M30 10L10 30" />
 	</svg>
 );
 
@@ -56,7 +56,7 @@ export const PrintIcon: React.FC<IconProps> = ({ size, className }) => (
 export const CheckIcon: React.FC<IconProps> = ({ size, className }) => (
 	<svg
 		{...(size != null ? { width: size, height: size } : {})}
-		viewBox="0 0 18 18"
+		viewBox="0 0 40 40"
 		fill="none"
 		stroke="currentColor"
 		strokeWidth="2"
@@ -64,6 +64,6 @@ export const CheckIcon: React.FC<IconProps> = ({ size, className }) => (
 		strokeLinejoin="round"
 		className={className}
 	>
-		<path d="M3 8l3 5 9-11" />
+		<path d="M8 20l8 9 16-18" />
 	</svg>
 );

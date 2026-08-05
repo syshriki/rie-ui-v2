@@ -19,10 +19,35 @@ export {
 };
 
 /**
+ * Unregisters any MSW service worker that may have been registered by a
+ * concurrently running mock server (npm run mock) so Playwright route
+ * handlers take precedence.
+ */
+async function disableServiceWorker(page: Page) {
+	// Block the service worker script so it can't be re-registered
+	await page.route("**/mockServiceWorker.js", (route) =>
+		route.fulfill({ status: 404 }),
+	);
+
+	// Unregister any existing service workers for this origin
+	await page.addInitScript(() => {
+		if ("serviceWorker" in navigator) {
+			navigator.serviceWorker.getRegistrations().then((regs) => {
+				for (const reg of regs) {
+					reg.unregister();
+				}
+			});
+		}
+	});
+}
+
+/**
  * Intercepts all backend API calls made by the app and returns mock data so
  * tests run without a real backend.
  */
 export async function mockApiRoutes(page: Page) {
+	await disableServiceWorker(page);
+
 	// Auth introspect — return 401 so the app treats the session as anonymous
 	await page.route("**/auth/applications/*/oauth/introspect", (route) =>
 		route.fulfill({ status: 401, body: "Unauthorized" }),
