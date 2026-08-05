@@ -7,9 +7,9 @@
 }
 
 .card {
-	margin: 2em;
-	margin-top: 2.5em;
-	padding: 2rem;
+	margin: var(--space-xl);
+	margin-top: var(--space-2xl);
+	padding: var(--space-xl);
 	width: 80%;
 	max-width: 480px;
 }
@@ -20,7 +20,7 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	margin-bottom: 1.5em;
+	margin-bottom: var(--space-lg);
 }
 
 .avatar {
@@ -39,13 +39,13 @@
 
 .username {
 	font: 1.8em "Schoolbell", cursive;
-	margin: 0 0 0.25em 0;
+	margin: 0 0 var(--space-xs) 0;
 }
 
 .usernameRow {
 	display: flex;
 	align-items: center;
-	gap: 0.5em;
+	gap: var(--space-sm);
 }
 
 .editButton {
@@ -68,12 +68,12 @@
 	display: grid;
 	grid-template-columns: 1fr auto 1fr;
 	align-items: center;
-	margin-bottom: 0.25em;
+	margin-bottom: var(--space-xs);
 }
 
 .editInput {
 	font: 1.4em "Schoolbell", cursive;
-	padding: 0.25em 0.5em;
+	padding: var(--space-xs) var(--space-sm);
 	border: 2px solid #000;
 	border-radius: 4px;
 	outline: none;
@@ -86,7 +86,8 @@
 	justify-self: start;
 	display: flex;
 	align-items: center;
-	gap: 0.5em;
+	gap: var(--space-sm);
+	margin-left: var(--space-sm);
 }
 
 .editAction {
@@ -127,7 +128,7 @@
 	display: flex;
 	justify-content: center;
 	gap: 1.25em;
-	margin-bottom: 2em;
+	margin-bottom: var(--space-xl);
 }
 
 .stat {
@@ -158,34 +159,34 @@
 	display: flex;
 	justify-content: center;
 	border-top: 2px solid #000;
-	padding-top: 1.5em;
+	padding-top: var(--space-lg);
 }
 
 /* ── Dialog ── */
 
 .deleteDialog {
 	text-align: center;
-	padding: 1em;
+	padding: var(--space-md);
 }
 
 .deleteDialog p {
-	margin-bottom: 1em;
+	margin-bottom: var(--space-md);
 }
 
 .deleteControls {
 	display: flex;
 	justify-content: center;
-	gap: 1em;
-	margin-top: 1.5em;
+	gap: var(--space-md);
+	margin-top: var(--space-lg);
 }
 
 /* ── Error ── */
 
 .error {
-	color: #b91c1c;
+	color: var(--error-color);
 	text-align: center;
 	font-weight: 500;
-	margin-bottom: 1em;
+	margin-bottom: var(--space-md);
 }
 
 /* ── Responsive ── */
@@ -193,7 +194,7 @@
 @media (max-width: 1000px) {
 	.card {
 		width: 90%;
-		margin-top: 1em;
+		margin-top: var(--space-md);
 	}
 }
 
@@ -202,7 +203,7 @@
 		width: 90%;
 		margin-left: 0.3em;
 		margin-right: 0.3em;
-		margin-top: 1em;
+		margin-top: var(--space-md);
 		padding: 1.2rem;
 	}
 

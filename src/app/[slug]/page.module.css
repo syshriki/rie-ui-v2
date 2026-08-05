@@ -14,15 +14,15 @@
 .card {
 	width: 80%;
 	min-height: 30em;
-	margin: 2em;
-	margin-top: 2.5em;
+	margin: var(--space-xl);
+	margin-top: var(--space-2xl);
 }
 
 .deleteControls {
 	display: flex;
 	justify-content: center;
-	gap: 2em;
-	margin-top: 1em;
+	gap: var(--space-xl);
+	margin-top: var(--space-md);
 }
 
 .mobileControls {
@@ -31,8 +31,8 @@
 		width: 4em;
 		height: 3rem;
 		img {
-			width: 2em;
-			height: 2em;
+			width: 2rem;
+			height: 2rem;
 			margin-right: .25em;
 		}
 	}
@@ -41,7 +41,7 @@
 .recipeContainer {
 	display: flex;
 	flex-direction: column;
-	padding: 2rem;
+	padding: var(--space-xl);
 	font-family: "Montserrat", sans-serif;
 	line-height: 1.2rem;
 	.headerContainer {
@@ -49,7 +49,7 @@
 		grid-template-columns: 3fr 1fr;
 		.desktopControls {
 			display: flex;
-			gap: 1rem;
+			gap: var(--space-md);
 			justify-content: flex-end;
 			.editButton {
 				justify-self: end;
@@ -58,8 +58,8 @@
 				width: 4em;
 				height: 3rem;
 				img {
-					width: 2em;
-					height: 2em;
+					width: 2rem;
+					height: 2rem;
 					margin-right: .25em;
 				}
 			}
@@ -74,8 +74,8 @@
 	.description {
 		font-style: italic;
 		line-height: 1.2em;
-		margin-bottom: 2em;
-		margin-top: 2em;
+		margin-bottom: var(--space-xl);
+		margin-top: var(--space-xl);
 		color: #444;
 	}
 
@@ -97,7 +97,7 @@
 	}
 	.mobileControls {
 		display: flex !important;
-		gap: 2rem;
+		gap: var(--space-xl);
 		justify-content: center;
 		flex-grow: 1;
 	}
@@ -106,13 +106,13 @@
 	}
 
 	.recipeContainer {
-		padding: 1em;
+		padding: var(--space-md);
 	}
 }
 
 @media (max-width: 600px) {
 	.card {
-		margin: 1em;
+		margin: var(--space-md);
 	}
 	.mobileControls {
 		display: flex !important;

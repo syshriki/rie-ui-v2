@@ -160,6 +160,7 @@ p {
 	--page-header-height: 6rem;
 	--default-background-color: #fee3cd;
 	--separator-color: #eda991;
+	--error-color: #b91c1c;
 	--link-selected-color: #0000a6;
 	--link-selected-color-svg: invert(15%) sepia(21%) saturate(6667%)
 		hue-rotate(224deg) brightness(122%) contrast(153%)
@@ -168,6 +169,12 @@ p {
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+	--space-xs: 0.25rem;
+	--space-sm: 0.5rem;
+	--space-md: 1rem;
+	--space-lg: 1.5rem;
+	--space-xl: 2rem;
+	--space-2xl: 2.5rem;
 	--seashell: #eee2df;
 	--champagne-pink: #eed7c5ff;
 	--rosy-brown: #c89f9cff;

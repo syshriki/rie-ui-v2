@@ -200,7 +200,7 @@ function PrivacyContent() {
 						Email:{" "}
 						<a href="mailto:shlomo@rie.recipes">shlomo@rie.recipes</a>
 					</p>
-					<p style={{ marginTop: "2em" }}>
+					<p style={{ marginTop: "var(--space-xl)" }}>
 						See also:{" "}
 						<a href="/terms">Terms of Service</a>
 					</p>

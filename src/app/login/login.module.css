@@ -75,8 +75,8 @@
 }
 
 .anonymousButton {
-	height: 2.5em !important;
-	margin-top: 2em;
+	height: 2.5rem !important;
+	margin-top: var(--space-xl);
 	font-weight: 700;
 	background-color: #000000;
 	color: #fff;
@@ -116,7 +116,7 @@
 			text-align: center;
 		}
 		.footer {
-			margin-top: 1em;
+			margin-top: var(--space-md);
 			width: 60%;
 			height: 60%;
 		}
@@ -131,8 +131,8 @@
 }
 
 .buttonContainer {
-	padding-top: 2rem;
-	padding-bottom: 1rem;
+	padding-top: var(--space-xl);
+	padding-bottom: var(--space-md);
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -141,8 +141,8 @@
 
 .center {
 	position: absolute;
-	right: calc(max(500px, 40%) - 2rem);
-	top: 1rem;
+	right: calc(max(500px, 40%) - var(--space-xl));
+	top: var(--space-md);
 	background-image: url("/spiral_binding_tile.svg");
 	background-size: 100%;
 	background-repeat: repeat;
@@ -163,8 +163,8 @@
 	}
 
 	.buttonContainer {
-		margin-left: 2rem;
-		margin-right: 2rem;
+		margin-left: var(--space-xl);
+		margin-right: var(--space-xl);
 	}
 
 	.right {
@@ -202,7 +202,7 @@
 
 .links {
 		display: flex;
-		gap: 1rem;
+		gap: var(--space-md);
 		a {
 			font-size: 0.75rem;
 			text-decoration: none;

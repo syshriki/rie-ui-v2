@@ -1,8 +1,8 @@
 .nav {
 	width: 100%;
-	margin-top: 2em;
-	margin-bottom: 2em;
-	padding-top: 2em;
+	margin-top: var(--space-xl);
+	margin-bottom: var(--space-xl);
+	padding-top: var(--space-xl);
 	font-family: Montserrat, sans-serif;
 	border-top: 2px solid #000;
 }
@@ -10,9 +10,9 @@
 .controls {
 	display: grid;
 	grid-template-columns: auto 1fr auto;
-	column-gap: 1em;
-	padding-left: 2em;
-	padding-right: 2em;
+	column-gap: var(--space-md);
+	padding-left: var(--space-xl);
+	padding-right: var(--space-xl);
 }
 
 .navButton {
@@ -53,7 +53,7 @@
 
 @media (max-width: 600px) {
 	.controls {
-		padding-left: 1em;
-		padding-right: 1em;
+		padding-left: var(--space-md);
+		padding-right: var(--space-md);
 	}
 }

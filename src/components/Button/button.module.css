@@ -34,12 +34,12 @@
 /* Add these classes for more customization */
 .small {
 	width: 10em;
-	height: 2em;
+	height: 2rem;
 }
 
 .medium {
 	width: 15em;
-	height: 2.5em;
+	height: 2.5rem;
 }
 
 .large {

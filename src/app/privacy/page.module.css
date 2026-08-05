@@ -9,9 +9,9 @@
 }
 
 .card {
-	margin: 2em;
-	margin-top: 2.5em;
-	padding: 2rem;
+	margin: var(--space-xl);
+	margin-top: var(--space-2xl);
+	padding: var(--space-xl);
 	width: 80%;
 	max-width: 800px;
 }
@@ -49,7 +49,7 @@
 	}
 	.card {
 		width: 90%;
-		margin-top: 1em;
+		margin-top: var(--space-md);
 	}
 }
 
@@ -58,7 +58,7 @@
 		width: 90%;
 		margin-left: .3em;
 		margin-right: .3em;
-		margin-top: 1em;
+		margin-top: var(--space-md);
 		padding: 1.2rem;
 	}
 }

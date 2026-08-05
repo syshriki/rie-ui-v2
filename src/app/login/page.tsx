@@ -5,13 +5,14 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect } from "react";
 import { revoke } from "../../api/auth";
 import Paper from "../../components/Paper/Paper";
+import { env } from "@/env";
 import { useIsLoggedIn } from "../../hooks/auth";
 import Chefy from "./chefy";
 import styles from "./login.module.css";
 
 function generateState(redirectUri = "recipes") {
 	const state = {
-		redirectUri: `${process.env.NEXT_PUBLIC_BASE_URL}/callback?redirectUri=${redirectUri}`,
+		redirectUri: `${env.NEXT_PUBLIC_BASE_URL}/callback?redirectUri=${redirectUri}`,
 		nonce: Math.random().toString(36).substring(2, 15),
 	};
 
@@ -48,7 +49,7 @@ function LoginClient() {
 						<Chefy />
 					</div>
 					<div className={styles.footer}>
-						<h2>Hi! I'm Rie.</h2>
+						<h2>Hi! I'm chef Rie.</h2>
 						<img src="underline_crayon.svg" alt="crayon underline" />
 					</div>
 				</div>
@@ -81,7 +82,7 @@ function LoginClient() {
 								className={styles.button}
 								onClick={() =>
 									router.push(
-										`${process.env.NEXT_PUBLIC_FB_AUTH_URL}&state=${generateState(redirectUri)}`,
+										`${env.NEXT_PUBLIC_FB_AUTH_URL}&state=${generateState(redirectUri)}`,
 									)
 								}
 							>
@@ -94,7 +95,7 @@ function LoginClient() {
 								className={styles.button}
 								onClick={() =>
 									router.push(
-										`${process.env.NEXT_PUBLIC_REDDIT_AUTH_URL}&state=${generateState(redirectUri)}`,
+										`${env.NEXT_PUBLIC_REDDIT_AUTH_URL}&state=${generateState(redirectUri)}`,
 									)
 								}
 							>
