@@ -16,7 +16,7 @@ import Paginator from "./paginator";
 function RecipesClient() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	const { isLoggedIn } = useIsLoggedIn({});
+	const { isLoggedIn } = useIsLoggedIn();
 
 	const queryParam = searchParams.get("q") || "";
 	const pageParam = searchParams.get("page");

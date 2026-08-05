@@ -18,9 +18,7 @@ function AddPageClient() {
 	} = useForm<CreateRecipeBody>({
 		mode: "onChange",
 	});
-	const { isLoggedIn, isLoading } = useIsLoggedIn({
-		requiresLogin: true,
-	});
+	const { isLoggedIn } = useIsLoggedIn();
 
 	const router = useRouter();
 	const [isSubmitting, setIsSubmitting] = useState(false);
@@ -41,11 +39,8 @@ function AddPageClient() {
 		}
 	};
 
-	if (isLoading) {
-		return null;
-	}
-
 	if (!isLoggedIn) {
+		window.location.href = "/login?redirectUri=/add";
 		return null;
 	}
 

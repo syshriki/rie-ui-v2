@@ -34,7 +34,7 @@ export default function RecipePage() {
 	const { slug } = useParams();
 	const router = useRouter();
 
-	const { isLoggedIn, userId } = useIsLoggedIn({});
+	const { isLoggedIn, userId } = useIsLoggedIn();
 
 	const [recipeData, setRecipeData] = useState<RecipeWithAuthor | RecipeWithAuthorAnon | null>(null);
 	const [isLoading, setIsLoading] = useState(true);

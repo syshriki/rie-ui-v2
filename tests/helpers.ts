@@ -181,6 +181,51 @@ export async function mockApiRoutes(page: Page) {
 			body: JSON.stringify(MOCK_RECIPES),
 		});
 	});
+
+	// Authenticated recipe list + detail — used when the user is logged in
+	// (the app switches from /anonymous/recipes to /recipes based on auth state).
+	// The route pattern excludes URLs containing "anonymous" so the two handlers
+	// don't conflict.
+	await page.route("**/api/recipes**", (route) => {
+		const rawUrl = route.request().url();
+		if (rawUrl.includes("/anonymous/")) return route.fallback();
+
+		const url = new URL(rawUrl);
+		const pathSegments = url.pathname.split("/").filter(Boolean);
+		// …/api/recipes/:slug (detail) vs …/api/recipes (list)
+		const isDetailRequest = pathSegments.length > 2;
+
+		if (isDetailRequest) {
+			return route.fulfill({
+				status: 200,
+				contentType: "application/json",
+				body: JSON.stringify(MOCK_RECIPE_DETAIL),
+			});
+		}
+
+		const q = url.searchParams.get("q") ?? "";
+		if (q.length > 0 && /^z+$/i.test(q)) {
+			return route.fulfill({
+				status: 200,
+				contentType: "application/json",
+				body: JSON.stringify(MOCK_EMPTY_RECIPES),
+			});
+		}
+
+		if (url.searchParams.get("page") === "2") {
+			return route.fulfill({
+				status: 200,
+				contentType: "application/json",
+				body: JSON.stringify(MOCK_RECIPES_PAGE_2),
+			});
+		}
+
+		return route.fulfill({
+			status: 200,
+			contentType: "application/json",
+			body: JSON.stringify(MOCK_RECIPES),
+		});
+	});
 }
 
 export const MOCK_PROFILE: UserProfile = {
@@ -197,13 +242,15 @@ export const MOCK_PROFILE: UserProfile = {
  */
 export async function mockAuthenticatedUser(page: Page, userId: string) {
 	await page.addInitScript(
-		({ id, expiresAt }) => {
+		({ id, expiresAt, refreshExpiresAt }) => {
 			localStorage.setItem("userId", id);
 			localStorage.setItem("expiresAt", expiresAt);
+			localStorage.setItem("refreshExpiresAt", refreshExpiresAt);
 		},
 		{
 			id: userId,
 			expiresAt: new Date(Date.now() + 86400000).toString(),
+			refreshExpiresAt: new Date(Date.now() + 86400000 * 7).toString(),
 		},
 	);
 

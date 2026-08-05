@@ -33,7 +33,7 @@ test.describe("Print layout", () => {
 		await expect(
 			page.getByRole("heading", { name: MOCK_PIZZA_RECIPE.title }),
 		).toBeVisible({ timeout: 10000 });
-		await expect(page.locator("pre")).toBeVisible();
+		await expect(page.locator("pre[class*='recipe']")).toBeVisible();
 
 		// Generate a PDF using A4 print dimensions — this honours the @media print
 		// CSS rules defined in page.module.css (no sidebar, no controls, etc.)

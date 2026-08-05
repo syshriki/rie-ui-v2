@@ -23,7 +23,7 @@ function generateState(redirectUri = "recipes") {
 
 // Client component that uses useSearchParams
 function LoginClient() {
-	const { isLoggedIn, isLoading } = useIsLoggedIn({});
+	const { isLoggedIn, isLoading } = useIsLoggedIn();
 	const searchParams = useSearchParams();
 	const redirectUri = searchParams.get("redirectUri") ?? undefined;
 	const router = useRouter();

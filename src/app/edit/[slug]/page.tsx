@@ -18,9 +18,7 @@ export default function EditPage() {
 	} = useForm<CreateRecipeBody>({
 		mode: "onChange",
 	});
-	const { isLoggedIn, isLoading } = useIsLoggedIn({
-		requiresLogin: true,
-	});
+	const { isLoggedIn } = useIsLoggedIn();
 
 	const router = useRouter();
 	const { slug } = useParams();
@@ -80,11 +78,8 @@ export default function EditPage() {
 		}
 	};
 
-	if (isLoading) {
-		return null;
-	}
-
 	if (!isLoggedIn) {
+		window.location.href = "/login?redirectUri=/edit";
 		return null;
 	}
 

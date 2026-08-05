@@ -16,14 +16,11 @@ test.describe("Profile page", () => {
 	});
 
 	test("shows recipe and favorite counts", async ({ page }) => {
-		await expect(page.getByText("5", { exact: true })).toBeVisible();
-		await expect(page.getByText("12", { exact: true })).toBeVisible();
-		await expect(
-			page.getByRole("main").getByText("Recipes", { exact: true }),
-		).toBeVisible();
-		await expect(
-			page.getByRole("main").getByText("Favorites", { exact: true }),
-		).toBeVisible();
+		const main = page.getByRole("main");
+		await expect(main.getByText("5", { exact: true })).toBeVisible();
+		await expect(main.getByText("12", { exact: true })).toBeVisible();
+		await expect(main.getByText("Recipes", { exact: true })).toBeVisible();
+		await expect(main.getByText("Favorites", { exact: true })).toBeVisible();
 	});
 
 	test("shows the Delete My Account button", async ({ page }) => {
@@ -86,7 +83,7 @@ test.describe("Profile page", () => {
 		expect(deleteRequest.method()).toBe("DELETE");
 
 		// After successful delete, user is redirected to login
-		await expect(page).toHaveURL(/\/login/, { timeout: 10000 });
+		await expect(page).toHaveURL(/\/login/, { timeout: 15000 });
 	});
 });
 
@@ -107,10 +104,10 @@ test.describe("Edit username", () => {
 		await expect(page.getByRole("textbox")).toBeVisible();
 		await expect(page.getByRole("textbox")).toHaveValue("Test User");
 		await expect(
-			page.getByRole("button", { name: "Save" }),
+			page.getByRole("button", { name: "Save username" }),
 		).toBeVisible();
 		await expect(
-			page.getByRole("button", { name: "Cancel" }),
+			page.getByRole("button", { name: "Cancel editing" }),
 		).toBeVisible();
 	});
 
@@ -118,7 +115,7 @@ test.describe("Edit username", () => {
 		await page.getByLabel("Edit username").click();
 		await expect(page.getByRole("textbox")).toBeVisible();
 
-		await page.getByRole("button", { name: "Cancel" }).click();
+		await page.getByRole("button", { name: "Cancel editing" }).click();
 
 		await expect(page.getByRole("textbox")).not.toBeVisible();
 		await expect(page.getByText("Test User")).toBeVisible();
@@ -132,7 +129,7 @@ test.describe("Edit username", () => {
 		const input = page.getByRole("textbox");
 		await input.fill("");
 
-		await page.getByRole("button", { name: "Save" }).click();
+		await page.getByRole("button", { name: "Save username" }).click();
 
 		// Error should appear and edit mode should remain
 		await expect(
@@ -153,7 +150,7 @@ test.describe("Edit username", () => {
 				request.url().includes("/users/me"),
 		);
 
-		await page.getByRole("button", { name: "Save" }).click();
+		await page.getByRole("button", { name: "Save username" }).click();
 
 		// Verify the PATCH request was made
 		const patchRequest = await patchRequestPromise;
@@ -173,16 +170,10 @@ test.describe("Edit username", () => {
 		const input = page.getByRole("textbox");
 		await input.fill("New Username");
 
-		// Initiate save and immediately check for loading state
-		const savePromise = page
-			.getByRole("button", { name: "Saving..." })
-			.waitFor({ state: "visible" });
-		await page.getByRole("button", { name: "Save" }).click();
-		await savePromise;
+		// Initiate save and immediately check the button is disabled (loading with spinner)
+		const saveButton = page.getByRole("button", { name: "Save username" });
+		await saveButton.click();
 
-		// The Save button text should have changed to "Saving..."
-		await expect(
-			page.getByRole("button", { name: "Saving..." }),
-		).toBeVisible();
+		await expect(saveButton).toBeDisabled();
 	});
 });

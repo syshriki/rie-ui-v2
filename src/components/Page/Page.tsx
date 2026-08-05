@@ -1,6 +1,7 @@
 "use client";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useLayoutEffect, useRef } from "react";
+import "../../api/setup";
 import Paper from "../Paper/Paper";
 import Corner from "./Corner/Corner";
 import Header from "./Header/Header";

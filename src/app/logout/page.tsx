@@ -4,7 +4,7 @@ import { useIsLoggedIn } from "../../hooks/auth";
 
 // Client component that uses useSearchParams indirectly through useIsLoggedIn
 function LogoutClient() {
-	const { logout, isLoading, isLoggedIn } = useIsLoggedIn({});
+	const { logout, isLoading, isLoggedIn } = useIsLoggedIn();
 
 	useEffect(() => {
 		if (!isLoading && isLoggedIn) {

@@ -20,7 +20,7 @@ function getInitials(username: string): string {
 
 function ProfileContent() {
 	const { isLoggedIn, isLoading: authLoading, logout, userId } =
-		useIsLoggedIn({});
+		useIsLoggedIn();
 	const router = useRouter();
 
 	const [profile, setProfile] = useState<UserProfile | null>(null);
