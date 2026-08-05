@@ -23,10 +23,13 @@ export function useIsLoggedIn(): {
 	setRefreshExpiresAt: (date: Date) => void;
 	setUserId: (id: string | null) => void;
 } {
-	const [isLoggedIn, setIsLoggedIn] = useState<boolean>(isUserLoggedIn());
-	const [userId, setUserIdState] = useState<string | null>(
-		window.localStorage.getItem("userId")
+	const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() =>
+		isUserLoggedIn(),
 	);
+	const [userId, setUserIdState] = useState<string | null>(() => {
+		if (typeof window === "undefined") return null;
+		return window.localStorage.getItem("userId");
+	});
 	const router = useRouter();
 
 	const setUserId = useCallback((id: string | null) => {

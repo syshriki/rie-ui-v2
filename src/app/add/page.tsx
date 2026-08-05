@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { createRecipe } from "../../api/sdk";
 import type { CreateRecipeBody } from "../../api/sdk";
@@ -39,8 +39,13 @@ function AddPageClient() {
 		}
 	};
 
+	useEffect(() => {
+		if (!isLoggedIn) {
+			router.replace("/login?redirectUri=/add");
+		}
+	}, [isLoggedIn, router]);
+
 	if (!isLoggedIn) {
-		window.location.href = "/login?redirectUri=/add";
 		return null;
 	}
 

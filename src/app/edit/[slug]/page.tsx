@@ -28,6 +28,12 @@ export default function EditPage() {
 
 	useEffect(() => {
 		if (!isLoggedIn) {
+			router.replace("/login?redirectUri=/edit");
+		}
+	}, [isLoggedIn, router]);
+
+	useEffect(() => {
+		if (!isLoggedIn) {
 			return;
 		}
 
@@ -79,7 +85,6 @@ export default function EditPage() {
 	};
 
 	if (!isLoggedIn) {
-		window.location.href = "/login?redirectUri=/edit";
 		return null;
 	}
 
