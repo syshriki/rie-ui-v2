@@ -10,7 +10,6 @@
 	border: 2px solid #000;
 }
 
-.button:not(:disabled):focus,
 .button:not(:disabled):hover {
 	transform: scale(1.1);
 	cursor: pointer;

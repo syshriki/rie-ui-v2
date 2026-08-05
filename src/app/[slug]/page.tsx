@@ -9,10 +9,12 @@ import {
 	getRecipeAnonymous,
 } from "../../api/sdk";
 import type { RecipeWithAuthor, RecipeWithAuthorAnon } from "../../api/sdk";
-import Button from "../../components/Button/Button";
+
 import Card from "../../components/Card/Card";
-import Popover from "../../components/Dialog/Dialog";
+import ConfirmDialog from "../../components/ConfirmDialog/ConfirmDialog";
 import Page from "../../components/Page/Page";
+import { EditIcon, DeleteIcon, PrintIcon } from "../../components/Icons/Icons";
+import IconButton from "../../components/IconButton/IconButton";
 import { useIsLoggedIn } from "../../hooks/auth";
 import styles from "./page.module.css";
 
@@ -40,14 +42,13 @@ export default function RecipePage() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
 	const [isDeleting, setIsDeleting] = useState(false);
-	const [wakeLock, setWakeLock] = useState<WakeLockSentinel | null>(null);
+	const wakeLockRef = useRef<WakeLockSentinel | null>(null);
 
 	useEffect(() => {
 		const requestWakeLock = async () => {
 			if ("wakeLock" in navigator) {
 				try {
-					const lock = await navigator.wakeLock.request("screen");
-					setWakeLock(lock);
+					wakeLockRef.current = await navigator.wakeLock.request("screen");
 				} catch (err) {
 					console.warn("Wake lock request failed:", err);
 				}
@@ -57,12 +58,12 @@ export default function RecipePage() {
 		requestWakeLock();
 
 		return () => {
-			if (wakeLock) {
-				wakeLock.release();
-				setWakeLock(null);
+			if (wakeLockRef.current) {
+				wakeLockRef.current.release();
+				wakeLockRef.current = null;
 			}
 		};
-	}, [wakeLock]);
+	}, []);
 
 	useEffect(() => {
 		const fetchRecipe = async () => {
@@ -118,23 +119,26 @@ export default function RecipePage() {
 							<div className={styles.headerContainer}>
 								<h2 className={styles.title}>{recipeData.title}</h2>
 								<nav className={styles.desktopControls}>
-									<Button className={styles.editButton} onClick={() => print()}>
-										<img src="/print.svg" aria-label="Print Recipe" />
-									</Button>
+									<IconButton
+										onClick={() => print()}
+										aria-label="Print Recipe"
+									>
+										<PrintIcon className={styles.icon} />
+									</IconButton>
 									{userId === recipeData.authorId ? (
 										<>
-											<Button
-												className={styles.editButton}
+											<IconButton
 												onClick={() => router.push(`/edit/${slug}`)}
+												aria-label="Edit Recipe"
 											>
-												<img src="/edit.svg" aria-label="Edit Recipe" />
-											</Button>
-											<Button
-												className={styles.editButton}
+												<EditIcon className={styles.icon} />
+											</IconButton>
+											<IconButton
 												onClick={() => setIsDeletePopupOpen(true)}
+												aria-label="Delete Recipe"
 											>
-												<img src="/delete.svg" aria-label="Delete Recipe" />
-											</Button>
+												<DeleteIcon className={styles.icon} />
+											</IconButton>
 										</>
 									) : null}
 								</nav>
@@ -142,28 +146,28 @@ export default function RecipePage() {
 							<p className={styles.description}>{recipeData.description}</p>
 							<pre className={styles.recipe}>{recipeData.recipe}</pre>
 							<nav className={styles.mobileControls}>
-								<Button
-									className={styles.editButton}
+								<IconButton
 									onClick={() =>
 										typeof window !== "undefined" && window.print()
 									}
+									aria-label="Print Recipe"
 								>
-									<img src="/print.svg" aria-label="Print Recipe" />
-								</Button>
+									<PrintIcon size={28} />
+								</IconButton>
 								{userId === recipeData.authorId ? (
 									<>
-										<Button
-											className={styles.editButton}
+										<IconButton
 											onClick={() => router.push(`/edit/${slug}`)}
+										aria-label="Edit Recipe"
 										>
-											<img src="/edit.svg" aria-label="Edit Recipe" />
-										</Button>
-										<Button
-											className={styles.editButton}
+											<EditIcon size={28} />
+										</IconButton>
+										<IconButton
 											onClick={() => setIsDeletePopupOpen(true)}
+										aria-label="Delete Recipe"
 										>
-											<img src="/delete.svg" aria-label="Delete Recipe" />
-										</Button>
+											<DeleteIcon size={28} />
+										</IconButton>
 									</>
 								) : null}
 							</nav>
@@ -175,25 +179,15 @@ export default function RecipePage() {
 					)}
 				</Card>
 			</div>
-			<Popover isOpen={isDeletePopupOpen}>
-				<p>Are you sure you want to delete this recipe?</p>
-				<nav className={styles.deleteControls}>
-					<Button
-						size="medium"
-						disabled={isDeleting}
-						onClick={() => setIsDeletePopupOpen(false)}
-					>
-						Cancel
-					</Button>
-					<Button
-						size="medium"
-						disabled={isDeleting}
-						onClick={() => deleteRecipeHandler(slug.toString())}
-					>
-						{isDeleting ? "Deleting..." : "Delete"}
-					</Button>
-				</nav>
-			</Popover>
+			<ConfirmDialog
+				isOpen={isDeletePopupOpen}
+				title="Are you sure you want to delete this recipe?"
+				confirmText="Delete"
+				onCancel={() => setIsDeletePopupOpen(false)}
+				onConfirm={() => deleteRecipeHandler(slug.toString())}
+				isConfirming={isDeleting}
+				confirmingText="Deleting..."
+			/>
 		</Page>
 	);
 }

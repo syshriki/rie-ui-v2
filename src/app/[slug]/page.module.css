@@ -18,24 +18,13 @@
 	margin-top: var(--space-2xl);
 }
 
-.deleteControls {
-	display: flex;
-	justify-content: center;
-	gap: var(--space-xl);
-	margin-top: var(--space-md);
+.icon {
+	width: var(--space-xl);
+	height: var(--space-xl)
 }
 
 .mobileControls {
 	display: none;
-	.editButton {
-		width: 4em;
-		height: 3rem;
-		img {
-			width: 2rem;
-			height: 2rem;
-			margin-right: .25em;
-		}
-	}
 }
 
 .recipeContainer {
@@ -51,18 +40,7 @@
 			display: flex;
 			gap: var(--space-md);
 			justify-content: flex-end;
-			.editButton {
-				justify-self: end;
-				align-items: center;
-				display: flex;
-				width: 4em;
-				height: 3rem;
-				img {
-					width: 2rem;
-					height: 2rem;
-					margin-right: .25em;
-				}
-			}
+			align-items: center;
 		}
 		> h2 {
 			align-self: flex-start;

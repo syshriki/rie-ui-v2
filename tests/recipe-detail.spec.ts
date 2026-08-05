@@ -43,7 +43,7 @@ test.describe("Recipe detail page", () => {
 
 			await expect(page).toHaveURL(/\/[^/]+$/);
 			await expect(
-				page.getByRole("img", { name: /Print Recipe/i }).first(),
+				page.getByRole("button", { name: /Print Recipe/i }).first(),
 			).toBeVisible({ timeout: 10000 });
 		});
 	});
@@ -127,10 +127,10 @@ test.describe("Recipe detail page", () => {
 			});
 			await page.goto("/pasta-carbonara");
 			await expect(
-				page.getByRole("img", { name: "Edit Recipe" }),
+				page.getByRole("button", { name: "Edit Recipe" }),
 			).toBeVisible({ timeout: 10000 });
 			await expect(
-				page.getByRole("img", { name: "Delete Recipe" }),
+				page.getByRole("button", { name: "Delete Recipe" }),
 			).toBeVisible({ timeout: 10000 });
 		});
 	});

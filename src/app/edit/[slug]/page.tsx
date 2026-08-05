@@ -8,6 +8,7 @@ import type { CreateRecipeBody } from "../../../api/sdk";
 import { useEffect, useState } from "react";
 import { useIsLoggedIn } from "../../../hooks/auth";
 import Button from "../../../components/Button/Button";
+import ErrorText from "../../../components/ErrorText/ErrorText";
 
 export default function EditPage() {
 	const {
@@ -92,26 +93,67 @@ export default function EditPage() {
 		return null;
 	}
 
+	const titleErrorId = "title-error";
+	const recipeErrorId = "recipe-error";
+
 	return (
 		<Page selected="add" headerText="Edit Recipe" isLoggedIn={isLoggedIn}>
 			<div>
-				<form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-					<input
-						type="text"
-						className={`${styles.input} ${styles.recipeName}`}
-						placeholder="Recipe Name"
-						{...register("title", { required: true })}
-					/>
-					<textarea
-						className={`${styles.input} ${styles.description}`}
-						placeholder="Description (Optional)"
-						{...register("description")}
-					/>
-					<textarea
-						className={`${styles.input} ${styles.recipe}`}
-						placeholder="Recipe"
-						{...register("recipe", { required: true })}
-					/>
+				<form onSubmit={handleSubmit(onSubmit)} className={styles.form} noValidate>
+					<div className={styles.fieldGroup}>
+						<label htmlFor="title" className={styles.label}>
+							Recipe Name <span className={styles.required} aria-hidden="true">*</span>
+							<span className={styles.srOnly}> (required)</span>
+						</label>
+						<input
+							id="title"
+							type="text"
+							className={`${styles.input} ${styles.recipeName} ${errors.title ? styles.invalid : ""}`}
+							placeholder="Enter recipe name"
+							required
+							aria-required="true"
+							aria-invalid={!!errors.title}
+							aria-describedby={errors.title ? titleErrorId : undefined}
+							{...register("title", { required: "Recipe name is required" })}
+						/>
+						{errors.title && (
+							<ErrorText id={titleErrorId} className={styles.fieldError}>
+								{errors.title.message}
+							</ErrorText>
+						)}
+					</div>
+					<div className={styles.fieldGroup}>
+						<label htmlFor="description" className={styles.label}>
+							Description <span className={styles.optional}>(optional)</span>
+						</label>
+						<textarea
+							id="description"
+							className={`${styles.input} ${styles.description}`}
+							placeholder="Brief description of the recipe"
+							{...register("description")}
+						/>
+					</div>
+					<div className={styles.fieldGroup}>
+						<label htmlFor="recipe" className={styles.label}>
+							Recipe <span className={styles.required} aria-hidden="true">*</span>
+							<span className={styles.srOnly}> (required)</span>
+						</label>
+						<textarea
+							id="recipe"
+							className={`${styles.input} ${styles.recipe} ${errors.recipe ? styles.invalid : ""}`}
+							placeholder="Enter the full recipe"
+							required
+							aria-required="true"
+							aria-invalid={!!errors.recipe}
+							aria-describedby={errors.recipe ? recipeErrorId : undefined}
+							{...register("recipe", { required: "Recipe text is required" })}
+						/>
+						{errors.recipe && (
+							<ErrorText id={recipeErrorId} className={styles.fieldError}>
+								{errors.recipe.message}
+							</ErrorText>
+						)}
+					</div>
 					<Button
 						type="submit"
 						disabled={!isValid || isSubmitting}

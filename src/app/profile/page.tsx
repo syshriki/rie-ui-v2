@@ -6,9 +6,10 @@ import { deleteUser, getMe, updateUser } from "../../api/sdk";
 import type { UserProfile } from "../../api/sdk";
 import Button from "../../components/Button/Button";
 import Card from "../../components/Card/Card";
-import Dialog from "../../components/Dialog/Dialog";
+import ConfirmDialog from "../../components/ConfirmDialog/ConfirmDialog";
 import Page from "../../components/Page/Page";
-import { CheckIcon, CloseIcon } from "../../components/Icons/Icons";
+import { CheckIcon, CloseIcon, EditIcon } from "../../components/Icons/Icons";
+import IconButton from "../../components/IconButton/IconButton";
 import ErrorText from "../../components/ErrorText/ErrorText";
 import Spinner from "../../components/Spinner/Spinner";
 import { useIsLoggedIn } from "../../hooks/auth";
@@ -137,18 +138,14 @@ function ProfileContent() {
 										maxLength={30}
 									/>
 									<div className={styles.icons}>
-										<button
-											type="button"
-											className={styles.editAction}
+										<IconButton
 											disabled={isSavingUsername}
 											onClick={handleCancelEdit}
 											aria-label="Cancel editing"
 										>
-											<CloseIcon size={18} />
-										</button>
-										<button
-											type="button"
-											className={styles.editAction}
+											<CloseIcon className={styles.icon} />
+										</IconButton>
+										<IconButton
 											disabled={isSavingUsername}
 											onClick={handleSaveUsername}
 											aria-label="Save username"
@@ -156,9 +153,9 @@ function ProfileContent() {
 											{isSavingUsername ? (
 												<Spinner size={16} />
 											) : (
-												<CheckIcon size={18} />
+												<CheckIcon className={styles.icon} />
 											)}
-										</button>
+										</IconButton>
 									</div>
 								</div>
 							) : (
@@ -166,14 +163,12 @@ function ProfileContent() {
 									<h2 className={styles.username}>
 										{profile.username}
 									</h2>
-									<button
-										type="button"
-										className={styles.editButton}
+									<IconButton
 										onClick={handleEditUsername}
 										aria-label="Edit username"
 									>
-										✎
-									</button>
+										<EditIcon className={styles.icon} />
+									</IconButton>
 								</div>
 							)}
 								<p className={styles.memberSince}>
@@ -217,37 +212,20 @@ function ProfileContent() {
 				</Card>
 			</div>
 
-			<Dialog isOpen={isDeleteOpen}>
-				<div className={styles.deleteDialog}>
-					<p>
-						<strong>
-							Are you sure you want to delete your account?
-						</strong>
-					</p>
-					<p>
-						This will permanently remove all your recipes,
-						favorites, and account data. This action cannot be
-						undone.
-					</p>
-					<nav className={styles.deleteControls}>
-						<Button
-							size="medium"
-							variant="secondary"
-							disabled={isDeleting}
-							onClick={() => setIsDeleteOpen(false)}
-						>
-							Cancel
-						</Button>
-						<Button
-							size="medium"
-							disabled={isDeleting}
-							onClick={handleDelete}
-						>
-							{isDeleting ? "Deleting..." : "Delete"}
-						</Button>
-					</nav>
-				</div>
-			</Dialog>
+			<ConfirmDialog
+				isOpen={isDeleteOpen}
+				title="Are you sure you want to delete your account?"
+				confirmText="Delete"
+				onCancel={() => setIsDeleteOpen(false)}
+				onConfirm={handleDelete}
+				isConfirming={isDeleting}
+				confirmingText="Deleting..."
+			>
+				<p>
+					This will permanently remove all your recipes, favorites,
+					and account data. This action cannot be undone.
+				</p>
+			</ConfirmDialog>
 		</Page>
 	);
 }

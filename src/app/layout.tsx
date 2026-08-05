@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import MockGate from "./MockGate";
 
 export const metadata: Metadata = {
 	title: "Rie.recipes",
@@ -16,7 +17,9 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body>{children}</body>
+			<body>
+				<MockGate>{children}</MockGate>
+			</body>
 		</html>
 	);
 }

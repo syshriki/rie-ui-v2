@@ -1,0 +1,15 @@
+.confirmDialog {
+	text-align: center;
+	padding: var(--space-md);
+}
+
+.confirmDialog p {
+	margin-bottom: var(--space-md);
+}
+
+.controls {
+	display: flex;
+	justify-content: center;
+	gap: var(--space-md);
+	margin-top: var(--space-lg);
+}
