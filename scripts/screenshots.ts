@@ -6,11 +6,11 @@
  *   npm run screenshots
  *
  * The dev server is started automatically. Screenshots are saved to
- * screenshots/<commit-hash>/ and are meant to be committed.
+ * screenshots/ and overwritten on each run.
  */
 
 import { chromium } from "@playwright/test";
-import { execSync, spawn, type ChildProcess } from "child_process";
+import { spawn, type ChildProcess } from "child_process";
 import fs from "fs";
 import http from "http";
 import path from "path";
@@ -79,14 +79,6 @@ const PAGES: PageEntry[] = [
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
-
-function getCommitHash(): string {
-  try {
-    return execSync("git rev-parse --short HEAD", { encoding: "utf-8" }).trim();
-  } catch {
-    return "unknown";
-  }
-}
 
 function waitForServer(url: string, timeoutMs: number): Promise<void> {
   const start = Date.now();
@@ -170,8 +162,7 @@ async function main() {
     }
 
     // 2. Compute output directory
-    const commitHash = getCommitHash();
-    const outputDir = path.join(SCREENSHOTS_DIR, commitHash);
+    const outputDir = SCREENSHOTS_DIR;
     fs.mkdirSync(outputDir, { recursive: true });
     console.log(`Output: ${outputDir}\n`);
 

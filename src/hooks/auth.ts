@@ -23,13 +23,12 @@ export function useIsLoggedIn(): {
 	setRefreshExpiresAt: (date: Date) => void;
 	setUserId: (id: string | null) => void;
 } {
-	const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() =>
-		isUserLoggedIn(),
-	);
-	const [userId, setUserIdState] = useState<string | null>(() => {
-		if (typeof window === "undefined") return null;
-		return window.localStorage.getItem("userId");
-	});
+	// Always initialize to "not logged in" so server and client
+	// render identical HTML during hydration (avoids React error #418).
+	// Sync with localStorage in the useEffect below.
+	const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+	const [userId, setUserIdState] = useState<string | null>(null);
+	const [isLoading, setIsLoading] = useState(true);
 	const router = useRouter();
 
 	const setUserId = useCallback((id: string | null) => {
@@ -43,12 +42,12 @@ export function useIsLoggedIn(): {
 
 	const setExpiresAt = useCallback((date: Date) => {
 		window.localStorage.setItem("expiresAt", date.toString());
-		
+
 	}, []);
 
 	const setRefreshExpiresAt = useCallback((date: Date) => {
 		window.localStorage.setItem("refreshExpiresAt", date.toString());
-		
+
 		setIsLoggedIn(true);
 	}, []);
 
@@ -68,6 +67,16 @@ export function useIsLoggedIn(): {
 		[setUserId, router],
 	);
 
+	// Sync auth state from localStorage after hydration.
+	// This must happen in useEffect so server and client render
+	// identical HTML (avoids React hydration error #418).
+	useEffect(() => {
+		setIsLoggedIn(isUserLoggedIn());
+		const storedUserId = window.localStorage.getItem("userId");
+		setUserIdState(storedUserId);
+		setIsLoading(false);
+	}, []);
+
 	useEffect(() => {
 		const handleStorageChange = (event: StorageEvent) => {
 			if (event.key === "refreshExpiresAt") {
@@ -78,16 +87,16 @@ export function useIsLoggedIn(): {
 			}
 		};
 
-			window.addEventListener("storage", handleStorageChange);
-			return () => {
-				window.removeEventListener("storage", handleStorageChange);
-			};
+		window.addEventListener("storage", handleStorageChange);
+		return () => {
+			window.removeEventListener("storage", handleStorageChange);
+		};
 	}, []);
 
 	return {
 		isLoggedIn,
 		logout,
-		isLoading: false,
+		isLoading,
 		setExpiresAt,
 		setRefreshExpiresAt,
 		setUserId,

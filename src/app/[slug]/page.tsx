@@ -2,7 +2,7 @@
 
 import clsx from "clsx";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import {
 	deleteRecipe,
 	getRecipe,
@@ -16,6 +16,7 @@ import Page from "../../components/Page/Page";
 import { EditIcon, DeleteIcon, PrintIcon } from "../../components/Icons/Icons";
 import IconButton from "../../components/IconButton/IconButton";
 import { useIsLoggedIn } from "../../hooks/auth";
+import { useWakeLock } from "../../hooks/useWakeLock";
 import styles from "./page.module.css";
 
 function print() {
@@ -33,6 +34,14 @@ function print() {
 	}
 }
 export default function RecipePage() {
+	return (
+		<Suspense fallback={<div>Loading...</div>}>
+			<RecipePageInner />
+		</Suspense>
+	);
+}
+
+function RecipePageInner() {
 	const { slug } = useParams();
 	const router = useRouter();
 
@@ -42,28 +51,7 @@ export default function RecipePage() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
 	const [isDeleting, setIsDeleting] = useState(false);
-	const wakeLockRef = useRef<WakeLockSentinel | null>(null);
-
-	useEffect(() => {
-		const requestWakeLock = async () => {
-			if ("wakeLock" in navigator) {
-				try {
-					wakeLockRef.current = await navigator.wakeLock.request("screen");
-				} catch (err) {
-					console.warn("Wake lock request failed:", err);
-				}
-			}
-		};
-
-		requestWakeLock();
-
-		return () => {
-			if (wakeLockRef.current) {
-				wakeLockRef.current.release();
-				wakeLockRef.current = null;
-			}
-		};
-	}, []);
+	useWakeLock();
 
 	useEffect(() => {
 		const fetchRecipe = async () => {

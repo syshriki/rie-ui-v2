@@ -5,12 +5,20 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { useParams, useRouter } from "next/navigation";
 import { getRecipe, updateRecipe } from "../../../api/sdk";
 import type { CreateRecipeBody } from "../../../api/sdk";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useIsLoggedIn } from "../../../hooks/auth";
 import Button from "../../../components/Button/Button";
 import ErrorText from "../../../components/ErrorText/ErrorText";
 
 export default function EditPage() {
+	return (
+		<Suspense fallback={<div>Loading...</div>}>
+			<EditPageInner />
+		</Suspense>
+	);
+}
+
+function EditPageInner() {
 	const {
 		register,
 		handleSubmit,
@@ -19,7 +27,7 @@ export default function EditPage() {
 	} = useForm<CreateRecipeBody>({
 		mode: "onChange",
 	});
-	const { isLoggedIn } = useIsLoggedIn();
+	const { isLoggedIn, isLoading: isAuthLoading } = useIsLoggedIn();
 
 	const router = useRouter();
 	const { slug } = useParams();
@@ -27,14 +35,17 @@ export default function EditPage() {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [isLoadingRecipe, setIsLoadingRecipe] = useState(true);
 
+	// Redirect to login only after auth state has been synced from
+	// localStorage (isAuthLoading === false), avoiding premature redirect
+	// during the initial render before hydration is complete.
 	useEffect(() => {
-		if (!isLoggedIn) {
+		if (!isAuthLoading && !isLoggedIn) {
 			router.replace("/login?redirectUri=/edit");
 		}
-	}, [isLoggedIn, router]);
+	}, [isLoggedIn, isAuthLoading, router]);
 
 	useEffect(() => {
-		if (!isLoggedIn) {
+		if (isAuthLoading || !isLoggedIn) {
 			return;
 		}
 
@@ -65,7 +76,7 @@ export default function EditPage() {
 		};
 
 		fetchRecipe();
-	}, [slug, isLoggedIn, reset, router]);
+	}, [slug, isLoggedIn, isAuthLoading, reset, router]);
 
 	const onSubmit: SubmitHandler<CreateRecipeBody> = async (data) => {
 		if (!slug) return;
@@ -85,7 +96,10 @@ export default function EditPage() {
 		}
 	};
 
-	if (!isLoggedIn) {
+	// Show nothing while auth is loading or user is not logged in.
+	// The useEffect above will redirect to /login if the user is
+	// truly unauthenticated after auth state is synced.
+	if (isAuthLoading || !isLoggedIn) {
 		return null;
 	}
 
