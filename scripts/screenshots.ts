@@ -2,8 +2,10 @@
  * Screenshot script — captures every page at every responsive breakpoint.
  *
  * Usage:
- *   npx tsx scripts/screenshots.ts
- *   npm run screenshots
+ *   npx tsx scripts/screenshots.ts               # all pages
+ *   npx tsx scripts/screenshots.ts login          # only the login page
+ *   npm run screenshots                           # all pages
+ *   npm run screenshots -- login                  # only the login page
  *
  * The dev server is started automatically. Screenshots are saved to
  * screenshots/ and overwritten on each run.
@@ -77,6 +79,22 @@ const PAGES: PageEntry[] = [
 ];
 
 // ---------------------------------------------------------------------------
+// Optional page filter (first CLI argument)
+// ---------------------------------------------------------------------------
+
+const targetPage = process.argv[2];
+const pages = targetPage
+  ? PAGES.filter((p) => p.label === targetPage)
+  : PAGES;
+
+if (targetPage && pages.length === 0) {
+  console.error(
+    `❌ Unknown page "${targetPage}". Available pages: ${PAGES.map((p) => p.label).join(", ")}`,
+  );
+  process.exit(1);
+}
+
+// ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
@@ -141,7 +159,8 @@ function startDevServer(): ChildProcess {
 // ---------------------------------------------------------------------------
 
 async function main() {
-  console.log("📸 Screenshot script starting…\n");
+  const scope = targetPage ? `"${targetPage}"` : "all pages";
+  console.log(`📸 Screenshot script starting — ${scope}…\n`);
 
   // 1. Ensure dev server is running
   const serverAlreadyRunning = await isServerRunning(BASE_URL);
@@ -172,7 +191,7 @@ async function main() {
     try {
       let screenshotCount = 0;
 
-      for (const entry of PAGES) {
+      for (const entry of pages) {
         console.log(`▶ ${entry.route}${entry.needsAuth ? " (auth)" : ""}`);
 
         const context = await browser.newContext();
