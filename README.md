@@ -38,4 +38,20 @@ Capture every page at every responsive breakpoint:
 npm run screenshots
 ```
 
-Saves to `screenshots/<commit-hash>/` — 600px, 900px, 1440px, and print layouts.
+Three views per page, in `screenshots/`:
+
+| file | view |
+| --- | --- |
+| `<page>-900px.png` | tablet, 900×900 |
+| `<page>-1440px.png` | desktop, 1440×900 |
+| `<page>-iphone12.png` | mobile, Playwright's iPhone 12 descriptor (390×664 CSS, DPR 3, touch, iPhone UA → 1170px wide) |
+| `<page>-print.png` | print media layout |
+| `<page>-iphone12-menu.png` | mobile dropdown open — only for pages opting in via `captureMenu` |
+
+Mobile has no breakpoint entry: it comes from the device descriptor, which needs
+its own browser context (DPR/touch/UA are context-level).
+
+Mobile captures are several screens tall, so they carry a dashed red line
+labelled `▲ end of first screen (664px)` at the fold — everything below it is
+what you'd only see after scrolling. It is injected as a manual popover so it
+stays visible on top of the open dropdown.

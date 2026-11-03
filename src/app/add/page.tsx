@@ -18,7 +18,7 @@ function AddPageClient() {
 	} = useForm<CreateRecipeBody>({
 		mode: "onChange",
 	});
-	const { isLoggedIn } = useIsLoggedIn();
+	const { isLoggedIn, isLoading: isAuthLoading } = useIsLoggedIn();
 
 	const router = useRouter();
 	const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,12 +40,15 @@ function AddPageClient() {
 	};
 
 	useEffect(() => {
-		if (!isLoggedIn) {
+		// `isLoading` starts true: the auth hook syncs from localStorage in an
+		// effect, so redirecting before that settles would bounce a logged-in
+		// user to /login — which then sends them straight back here.
+		if (!isAuthLoading && !isLoggedIn) {
 			router.replace("/login?redirectUri=/add");
 		}
-	}, [isLoggedIn, router]);
+	}, [isAuthLoading, isLoggedIn, router]);
 
-	if (!isLoggedIn) {
+	if (isAuthLoading || !isLoggedIn) {
 		return null;
 	}
 
