@@ -1,15 +1,20 @@
 .paper {
 	line-height: var(--line-height);
-	background-image: repeating-linear-gradient(
-		to bottom,
-		var(--paper-line-color) 0,
-		var(--paper-line-color) var(--paper-line-thickness),
-		transparent var(--paper-line-thickness),
-		transparent calc(var(--paper-line-height) + var(--paper-line-thickness))
-	);
+	background-image: var(--paper-lines);
 	background-attachment: local;
 	background-size: 100%
 		calc(var(--paper-line-height) + var(--paper-line-thickness));
 	min-height: 100vh;
 	overscroll-behavior: none;
+}
+
+/*
+ * Mobile scrolls the document itself (see page.module.css), and `none` there
+ * stops the scroll chain dead — nothing scrolls at all. Only the nested
+ * scroller on desktop/tablet wants the overscroll contained.
+ */
+@media (max-width: 600px) {
+	.paper {
+		overscroll-behavior: auto;
+	}
 }

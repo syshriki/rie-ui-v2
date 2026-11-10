@@ -157,6 +157,15 @@ p {
 	--paper-line-height: 2em;
 	--paper-line-color: #f1d8c9;
 	--paper-line-thickness: 2px;
+	/* Ruled-paper lines: shared so non-Paper surfaces (e.g. the mobile menu)
+	   can sit on the same background. */
+	--paper-lines: repeating-linear-gradient(
+		to bottom,
+		var(--paper-line-color) 0,
+		var(--paper-line-color) var(--paper-line-thickness),
+		transparent var(--paper-line-thickness),
+		transparent calc(var(--paper-line-height) + var(--paper-line-thickness))
+	);
 	--page-header-height: 6rem;
 	--default-background-color: #fee3cd;
 	--separator-color: #eda991;

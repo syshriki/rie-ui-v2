@@ -10,6 +10,7 @@ interface MenuProps {
 	menuId?: string;
 	onOpen?: () => void;
 	onClose?: () => void;
+	/** Set to keep one corner square when the menu is anchored to an element. */
 	noRadiusCorner?: NoRadiusCorner;
 	anchorToElement?: string;
 }
@@ -20,7 +21,7 @@ const Menu: React.FC<MenuProps> = ({
 	menuId,
 	onOpen,
 	onClose,
-	noRadiusCorner = "bottomRight",
+	noRadiusCorner,
 	anchorToElement,
 }) => {
 	const generatedId = useId();
@@ -33,6 +34,8 @@ const Menu: React.FC<MenuProps> = ({
 
 		// Safety check
 		if (!popover) return;
+
+		const corner = noRadiusCorner ?? "bottomRight";
 
 		const handleToggle = (event: Event) => {
 			const toggleEvent = event as ToggleEvent;
@@ -47,28 +50,16 @@ const Menu: React.FC<MenuProps> = ({
 						const popoverElRect = popover.getBoundingClientRect();
 						// Position at the bottom right corner of the anchor element
 						popover.style.position = "fixed";
-						if (
-							noRadiusCorner === "bottomRight" ||
-							noRadiusCorner === "bottomLeft"
-						) {
+						if (corner === "bottomRight" || corner === "bottomLeft") {
 							popover.style.top = `${anchoElRect.y - popoverElRect.height - 16}px`; // 5 to add a small gap
 						} else {
 							popover.style.top = `${anchoElRect.y + anchoElRect.height + 16}px`;
 						}
 
-						if (
-							noRadiusCorner === "bottomRight" ||
-							noRadiusCorner === "topRight"
-						) {
+						if (corner === "bottomRight" || corner === "topRight") {
 							popover.style.right = `${window.innerWidth - anchoElRect.right + 0.5 * anchoElRect.width}px`;
 							popover.style.left = "auto";
 						} else {
-							console.log({
-								windowWidth: window.innerWidth,
-								anchoElRectRight: anchoElRect.right,
-								anchoElRectWidth: anchoElRect.width,
-								innerWidth: window.innerWidth,
-							});
 							popover.style.left = `${anchoElRect.right}px`;
 						}
 						popover.style.margin = "0";

@@ -274,6 +274,19 @@ async function saveScreenshot(
   console.log(`  ✓ ${filename}`);
 }
 
+/** Viewport-sized capture: for states that fill the screen (full-screen menu). */
+async function saveViewportScreenshot(
+  page: Page,
+  outputDir: string,
+  filename: string,
+): Promise<void> {
+  await page.screenshot({
+    path: path.join(outputDir, filename),
+    fullPage: false,
+  });
+  console.log(`  ✓ ${filename}`);
+}
+
 /**
  * Full-page captures are several screens tall. This variant first marks where
  * the device's first screen ends, so the fold stays readable in one image.
@@ -393,13 +406,13 @@ async function captureViewports(
 }
 
 /**
- * Opens the dropdown, screenshots it (fold line included), then closes it.
+ * Opens the dropdown, screenshots it, then closes it. No fold marker: the menu
+ * is full-screen, so there is nothing below the fold to point at.
  */
 async function captureOpenMenu(
   page: Page,
   outputDir: string,
   filename: string,
-  viewportHeight: number,
 ): Promise<number> {
   const trigger = page.locator(`#${MENU_TRIGGER_ID}`);
   if ((await trigger.count()) === 0) {
@@ -414,7 +427,7 @@ async function captureOpenMenu(
     .waitFor({ state: "visible", timeout: 5_000 });
   await page.waitForTimeout(300);
 
-  await saveScreenState(page, outputDir, filename, viewportHeight);
+  await saveViewportScreenshot(page, outputDir, filename);
   await closeMenu(page);
   return 1;
 }
@@ -477,7 +490,6 @@ async function captureMobileState(
           page,
           outputDir,
           `${entry.label}-${MOBILE_DEVICE}-menu.png`,
-          viewportHeight,
         )
       : 0;
 

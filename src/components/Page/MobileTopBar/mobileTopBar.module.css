@@ -21,8 +21,73 @@
 	transform: translate(-50%, -50%);
 }
 
-.menu {
-	width: 75%;
+/* Full-screen menu: header row, scrollable items, bottom-pinned account row. */
+.menuHeader {
+	position: relative;
+	display: flex;
+	align-items: center;
+	min-height: 4em;
+	padding-inline: var(--space-md);
+	/* Opaque, like the desktop Header band: no rules cross the top bar. */
+	background: var(--default-background-color);
+	/* Drawn as a pseudo-element: globals.css puts a border on popover children. */
+	&::after {
+		content: "";
+		position: absolute;
+		inset: auto 0 0 0;
+		border-bottom-style: double;
+		border-bottom-width: 5px;
+		border-bottom-color: var(--separator-color);
+	}
+}
+
+.closeButton {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: inherit;
+	cursor: pointer;
+}
+
+.closeIcon {
+	/* CloseIcon's ink is the middle half of its 40-unit viewBox, so a 3.25rem
+	   box renders a ~26px glyph — the same size as the row icons (0.9em of the
+	   1.8em menu font). Stays well inside the 4rem bar, which drives the
+	   ruled-line phase-lock below it. */
+	height: 3.25rem;
+	width: 3.25rem;
+}
+
+.items {
+	flex: 1;
+	overflow-y: auto;
+	/* Same voice as the desktop sidebar. */
+	font: 1.8em "Schoolbell", cursive;
+	/*
+	 * Phase-lock the rows to the ruled paper: the first row starts on a rule
+	 * (3 pitches) instead of wherever the 4rem header happens to end.
+	 */
+	padding: calc(3 * var(--menu-line-pitch) - 4rem) 0 0 1em;
+}
+
+.account {
+	/* Mirrors the sidebar footer. */
+	border-top-style: double;
+	border-top-width: 5px;
+	border-top-color: var(--separator-color);
+	min-height: 3.5em;
+	padding-inline: 1em;
+	/* Opaque, like the sidebar footer. */
+	background-color: var(--default-background-color);
+	display: flex;
+	align-items: center;
+	font: 1.8em "Schoolbell", cursive;
+	> button {
+		margin-bottom: 0;
+	}
 }
 
 .clickable {
@@ -48,18 +113,53 @@
 	border-bottom: 3px solid var(--link-selected-color);
 }
 
-.selectedItem {
-	display: flex;
-	align-items: center;
-	color: var(--link-selected-color);
-	img {
-		filter: invert(15%) sepia(21%) saturate(6667%) hue-rotate(224deg)
-			brightness(122%) contrast(153%);
-	}
-}
+/* Row content alignment lives in MenuItem (menuItem.module.css). */
 
 @media (max-width: 600px) {
 	.mobileTopBar {
 		display: flex;
+	}
+
+	/*
+	 * Full-screen menu: covers the viewport instead of floating next to the
+	 * hamburger. Overrides the shared popover styling in globals.css.
+	 */
+	.menu:popover-open {
+		/* Ruled-line pitch in root units, so rows below can snap to it. */
+		--menu-line-pitch: calc(2rem + var(--paper-line-thickness));
+		inset: 0;
+		width: 100%;
+		min-width: 0;
+		max-width: none;
+		height: 100dvh;
+		max-height: none;
+		margin: 0;
+		padding: 0;
+		border: none;
+		border-radius: 0;
+		box-shadow: none;
+		/* Same ruled-paper surface as the rest of the app. */
+		font-size: 1rem;
+		background-color: var(--default-background-color);
+		background-image: var(--paper-lines);
+		background-attachment: local;
+		background-size: 100% var(--menu-line-pitch);
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+		/* Belt and braces with the html lock below: stops any scroll gesture that
+		   starts inside the menu from chaining to the page behind it. */
+		overscroll-behavior: contain;
+
+		/* globals.css draws a divider on every direct child but the last. */
+		> :not(:last-child) {
+			border-bottom: none;
+		}
+	}
+
+	/* Lock the page behind the open menu so it can't scroll underneath it. */
+	:global(html:has(#footer-menu:popover-open)),
+	:global(html:has(#footer-menu:popover-open)) :global(body) {
+		overflow: hidden;
 	}
 }

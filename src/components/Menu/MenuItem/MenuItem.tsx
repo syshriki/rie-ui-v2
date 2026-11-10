@@ -5,13 +5,22 @@ import styles from "./menuItem.module.css";
 type MenuItemProps = {
 	children: React.ReactNode;
 	disabled?: boolean;
+	selected?: boolean;
 	onClick?: () => void;
 };
 
-const MenuItem = ({ children, disabled, onClick }: MenuItemProps) => {
+const MenuItem = ({
+	children,
+	disabled,
+	selected,
+	onClick,
+}: MenuItemProps) => {
 	return (
 		<button
-			className={clsx(styles.clickable, disabled && styles.disabled)}
+			className={clsx(styles.clickable, {
+				[styles.selected]: selected,
+				[styles.disabled]: disabled,
+			})}
 			onClick={onClick}
 			disabled={disabled}
 			type="button"

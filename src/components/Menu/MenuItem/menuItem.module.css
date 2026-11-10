@@ -1,18 +1,40 @@
+/*
+ * Mirrors the desktop sidebar rows (Sidebar.module.css) so the mobile menu and
+ * the sidebar read as the same navigation.
+ */
 .clickable {
+	cursor: pointer;
 	display: flex;
 	align-items: center;
+	width: 100%;
+	padding: 0 0 0 0.5rem;
+	/* Spacing as margin so the left indicator hugs the content, like the sidebar. */
+	margin-bottom: var(--line-height);
 	border: 0;
-	padding: 3em;
-	cursor: pointer;
-	height: 100%;
-	background-color: inherit;
-	span {
-		font-size: 3em;
+	/* Reserved so the selected/hover indicator never shifts the label. */
+	border-left: 3px solid transparent;
+	background: none;
+	color: inherit;
+	font: inherit;
+	text-align: left;
+	> img {
+		width: 0.9em;
+		height: 0.9em;
+		margin-right: 0.25rem;
+		flex-shrink: 0;
 	}
+}
+
+.clickable:not(.selected):hover {
+	border-left-color: #000;
+}
+
+.selected {
+	color: var(--link-selected-color);
+	text-shadow: 3px 3px 4px #00000066;
+	border-left-color: var(--link-selected-color);
 	img {
-		height: 3em;
-		width: 3em;
-		margin-right: 0.5em;
+		filter: var(--link-selected-color-svg);
 	}
 }
 
