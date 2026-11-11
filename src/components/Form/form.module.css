@@ -1,16 +1,10 @@
 /* Shared form surface + controls. Every form page (add, edit, …) gets its
    layout, label treatment and control styling from here, so fields behave the
-   same on every screen size. */
+   same on every screen size. The card shell comes from PageCard; this sets how
+   wide a form may get, and the fields and footer own the inset. */
 
 .card {
-	/* Single source of truth for the form's inset: the fields take it as their
-	   padding and the footer reuses it, so the footer's rule can run the full
-	   card width, edge to edge. */
-	--form-padding: clamp(var(--space-md), 2.5vw, var(--space-xl));
-	width: 80%;
 	max-width: 56rem;
-	margin: var(--space-2xl) auto;
-	padding: 0;
 }
 
 .form {
@@ -23,7 +17,7 @@
 	display: flex;
 	flex-direction: column;
 	gap: var(--space-lg);
-	padding: var(--form-padding);
+	padding: var(--card-padding);
 }
 
 /* ── Field ── */
@@ -121,25 +115,18 @@
 
 /* ── Footer ── */
 
+/* The rule and the inset come from CardRule; this only lays out the actions. */
 .footer {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	flex-wrap: wrap;
 	gap: var(--space-md);
-	/* Like the recipe list's paginator rule: full width, meeting the card's
-	   side borders at both ends. */
-	border-top: 2px solid #000;
-	padding: var(--space-lg) var(--form-padding) var(--form-padding);
 }
 
 @media (max-width: 900px) {
-	.card {
-		width: 90%;
-		margin-top: var(--space-md);
-	}
-
-	/* Stack the actions, primary on top, each one full width. */
+	/* Stack the actions, primary on top, each one full width. Same breakpoint as
+	   Button, which goes full width of its container below it. */
 	.footer {
 		flex-direction: column-reverse;
 		align-items: stretch;

@@ -1,31 +1,19 @@
-.container {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	width: 100%;
-	row-gap: 2.1em;
-	height: 100%;
-	line-height: 1.1rem;
-}
-
+/* The card shell (width, margins, breakpoint) comes from PageCard. */
 .card {
-	margin: var(--space-xl);
-	margin-top: var(--space-2xl);
-	padding: var(--space-xl);
-	width: 80%;
-	max-width: 800px;
+	max-width: 50rem;
 }
 
-.card h3 {
+/* Long-form document styles for the text inside the card. */
+.prose h3 {
 	margin-top: 1.5em;
 	margin-bottom: 0.5em;
 }
 
-.card p {
+.prose p {
 	margin-bottom: 0.75em;
 }
 
-.card ul {
+.prose ul {
 	font-family: "Montserrat", sans-serif;
 	font-size: 1.1rem;
 	line-height: 1.6rem;
@@ -34,31 +22,11 @@
 	margin-bottom: 0.75em;
 }
 
-.card li {
+.prose li {
 	margin-bottom: 0.4em;
 }
 
-.card a {
+.prose a {
 	color: var(--link-selected-color);
 	text-decoration: underline;
-}
-
-@media (max-width: 1000px) {
-	.container {
-		width: 100%;
-	}
-	.card {
-		width: 90%;
-		margin-top: var(--space-md);
-	}
-}
-
-@media (max-width: 600px) {
-	.card {
-		width: 90%;
-		margin-left: .3em;
-		margin-right: .3em;
-		margin-top: var(--space-md);
-		padding: 1.2rem;
-	}
 }

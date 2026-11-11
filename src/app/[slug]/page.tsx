@@ -10,9 +10,9 @@ import {
 } from "../../api/sdk";
 import type { RecipeWithAuthor, RecipeWithAuthorAnon } from "../../api/sdk";
 
-import Card from "../../components/Card/Card";
 import ConfirmDialog from "../../components/ConfirmDialog/ConfirmDialog";
 import Page from "../../components/Page/Page";
+import PageCard from "../../components/Page/PageCard/PageCard";
 import { EditIcon, DeleteIcon, PrintIcon } from "../../components/Icons/Icons";
 import IconButton from "../../components/IconButton/IconButton";
 import { useIsLoggedIn } from "../../hooks/auth";
@@ -100,73 +100,71 @@ function RecipePageInner() {
 
 	return (
 		<Page selected="recipes" headerText="" isLoggedIn={isLoggedIn}>
-			<div className={styles.container}>
-				<Card className={styles.card}>
-					{!isLoading && recipeData && (
-						<article className={clsx(styles.recipeContainer)}>
-							<div className={styles.headerContainer}>
-								<h2 className={styles.title}>{recipeData.title}</h2>
-								<nav className={styles.desktopControls}>
-									<IconButton
-										onClick={() => print()}
-										aria-label="Print Recipe"
-									>
-										<PrintIcon className={styles.icon} />
-									</IconButton>
-									{userId === recipeData.authorId ? (
-										<>
-											<IconButton
-												onClick={() => router.push(`/edit/${slug}`)}
-												aria-label="Edit Recipe"
-											>
-												<EditIcon className={styles.icon} />
-											</IconButton>
-											<IconButton
-												onClick={() => setIsDeletePopupOpen(true)}
-												aria-label="Delete Recipe"
-											>
-												<DeleteIcon className={styles.icon} />
-											</IconButton>
-										</>
-									) : null}
-								</nav>
-							</div>
-							<p className={styles.description}>{recipeData.description}</p>
-							<pre className={styles.recipe}>{recipeData.recipe}</pre>
-							<nav className={styles.mobileControls}>
+			<PageCard className={styles.card} padding="none">
+				{!isLoading && recipeData && (
+					<article className={clsx(styles.recipeContainer)}>
+						<div className={styles.headerContainer}>
+							<h2 className={styles.title}>{recipeData.title}</h2>
+							<nav className={styles.desktopControls}>
 								<IconButton
-									onClick={() =>
-										typeof window !== "undefined" && window.print()
-									}
+									onClick={() => print()}
 									aria-label="Print Recipe"
 								>
-									<PrintIcon size={28} />
+									<PrintIcon className={styles.icon} />
 								</IconButton>
 								{userId === recipeData.authorId ? (
 									<>
 										<IconButton
 											onClick={() => router.push(`/edit/${slug}`)}
-										aria-label="Edit Recipe"
+											aria-label="Edit Recipe"
 										>
-											<EditIcon size={28} />
+											<EditIcon className={styles.icon} />
 										</IconButton>
 										<IconButton
 											onClick={() => setIsDeletePopupOpen(true)}
-										aria-label="Delete Recipe"
+											aria-label="Delete Recipe"
 										>
-											<DeleteIcon size={28} />
+											<DeleteIcon className={styles.icon} />
 										</IconButton>
 									</>
 								) : null}
 							</nav>
-							<i>
-								Last edited by {recipeData.authorUsername} on{" "}
-								{new Date(recipeData.createdAt).toLocaleString()}
-							</i>
-						</article>
-					)}
-				</Card>
-			</div>
+						</div>
+						<p className={styles.description}>{recipeData.description}</p>
+						<pre className={styles.recipe}>{recipeData.recipe}</pre>
+						<nav className={styles.mobileControls}>
+							<IconButton
+								onClick={() =>
+									typeof window !== "undefined" && window.print()
+								}
+								aria-label="Print Recipe"
+							>
+								<PrintIcon size={28} />
+							</IconButton>
+							{userId === recipeData.authorId ? (
+								<>
+									<IconButton
+										onClick={() => router.push(`/edit/${slug}`)}
+									aria-label="Edit Recipe"
+									>
+										<EditIcon size={28} />
+									</IconButton>
+									<IconButton
+										onClick={() => setIsDeletePopupOpen(true)}
+									aria-label="Delete Recipe"
+									>
+										<DeleteIcon size={28} />
+									</IconButton>
+								</>
+							) : null}
+						</nav>
+						<i>
+							Last edited by {recipeData.authorUsername} on{" "}
+							{new Date(recipeData.createdAt).toLocaleString()}
+						</i>
+					</article>
+				)}
+			</PageCard>
 			<ConfirmDialog
 				isOpen={isDeletePopupOpen}
 				title="Are you sure you want to delete this recipe?"

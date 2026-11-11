@@ -4,15 +4,14 @@
 	margin-bottom: var(--space-xl);
 	padding-top: var(--space-xl);
 	font-family: Montserrat, sans-serif;
-	border-top: 2px solid #000;
+	border-top: 2px solid var(--rule-color);
 }
 
 .controls {
 	display: grid;
 	grid-template-columns: auto 1fr auto;
 	column-gap: var(--space-md);
-	padding-left: var(--space-xl);
-	padding-right: var(--space-xl);
+	padding-inline: var(--card-padding);
 }
 
 .navButton {
@@ -49,11 +48,4 @@
 	cursor: pointer;
 	text-align: center;
 	background-size: 16px 12px;
-}
-
-@media (max-width: 600px) {
-	.controls {
-		padding-left: var(--space-md);
-		padding-right: var(--space-md);
-	}
 }

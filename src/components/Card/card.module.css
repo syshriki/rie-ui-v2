@@ -1,6 +1,22 @@
 .card {
+	/* The inset every section of a card measures against. Sections take it as
+	   their padding and full-width rules use it to re-inset their contents, so a
+	   rule can still reach the card's side borders. Inherited by everything
+	   inside the card. */
+	--card-padding: var(--space-xl);
+	/* The hard divider that closes a card section, and the softer one between
+	   list rows inside a card. */
+	--rule-color: #000;
+	--rule-subtle-color: #98b8e4;
+
 	border: 2px solid #000;
 	border-radius: 5px;
 	box-shadow: 3px 3px 4px #00000066;
 	background-color: white;
+}
+
+@media (max-width: 600px) {
+	.card {
+		--card-padding: var(--space-md);
+	}
 }

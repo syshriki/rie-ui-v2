@@ -1,0 +1,5 @@
+.cardRule {
+	border-top: 2px solid var(--rule-color, #000);
+	padding: var(--space-lg) var(--card-padding, var(--space-xl))
+		var(--card-padding, var(--space-xl));
+}

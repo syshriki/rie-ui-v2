@@ -1,7 +1,8 @@
 "use client";
 import clsx from "clsx";
 import type React from "react";
-import Card from "../Card/Card";
+import CardRule from "../Card/CardRule";
+import PageCard from "../Page/PageCard/PageCard";
 import styles from "./form.module.css";
 
 interface FormProps extends React.ComponentProps<"form"> {
@@ -10,16 +11,17 @@ interface FormProps extends React.ComponentProps<"form"> {
 }
 
 /**
- * The default form surface: a Paper-styled card holding labelled fields and an
- * optional footer of actions. Pages only provide the fields and the footer.
+ * The default form surface: a page card holding labelled fields and an optional
+ * footer of actions, closed off by a rule that spans the card. Pages only
+ * provide the fields and the footer.
  */
 const Form = ({ footer, children, className, ...props }: FormProps) => (
-	<Card className={styles.card}>
+	<PageCard padding="none" className={styles.card}>
 		<form noValidate className={clsx(styles.form, className)} {...props}>
 			<div className={styles.fields}>{children}</div>
-			{footer ? <div className={styles.footer}>{footer}</div> : null}
+			{footer ? <CardRule className={styles.footer}>{footer}</CardRule> : null}
 		</form>
-	</Card>
+	</PageCard>
 );
 
 export default Form;

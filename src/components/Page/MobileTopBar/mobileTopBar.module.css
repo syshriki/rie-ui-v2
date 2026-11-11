@@ -24,26 +24,20 @@
 	height: 2.5rem;
 }
 
-/* Full-screen menu: header row, scrollable items, bottom-pinned account row. */
+/* Mirrors the top bar's geometry exactly: 4rem of content plus a 5px double
+   rule below it (content-box, so the rule sits outside the 4rem and the bar's
+   contents keep centering on 4rem/2). */
 .menuHeader {
 	position: relative;
 	display: flex;
 	align-items: center;
-	min-height: 4em;
+	height: 4em;
 	padding-inline: var(--space-md);
+	border-bottom-style: double;
+	border-bottom-width: 5px;
+	border-bottom-color: var(--separator-color);
 	/* Opaque, like the desktop Header band: no rules cross the top bar. */
 	background: var(--default-background-color);
-
-	/* Overlay rule: keeps the content box a full 4rem (which the ruled-line
-	   phase-lock below depends on) instead of eating 5px of the bar. */
-	&::after {
-		content: "";
-		position: absolute;
-		inset: auto 0 0 0;
-		border-bottom-style: double;
-		border-bottom-width: 5px;
-		border-bottom-color: var(--separator-color);
-	}
 }
 
 .closeButton {
@@ -73,9 +67,10 @@
 	font: 1.8em "Schoolbell", cursive;
 	/*
 	 * Phase-lock the rows to the ruled paper: the first row starts on a rule
-	 * (3 pitches) instead of wherever the 4rem header happens to end.
+	 * (3 pitches) instead of wherever the header happens to end. The header is
+	 * 4rem of content + a 5px rule, so subtract both.
 	 */
-	padding: calc(3 * var(--menu-line-pitch) - 4rem) 0 0 1em;
+	padding: calc(3 * var(--menu-line-pitch) - 4rem - 5px) 0 0 1em;
 }
 
 .account {

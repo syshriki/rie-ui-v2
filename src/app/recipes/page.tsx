@@ -5,8 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { searchRecipes, searchRecipesAnonymous } from "../../api/sdk";
 import type { RecipesPageResponse, RecipesPageResponseAnon } from "../../api/sdk";
-import Card from "../../components/Card/Card";
 import Page from "../../components/Page/Page";
+import PageCard from "../../components/Page/PageCard/PageCard";
 import { useIsLoggedIn } from "../../hooks/auth";
 import MobilePaginator from "./MobilePaginator";
 import styles from "./page.module.css";
@@ -75,66 +75,64 @@ function RecipesClient() {
 
 	return (
 		<Page selected="recipes" headerText="Recipes" isLoggedIn={isLoggedIn}>
-			<div className={styles.container}>
-				<Card className={styles.card}>
-					<search className={styles.search}>
-						<div className={styles.searchContainer}>
-							<input
-								id="recipe-search"
-								className={styles.searchBox}
-								type="search"
-								placeholder="Search recipes..."
-								value={searchQuery}
-								onChange={(e) => setSearchQuery(e.target.value)}
-								onKeyDown={(e) => e.key === "Enter" && performSearch()}
-								aria-label="Search recipes (typing 3 or more characters will search automatically)"
-							/>
-							<button
-								className={styles.searchButton}
-								onClick={performSearch}
-								onKeyDown={(e) => e.key === "Enter" && performSearch()}
-								aria-label="Submit"
-								type="button"
-							>
-								<img src="/search.svg" alt="Search icon" />
-							</button>
-						</div>
-						<section className={styles.resultContainer}>
-							{isLoading && (
-								<p className={styles.loadingText}>Loading...</p>
-							)}
+			<PageCard padding="none">
+				<search className={styles.search}>
+					<div className={styles.searchContainer}>
+						<input
+							id="recipe-search"
+							className={styles.searchBox}
+							type="search"
+							placeholder="Search recipes..."
+							value={searchQuery}
+							onChange={(e) => setSearchQuery(e.target.value)}
+							onKeyDown={(e) => e.key === "Enter" && performSearch()}
+							aria-label="Search recipes (typing 3 or more characters will search automatically)"
+						/>
+						<button
+							className={styles.searchButton}
+							onClick={performSearch}
+							onKeyDown={(e) => e.key === "Enter" && performSearch()}
+							aria-label="Submit"
+							type="button"
+						>
+							<img src="/search.svg" alt="Search icon" />
+						</button>
+					</div>
+					<section className={styles.resultContainer}>
+						{isLoading && (
+							<p className={styles.loadingText}>Loading...</p>
+						)}
 
-							{!isLoading && recipeResponse?.recipes.map((recipe) => (
-								<div className={styles.result} key={recipe.id}>
-									<Link href={`/${recipe.slug}`}>
-										<img src="/asterisk.svg" aria-label="list item marker" />
-										<h3>{recipe.title}</h3>
-									</Link>
-									<p>{recipe.description}</p>
-								</div>
-							))}
+						{!isLoading && recipeResponse?.recipes.map((recipe) => (
+							<div className={styles.result} key={recipe.id}>
+								<Link href={`/${recipe.slug}`}>
+									<img src="/asterisk.svg" aria-label="list item marker" />
+									<h3>{recipe.title}</h3>
+								</Link>
+								<p>{recipe.description}</p>
+							</div>
+						))}
 
-							{!isLoading && recipeResponse?.recipes.length === 0 && (
-								<h3 aria-live="polite">No recipes found</h3>
-							)}
-						</section>
-					</search>
-					<Paginator
-						totalPages={recipeResponse?.pagination.totalPages || 0}
-						totalItems={recipeResponse?.pagination.totalItems || 0}
-						currentPage={currentPage}
-						pageNumbersToShow={10}
-						className={styles.desktopPaginator}
-					/>
+						{!isLoading && recipeResponse?.recipes.length === 0 && (
+							<h3 aria-live="polite">No recipes found</h3>
+						)}
+					</section>
+				</search>
+				<Paginator
+					totalPages={recipeResponse?.pagination.totalPages || 0}
+					totalItems={recipeResponse?.pagination.totalItems || 0}
+					currentPage={currentPage}
+					pageNumbersToShow={10}
+					className={styles.desktopPaginator}
+				/>
 
-					<MobilePaginator
-						totalPages={recipeResponse?.pagination.totalPages || 0}
-						totalItems={recipeResponse?.pagination.totalItems || 0}
-						currentPage={currentPage}
-						className={styles.mobilePaginator}
-					/>
-				</Card>
-			</div>
+				<MobilePaginator
+					totalPages={recipeResponse?.pagination.totalPages || 0}
+					totalItems={recipeResponse?.pagination.totalItems || 0}
+					currentPage={currentPage}
+					className={styles.mobilePaginator}
+				/>
+			</PageCard>
 		</Page>
 	);
 }

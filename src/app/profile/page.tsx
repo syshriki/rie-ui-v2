@@ -5,9 +5,10 @@ import { Suspense, useEffect, useState } from "react";
 import { deleteUser, getMe, updateUser } from "../../api/sdk";
 import type { UserProfile } from "../../api/sdk";
 import Button from "../../components/Button/Button";
-import Card from "../../components/Card/Card";
+import CardRule from "../../components/Card/CardRule";
 import ConfirmDialog from "../../components/ConfirmDialog/ConfirmDialog";
 import Page from "../../components/Page/Page";
+import PageCard from "../../components/Page/PageCard/PageCard";
 import { CheckIcon, CloseIcon, EditIcon } from "../../components/Icons/Icons";
 import IconButton from "../../components/IconButton/IconButton";
 import ErrorText from "../../components/ErrorText/ErrorText";
@@ -114,8 +115,8 @@ function ProfileContent() {
 			isLoggedIn={isLoggedIn}
 			selected="profile"
 		>
-			<div className={styles.container}>
-				<Card className={styles.card}>
+			<PageCard padding="none" className={styles.card}>
+				<div className={styles.body}>
 					{showLoading && <p>Loading...</p>}
 
 					{error && <ErrorText>{error}</ErrorText>}
@@ -127,50 +128,50 @@ function ProfileContent() {
 									{getInitials(profile.username)}
 								</div>
 								{isEditingUsername ? (
-								<div className={styles.editRow}>
-									<input
-										className={styles.editInput}
-										type="text"
-										value={newUsername}
-										onChange={(e) =>
-											setNewUsername(e.target.value)
-										}
-										maxLength={30}
-									/>
-									<div className={styles.icons}>
+									<div className={styles.editRow}>
+										<input
+											className={styles.editInput}
+											type="text"
+											value={newUsername}
+											onChange={(e) =>
+												setNewUsername(e.target.value)
+											}
+											maxLength={30}
+										/>
+										<div className={styles.icons}>
+											<IconButton
+												disabled={isSavingUsername}
+												onClick={handleCancelEdit}
+												aria-label="Cancel editing"
+											>
+												<CloseIcon className={styles.icon} />
+											</IconButton>
+											<IconButton
+												disabled={isSavingUsername}
+												onClick={handleSaveUsername}
+												aria-label="Save username"
+											>
+												{isSavingUsername ? (
+													<Spinner size={16} />
+												) : (
+													<CheckIcon className={styles.icon} />
+												)}
+											</IconButton>
+										</div>
+									</div>
+								) : (
+									<div className={styles.usernameRow}>
+										<h2 className={styles.username}>
+											{profile.username}
+										</h2>
 										<IconButton
-											disabled={isSavingUsername}
-											onClick={handleCancelEdit}
-											aria-label="Cancel editing"
+											onClick={handleEditUsername}
+											aria-label="Edit username"
 										>
-											<CloseIcon className={styles.icon} />
-										</IconButton>
-										<IconButton
-											disabled={isSavingUsername}
-											onClick={handleSaveUsername}
-											aria-label="Save username"
-										>
-											{isSavingUsername ? (
-												<Spinner size={16} />
-											) : (
-												<CheckIcon className={styles.icon} />
-											)}
+											<EditIcon className={styles.icon} />
 										</IconButton>
 									</div>
-								</div>
-							) : (
-								<div className={styles.usernameRow}>
-									<h2 className={styles.username}>
-										{profile.username}
-									</h2>
-									<IconButton
-										onClick={handleEditUsername}
-										aria-label="Edit username"
-									>
-										<EditIcon className={styles.icon} />
-									</IconButton>
-								</div>
-							)}
+								)}
 								<p className={styles.memberSince}>
 									Member since{" "}
 									{new Date(
@@ -197,20 +198,22 @@ function ProfileContent() {
 									</span>
 								</div>
 							</div>
-
-							<div className={styles.dangerZone}>
-								<Button
-									size="medium"
-									variant="secondary"
-									onClick={() => setIsDeleteOpen(true)}
-								>
-									Delete My Account
-								</Button>
-							</div>
 						</>
 					)}
-				</Card>
-			</div>
+				</div>
+
+				{!showLoading && profile && (
+					<CardRule className={styles.dangerZone}>
+						<Button
+							size="medium"
+							variant="secondary"
+							onClick={() => setIsDeleteOpen(true)}
+						>
+							Delete My Account
+						</Button>
+					</CardRule>
+				)}
+			</PageCard>
 
 			<ConfirmDialog
 				isOpen={isDeleteOpen}

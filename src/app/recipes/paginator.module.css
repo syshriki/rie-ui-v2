@@ -5,7 +5,7 @@
 	font: Montserrat, sans-serif;
 	font-size: 1.25em;
 	justify-content: center;
-	border-top: 2px solid #000;
+	border-top: 2px solid var(--rule-color);
 	a {
 		text-decoration: none;
 		color: inherit;

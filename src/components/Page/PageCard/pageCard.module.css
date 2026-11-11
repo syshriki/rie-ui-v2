@@ -1,0 +1,36 @@
+/* The shared page-level card shell. Width, margins and the responsive
+   breakpoint live here, so every page card lines up; a page adds only its own
+   constraints (max width, min height, alignment) through `className`. */
+
+.pageCard {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	line-height: 1.1rem;
+}
+
+.card {
+	width: 80%;
+	margin: var(--space-2xl) var(--space-xl) var(--space-xl);
+}
+
+/* Opt-in: the card pads its content. Sections that need the card's full width
+   (CardRule, paginator rules) use `padding="none"` instead. */
+.inset {
+	padding: var(--card-padding);
+}
+
+@media (max-width: 1000px) {
+	.card {
+		width: 90%;
+		margin-top: var(--space-md);
+	}
+}
+
+@media (max-width: 600px) {
+	.card {
+		margin-inline: var(--space-md);
+	}
+}
