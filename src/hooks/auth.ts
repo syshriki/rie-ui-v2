@@ -14,6 +14,32 @@ function isUserLoggedIn(): boolean {
 	return false;
 }
 
+/**
+ * Sends anonymous visitors to the login screen, returning them to
+ * `redirectUri` once they are authenticated.
+ *
+ * Only redirects after the auth state has been synced from localStorage
+ * (`isAuthLoading === false`), so a logged-in user is never bounced during the
+ * first render before hydration completes.
+ */
+export function useLoginRedirect({
+	redirectUri,
+	isLoggedIn,
+	isAuthLoading,
+}: {
+	redirectUri: string;
+	isLoggedIn: boolean;
+	isAuthLoading: boolean;
+}): void {
+	const router = useRouter();
+
+	useEffect(() => {
+		if (!isAuthLoading && !isLoggedIn) {
+			router.replace(`/login?redirectUri=${redirectUri}`);
+		}
+	}, [isLoggedIn, isAuthLoading, redirectUri, router]);
+}
+
 export function useIsLoggedIn(): {
 	userId: string | null;
 	isLoggedIn: boolean;

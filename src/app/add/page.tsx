@@ -1,90 +1,18 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { createRecipe } from "../../api/sdk";
 import type { CreateRecipeBody } from "../../api/sdk";
 import Button from "../../components/Button/Button";
+import Field from "../../components/Form/Field";
+import Form from "../../components/Form/Form";
+import TextArea from "../../components/Form/TextArea";
+import TextInput from "../../components/Form/TextInput";
 import Page from "../../components/Page/Page";
-import { useIsLoggedIn } from "../../hooks/auth";
-import styles from "./page.module.css";
+import { useIsLoggedIn, useLoginRedirect } from "../../hooks/auth";
 
-// Client component that uses useSearchParams via useIsLoggedIn hook
-function AddPageClient() {
-	const {
-		register,
-		handleSubmit,
-		formState: { isValid, errors },
-	} = useForm<CreateRecipeBody>({
-		mode: "onChange",
-	});
-	const { isLoggedIn, isLoading: isAuthLoading } = useIsLoggedIn();
-
-	const router = useRouter();
-	const [isSubmitting, setIsSubmitting] = useState(false);
-
-	const onSubmit: SubmitHandler<CreateRecipeBody> = async (data) => {
-		setIsSubmitting(true);
-		try {
-			const result = await createRecipe({ body: data });
-			if (result.error) {
-				console.error("Failed to create recipe:", result.error);
-			} else {
-				router.push(`/${result.data.slug}`);
-			}
-		} catch (error) {
-			console.error("Failed to post recipe:", error);
-		} finally {
-			setIsSubmitting(false);
-		}
-	};
-
-	useEffect(() => {
-		// `isLoading` starts true: the auth hook syncs from localStorage in an
-		// effect, so redirecting before that settles would bounce a logged-in
-		// user to /login — which then sends them straight back here.
-		if (!isAuthLoading && !isLoggedIn) {
-			router.replace("/login?redirectUri=/add");
-		}
-	}, [isAuthLoading, isLoggedIn, router]);
-
-	if (isAuthLoading || !isLoggedIn) {
-		return null;
-	}
-
-	return (
-		<Page selected="add" headerText="Add Recipe" isLoggedIn={isLoggedIn}>
-			<div>
-				<form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-					<input
-						type="text"
-						className={`${styles.input} ${styles.recipeName}`}
-						placeholder="Recipe Name"
-						{...register("title", { required: true })}
-					/>
-					<textarea
-						className={`${styles.input} ${styles.description}`}
-						placeholder="Description (Optional)"
-						{...register("description")}
-					/>
-					<textarea
-						className={`${styles.input} ${styles.recipe}`}
-						placeholder="Recipe"
-						{...register("recipe", { required: true })}
-					/>
-					<Button
-						type="submit"
-						disabled={!isValid || isSubmitting}
-						isLoading={isSubmitting}
-						loadingText="Saving..."
-					>
-						Save
-					</Button>
-				</form>
-			</div>
-		</Page>
-	);
-}
+type AppRouter = ReturnType<typeof useRouter>;
 
 // Main page component with Suspense boundary
 export default function AddPage() {
@@ -93,4 +21,106 @@ export default function AddPage() {
 			<AddPageClient />
 		</Suspense>
 	);
+}
+
+// Client component that uses useSearchParams via useIsLoggedIn hook
+function AddPageClient() {
+	const router = useRouter();
+	const { isLoggedIn, isLoading: isAuthLoading } = useIsLoggedIn();
+	const {
+		register,
+		handleSubmit,
+		formState: { isValid, errors },
+	} = useForm<CreateRecipeBody>({ mode: "onChange" });
+
+	const [isSubmitting, setIsSubmitting] = useState(false);
+
+	// 1. Anonymous visitors go to login first, then come back here.
+	useLoginRedirect({ redirectUri: "/add", isLoggedIn, isAuthLoading });
+
+	// 2. Create the recipe, then land on its page.
+	const saveRecipe = useRecipeCreator({ router, setIsSubmitting });
+
+	// Hold the form back until the session has been confirmed. When it turns
+	// out there is none, step 1 is already redirecting to the login screen.
+	if (isAuthLoading || !isLoggedIn) {
+		return null;
+	}
+
+	return (
+		<Page selected="add" headerText="Add Recipe" isLoggedIn={isLoggedIn}>
+			<Form
+				onSubmit={handleSubmit(saveRecipe)}
+				footer={
+					<>
+						<Button
+							type="button"
+							size="medium"
+							variant="secondary"
+							disabled={isSubmitting}
+							onClick={() => router.push("/recipes")}
+						>
+							Cancel
+						</Button>
+						<Button
+							type="submit"
+							size="medium"
+							disabled={!isValid || isSubmitting}
+							isLoading={isSubmitting}
+							loadingText="Saving..."
+						>
+							Save
+						</Button>
+					</>
+				}
+			>
+				<Field label="Recipe Name" required error={errors.title?.message}>
+					<TextInput
+						placeholder="Recipe Name"
+						{...register("title", { required: "Recipe name is required" })}
+					/>
+				</Field>
+				<Field label="Description" optional>
+					<TextArea
+						placeholder="Description (Optional)"
+						{...register("description")}
+					/>
+				</Field>
+				<Field label="Recipe" required error={errors.recipe?.message}>
+					<TextArea
+						size="large"
+						placeholder="Recipe"
+						{...register("recipe", { required: "Recipe text is required" })}
+					/>
+				</Field>
+			</Form>
+		</Page>
+	);
+}
+
+/**
+ * Step 2 — persist the new recipe and navigate to it.
+ */
+function useRecipeCreator({
+	router,
+	setIsSubmitting,
+}: {
+	router: AppRouter;
+	setIsSubmitting: (isSubmitting: boolean) => void;
+}): SubmitHandler<CreateRecipeBody> {
+	return async (values) => {
+		setIsSubmitting(true);
+		try {
+			const result = await createRecipe({ body: values });
+			if (result.error) {
+				console.error("Failed to create recipe:", result.error);
+				return;
+			}
+			router.push(`/${result.data.slug}`);
+		} catch (error) {
+			console.error("Failed to post recipe:", error);
+		} finally {
+			setIsSubmitting(false);
+		}
+	};
 }
