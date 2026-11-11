@@ -129,7 +129,10 @@
 
 .icon {
 	width: var(--space-lg);
-	height: var(--space-lg)
+	height: var(--space-lg);
+	/* Same SVG as the mobile menu's ✕ (components/Icons), but half its size —
+	   proportionally thicker strokes here so it carries the same weight. */
+	stroke-width: 2.5;
 }
 
 /* ── Error ── */

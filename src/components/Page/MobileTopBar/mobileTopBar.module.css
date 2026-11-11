@@ -19,6 +19,9 @@
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
+	/* Owned here rather than inherited from `.mobileTopBar img`, because the
+	   menu (and this logo) are portalled out of the top bar. */
+	height: 2.5rem;
 }
 
 /* Full-screen menu: header row, scrollable items, bottom-pinned account row. */
@@ -30,7 +33,9 @@
 	padding-inline: var(--space-md);
 	/* Opaque, like the desktop Header band: no rules cross the top bar. */
 	background: var(--default-background-color);
-	/* Drawn as a pseudo-element: globals.css puts a border on popover children. */
+
+	/* Overlay rule: keeps the content box a full 4rem (which the ruled-line
+	   phase-lock below depends on) instead of eating 5px of the bar. */
 	&::after {
 		content: "";
 		position: absolute;
@@ -121,17 +126,31 @@
 	}
 
 	/*
+	 * Anchored to the viewport from the base class as well, so the panel can
+	 * never fall back to in-flow layout (which puts it at the document top and
+	 * hides it behind the backdrop once the page is scrolled).
+	 */
+	.menu {
+		position: fixed;
+	}
+
+	/*
 	 * Full-screen menu: covers the viewport instead of floating next to the
-	 * hamburger. Overrides the shared popover styling in globals.css.
+	 * hamburger.
 	 */
 	.menu:popover-open {
 		/* Ruled-line pitch in root units, so rows below can snap to it. */
 		--menu-line-pitch: calc(2rem + var(--paper-line-thickness));
+		position: fixed;
 		inset: 0;
 		width: 100%;
 		min-width: 0;
 		max-width: none;
-		height: 100dvh;
+		/* Height must be explicit: the UA stylesheet gives popovers
+		   `height: fit-content`, which would leave the panel short. 100% of the
+		   fixed containing block (the viewport) — no dvh, so no dependence on
+		   dynamic-toolbar viewport units. */
+		height: 100%;
 		max-height: none;
 		margin: 0;
 		padding: 0;
@@ -150,11 +169,6 @@
 		/* Belt and braces with the html lock below: stops any scroll gesture that
 		   starts inside the menu from chaining to the page behind it. */
 		overscroll-behavior: contain;
-
-		/* globals.css draws a divider on every direct child but the last. */
-		> :not(:last-child) {
-			border-bottom: none;
-		}
 	}
 
 	/* Lock the page behind the open menu so it can't scroll underneath it. */

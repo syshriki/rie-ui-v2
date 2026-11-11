@@ -1,8 +1,6 @@
 "use client";
-import clsx from "clsx";
-import { type ReactNode, useEffect, useId, useRef } from "react";
-import styles from "./menu.module.css";
-type NoRadiusCorner = "topLeft" | "topRight" | "bottomLeft" | "bottomRight";
+import { type ReactNode, useEffect, useId, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 interface MenuProps {
 	children: ReactNode;
@@ -10,61 +8,40 @@ interface MenuProps {
 	menuId?: string;
 	onOpen?: () => void;
 	onClose?: () => void;
-	/** Set to keep one corner square when the menu is anchored to an element. */
-	noRadiusCorner?: NoRadiusCorner;
-	anchorToElement?: string;
 }
 
+/**
+ * Popover wrapper. Presentation lives with the consumer — the only menu in the
+ * app is the mobile one (see Page/MobileTopBar/mobileTopBar.module.css).
+ *
+ * Rendered through a portal onto <body>: inside the sticky top bar, engines that
+ * anchor a fixed panel to its ancestor instead of the viewport would leave the
+ * panel at the top of the document, i.e. off-screen once the page is scrolled.
+ */
 const Menu: React.FC<MenuProps> = ({
 	children,
 	className,
 	menuId,
 	onOpen,
 	onClose,
-	noRadiusCorner,
-	anchorToElement,
 }) => {
 	const generatedId = useId();
 	const finalMenuId = menuId || `menu-${generatedId}`;
 	const menuRef = useRef<HTMLMenuElement>(null);
+	const [mounted, setMounted] = useState(false);
 
 	useEffect(() => {
-		// This will run after the first render when the DOM is ready
+		setMounted(true);
+	}, []);
+
+	useEffect(() => {
 		const popover = menuRef.current;
-
-		// Safety check
 		if (!popover) return;
-
-		const corner = noRadiusCorner ?? "bottomRight";
 
 		const handleToggle = (event: Event) => {
 			const toggleEvent = event as ToggleEvent;
 			if (toggleEvent.newState === "open") {
 				onOpen?.();
-
-				// Position the menu relative to the anchor element if provided
-				if (anchorToElement && popover) {
-					const anchorEl = document.getElementById(anchorToElement);
-					if (anchorEl) {
-						const anchoElRect = anchorEl.getBoundingClientRect();
-						const popoverElRect = popover.getBoundingClientRect();
-						// Position at the bottom right corner of the anchor element
-						popover.style.position = "fixed";
-						if (corner === "bottomRight" || corner === "bottomLeft") {
-							popover.style.top = `${anchoElRect.y - popoverElRect.height - 16}px`; // 5 to add a small gap
-						} else {
-							popover.style.top = `${anchoElRect.y + anchoElRect.height + 16}px`;
-						}
-
-						if (corner === "bottomRight" || corner === "topRight") {
-							popover.style.right = `${window.innerWidth - anchoElRect.right + 0.5 * anchoElRect.width}px`;
-							popover.style.left = "auto";
-						} else {
-							popover.style.left = `${anchoElRect.right}px`;
-						}
-						popover.style.margin = "0";
-					}
-				}
 			} else {
 				onClose?.();
 			}
@@ -74,19 +51,21 @@ const Menu: React.FC<MenuProps> = ({
 		return () => {
 			popover.removeEventListener("toggle", handleToggle);
 		};
-	}, [onOpen, onClose, anchorToElement, noRadiusCorner]);
+	}, [onOpen, onClose, mounted]);
 
-	return (
+	if (!mounted) return null;
+
+	return createPortal(
 		<menu
 			ref={menuRef}
 			id={finalMenuId}
 			popover="auto"
 			role="menu"
-			className={clsx(className, styles.menu)}
-			data-no-radius-corner={noRadiusCorner}
+			className={className}
 		>
 			{children}
-		</menu>
+		</menu>,
+		document.body,
 	);
 };
 
