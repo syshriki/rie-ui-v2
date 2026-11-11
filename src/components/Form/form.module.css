@@ -3,10 +3,14 @@
    same on every screen size. */
 
 .card {
+	/* Single source of truth for the form's inset: the fields take it as their
+	   padding and the footer reuses it, so the footer's rule can run the full
+	   card width, edge to edge. */
+	--form-padding: clamp(var(--space-md), 2.5vw, var(--space-xl));
 	width: 80%;
 	max-width: 56rem;
 	margin: var(--space-2xl) auto;
-	padding: clamp(var(--space-md), 2.5vw, var(--space-xl));
+	padding: 0;
 }
 
 .form {
@@ -19,6 +23,7 @@
 	display: flex;
 	flex-direction: column;
 	gap: var(--space-lg);
+	padding: var(--form-padding);
 }
 
 /* ── Field ── */
@@ -122,8 +127,10 @@
 	justify-content: center;
 	flex-wrap: wrap;
 	gap: var(--space-md);
+	/* Like the recipe list's paginator rule: full width, meeting the card's
+	   side borders at both ends. */
 	border-top: 2px solid #000;
-	padding-top: var(--space-lg);
+	padding: var(--space-lg) var(--form-padding) var(--form-padding);
 }
 
 @media (max-width: 900px) {
@@ -144,10 +151,6 @@
 }
 
 @media (max-width: 600px) {
-	.card {
-		padding: var(--space-md);
-	}
-
 	.textAreaLarge {
 		min-height: 13rem;
 	}
