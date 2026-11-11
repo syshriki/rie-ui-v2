@@ -1,3 +1,5 @@
+/* The card is squared off on purpose: only popups (`Dialog`) round their
+   corners, so a card and the page it sits on read as one surface. */
 .card {
 	/* The inset every section of a card measures against. Sections take it as
 	   their padding and full-width rules use it to re-inset their contents, so a
@@ -10,7 +12,7 @@
 	--rule-subtle-color: #98b8e4;
 
 	border: 2px solid #000;
-	border-radius: 5px;
+	border-radius: 0;
 	box-shadow: 3px 3px 4px #00000066;
 	background-color: white;
 }

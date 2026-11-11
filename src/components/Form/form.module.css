@@ -7,10 +7,12 @@
 	max-width: 56rem;
 }
 
+/* No gap between the fields and the rule: the fields already end on their own
+   inset, and the rule carries the same one, so the whitespace above the rule
+   matches the whitespace below it. A gap here would double the top half. */
 .form {
 	display: flex;
 	flex-direction: column;
-	gap: var(--space-xl);
 }
 
 .fields {

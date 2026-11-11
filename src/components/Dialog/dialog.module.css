@@ -1,5 +1,8 @@
+/* A popup is the one surface that rounds its corners — everything else (cards,
+   fields, buttons) stays squared off. The radius lives in a token so a dialog
+   never drifts from that rule. */
 .dialog {
 	border: 2px solid #000;
-	border-radius: 5px;
+	border-radius: var(--popup-radius);
 	box-shadow: 3px 3px 4px #00000066;
 }

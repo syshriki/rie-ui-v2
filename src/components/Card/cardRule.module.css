@@ -1,5 +1,6 @@
+/* The rule closes a card, so the row it holds breathes the same distance from
+   the rule above it as from the card's bottom edge — one inset, all sides. */
 .cardRule {
 	border-top: 2px solid var(--rule-color, #000);
-	padding: var(--space-lg) var(--card-padding, var(--space-xl))
-		var(--card-padding, var(--space-xl));
+	padding: var(--card-padding, var(--space-xl));
 }
