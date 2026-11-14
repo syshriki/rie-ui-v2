@@ -1,7 +1,4 @@
 /* The card shell (width, margins, breakpoint) comes from PageCard. */
-.card {
-	max-width: 30rem;
-}
 
 /* The card does not pad itself — this body owns the inset so the rule below the
    stats can span the full card width. */

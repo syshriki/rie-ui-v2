@@ -1,6 +1,5 @@
 "use client";
 
-import clsx from "clsx";
 import { Suspense } from "react";
 import Page from "../../components/Page/Page";
 import PageCard from "../../components/Page/PageCard/PageCard";
@@ -9,7 +8,7 @@ import styles from "../privacy/page.module.css";
 function TermsContent() {
 	return (
 		<Page headerText="Terms of Service">
-			<PageCard className={clsx(styles.card, styles.prose)}>
+			<PageCard className={styles.prose}>
 				<p>
 					<strong>Last updated:</strong> July 27, 2026
 				</p>

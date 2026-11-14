@@ -16,7 +16,7 @@ interface FormProps extends React.ComponentProps<"form"> {
  * provide the fields and the footer.
  */
 const Form = ({ footer, children, className, ...props }: FormProps) => (
-	<PageCard padding="none" className={styles.card}>
+	<PageCard padding="none">
 		<form noValidate className={clsx(styles.form, className)} {...props}>
 			<div className={styles.fields}>{children}</div>
 			{footer ? <CardRule className={styles.footer}>{footer}</CardRule> : null}

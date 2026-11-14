@@ -13,19 +13,19 @@ interface PageCardProps {
 	 */
 	padding?: "inset" | "none";
 	/**
-	 * The page's own card styling — its max width, min height, text alignment.
-	 * Widths belong to the page, not here: this component only knows the shared
-	 * shell (centred, 80% → 90%, one breakpoint).
+	 * The page's own card styling — its min height, text alignment, inner text
+	 * measure. Widths stay out of here: this component owns the one width every
+	 * card shares (`--page-card-width`), so no page can drift from the others.
 	 */
 	className?: string;
 }
 
 /**
- * The card every page sits its content in: centred, 80% wide (90% on narrower
- * screens) at one shared breakpoint.
+ * The card every page sits its content in: one shared width on every page,
+ * centred, at one shared breakpoint.
  *
  * `Card` supplies the frame and the `--card-padding` / rule tokens that the
- * card's sections inherit, so a page only decides its width and its inset.
+ * card's sections inherit, so a page only decides its own inner layout.
  */
 const PageCard = ({ children, padding = "inset", className }: PageCardProps) => (
 	<div className={styles.pageCard}>

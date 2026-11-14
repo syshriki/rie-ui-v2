@@ -115,7 +115,7 @@ function ProfileContent() {
 			isLoggedIn={isLoggedIn}
 			selected="profile"
 		>
-			<PageCard padding="none" className={styles.card}>
+			<PageCard padding="none">
 				<div className={styles.body}>
 					{showLoading && <p>Loading...</p>}
 

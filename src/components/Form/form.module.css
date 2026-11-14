@@ -1,11 +1,7 @@
 /* Shared form surface + controls. Every form page (add, edit, …) gets its
    layout, label treatment and control styling from here, so fields behave the
-   same on every screen size. The card shell comes from PageCard; this sets how
-   wide a form may get, and the fields and footer own the inset. */
-
-.card {
-	max-width: 56rem;
-}
+   same on every screen size. The card shell and its width come from PageCard;
+   the fields and footer own the inset. */
 
 /* No gap between the fields and the rule: the fields already end on their own
    inset, and the rule carries the same one, so the whitespace above the rule

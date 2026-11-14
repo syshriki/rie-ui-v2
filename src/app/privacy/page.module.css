@@ -1,7 +1,4 @@
 /* The card shell (width, margins, breakpoint) comes from PageCard. */
-.card {
-	max-width: 50rem;
-}
 
 /* Long-form document styles for the text inside the card. */
 .prose h3 {
